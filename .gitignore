@@ -3,6 +3,7 @@ application/data/cache/URI/*
 application/data/cache/HTML/*
 application/data/cache/CSS/*
 application/data/cache/tags/*
+!application/data/**/.gitdir
 application/configs/version.php
 application/data/logs/*.log
 application/data/sql/*.sql
