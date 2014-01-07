@@ -1,0 +1,31 @@
+<?php
+/**
+ * Let's store the cookie acceptance info in localStorage.
+ * Since it's... you know... illegal to store it in a cookie...
+ * Also it's a f*cking waste of HTTP load to store it in a cookie.
+ */
+$cookie_script = <<<EOT
+(function() {
+	var localStorage = typeof window.localStorage !== 'undefined' ? window.localStorage : null;
+	var cookie_bar_html = '<section id="cookie-announcement" class="cookie-announcement"> \
+	    Deze site maakt gebruik van cookies. \
+	    <a href="{$this->url(array(), 'cookie_info')}">Meer informatie?</a>';
+	if (localStorage) {
+	    cookie_bar_html += '<button>&times;</button>';
+	}
+	cookie_bar_html += '</section>';
+	if (!localStorage || !localStorage.getItem('accept_cookies')) {
+	    document.write(cookie_bar_html);
+
+		if (localStorage) {
+			var ca = document.getElementById('cookie-announcement');
+			var btn = ca.getElementsByTagName('button')[0];
+			btn.onclick = function() {
+				ca.parentNode.removeChild(ca);
+				localStorage.setItem('accept_cookies', 1);
+			};
+		}
+	}
+})();
+EOT;
+$this->script()->block($cookie_script);

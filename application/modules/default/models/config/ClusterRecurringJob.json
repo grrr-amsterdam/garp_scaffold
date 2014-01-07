@@ -1,0 +1,35 @@
+{
+	"inputs": {
+		"command": {},
+
+		"interval": {
+			"type": "enum",
+			"options": [
+				"monthly",
+				"daily"
+			]
+		},
+		
+		"at": {
+			"type": "time"
+		},
+
+		"last_accepted_at": {
+			"type": "datetime",
+			"required": false
+		}
+	},
+	
+	"relations": {
+		"Accepter": { 
+			"model": "ClusterServer",
+			"type": "hasOne"
+		}
+	},
+
+	"listFields": ["command", "interval", "at"],
+
+	"visible": false,
+
+	"module": "garp"
+}

@@ -1,0 +1,20 @@
+{
+	"inputs": {
+		"tags": {
+			"maxLength": null
+		}
+	},
+
+	"relations": {
+		"Creator": {
+			"model": "ClusterServer",
+			"type": "belongsTo"
+		}
+	},
+
+	"listFields": "tags",
+
+	"visible": false,
+
+	"module": "garp"
+}
