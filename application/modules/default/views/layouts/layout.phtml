@@ -1,0 +1,92 @@
+<!doctype html>
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="nl"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="nl"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+
+	<?php
+		$title = '';
+		if ($this->currentPage == 'home'):
+			$title = $this->escape($this->config()->app->name);
+			if ($this->title):
+				$title .= ' &mdash; '.$this->escape($this->title);
+			endif;
+		else:
+			if ($this->title):
+				$title = $this->escape($this->title).' | ';
+			endif;
+			$title .= $this->escape($this->config()->app->name);
+		endif;
+	?>
+	<title><?php echo $title ?></title>
+
+<!--
+ _________   ________   ________   _______-+-
+/\* ______\ /\* ____ \ /\* ____ \ /\* ____ \
+\ \ \_____/ \ \ \__/\ \\ \ \__/\ \\ \ \__/\ \
+ \ \ \   ____\ \ \_\_\ \\ \ \_\_\ \\ \ \_\_\ \
+  \ \ \ /\__ \\ \  __  _\\ \  __  _\\ \  __  _\
+   \ \ \_/_/\ \\ \ \/\ \/_\ \ \/\ \/_\ \ \/\ \/_
+    \ \________\\ \_\ \___\\ \_\ \___\\ \_\ \___\
+     \/________/ \/_/\/___/ \/_/\/___/ \/_/\/___/.nl -->
+
+	<meta http-equiv="cleartype" content="on">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<?php
+		$canonical = $this->fullUrl($this->url());
+		if ($this->canonical_url):
+			$canonical = $this->canonical_url;
+		endif;
+	?>
+	<link rel="canonical" href="<?php echo $this->escape($canonical) ?>">
+	<?php
+		/* Robots must never crawl staging or development sites! */
+		if (APPLICATION_ENV != 'production'):
+	?>
+	<meta name="robots" content="noindex, nofollow">
+	<?php endif; ?>
+
+	<meta name="description" content="<?php echo $this->escape($this->description ?: $this->config()->app->description); ?>">
+	<?php // echo $this->social()->facebookOgData($this->ogData ?: array()); ?>
+
+	<!--[if lte IE 8]>
+	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/ie-old.css') ?>">
+	<![endif]-->
+	<!--[if gt IE 8]><!-->
+	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/base.css') ?>">
+	<!--<![endif]-->
+	<script src="<?php echo $this->assetUrl($this->config()->assets->js->root . '/modernizr.js') ?>"></script>
+	<link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
+</head>
+<body>
+
+	<div class="wrapper">
+		<?php echo $this->partial('partials/header.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
+		<div class="content">
+			<?php echo $this->layout()->content; ?>
+		</div>
+	</div>
+	<?php echo $this->partial('partials/cookie-announcement.phtml', 'default');?>
+
+	<!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>
+		!window.jQuery && document.write(unescape('%3Cscript src="<?php echo $this->assetUrl($this->config()->assets->js->root . '/jquery.js') ?>"%3E%3C/script%3E'));
+		BASE = "<?php echo $this->baseUrl() ?>";
+		CDN_URL = "http://<?php echo $this->config()->cdn->domain ?>";
+		CDN_IMAGE_ROOT = CDN_URL + "<?php echo $this->config()->cdn->path->upload->image ?>";
+		JS_ROOT = "<?php echo $this->config()->assets->js->root ?>";
+	</script>
+	<?php
+		$this->script()->src($this->config()->assets->js->root . '/main.js');
+		echo $this->script()->render();
+		if ($browseboxConfig = $this->browsebox()->config()):
+			echo $browseboxConfig;
+		endif;
+		if ($this->social()->needsFacebookInit()) {
+			echo $this->social()->facebookInit();
+		}
+		echo $this->partial('partials/google-analytics.phtml', 'g');
+	?>
+</body>
+</html>

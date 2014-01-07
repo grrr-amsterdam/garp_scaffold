@@ -1,0 +1,1 @@
+document.write("<script src=\"/js/src/libs/modernizr.js\"></script>");
