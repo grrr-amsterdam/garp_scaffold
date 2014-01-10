@@ -128,7 +128,7 @@ $breakpoints: (
 */
 $breakpoints: (
     'palm' '(max-width: ' + (pxToEm($small) - 0.0625em) + ')',
-    'lap' '(min-width: ' + pxToEm($small) + ')' and '(max-width: ' + (pxToEm($medium) - 0.0625em) + ')',
+    'lap' '(min-width: ' + pxToEm($small) + ')',
     'desk' '(min-width: ' + pxToEm($medium) + ')'
 )!default;
 
