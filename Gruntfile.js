@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 
 	// File and path configuration
-	var paths = {}
+	var paths = {};
 	paths.public   = 'public/';
 
 	paths.js       = paths.public + 'js/';
@@ -22,9 +22,9 @@ module.exports = function(grunt) {
 			paths.js_libs + '/fastclick.js',
 		],
 		'garp': [
-			// paths.js_garp + 'styling.js',
-			// paths.js_garp + 'flashmessage.js',
-			// paths.js_garp + 'cookies.js',
+			paths.js_garp + 'front/styling.js',
+			paths.js_garp + 'front/flashmessage.js',
+			paths.js_garp + 'front/cookies.js',
 		],
 		'src': [
 			paths.js_src + '/main.js'
@@ -202,7 +202,7 @@ module.exports = function(grunt) {
 			grunt.file.write(file.dest, content);
 			grunt.log.ok('DocumentWritified file "' + file.dest + '" created.');
 		});
-	})
+	});
 
 	/**
 	 * Echo current git branch to show which git flow feature is active while running grunt
