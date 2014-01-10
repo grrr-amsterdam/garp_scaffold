@@ -49,6 +49,8 @@ html { font-size: 62.5%; line-height: 1.4; -webkit-font-smoothing: antialiased; 
 body, button, input, select, textarea { font-family: $bodyFont; @include font-size($defaultFontSize); color: #000; }
 body { background: #fff; margin: 0; }
 
+input { @include bp-max($small) { font-size: 16px; }} /* Min font size of 16px disables focus zoom on iOS */
+
 .unstyled-list { list-style: none; padding-left: 0; }
 .nav ul, .nav ol { @extend .unstyled-list; }
 

@@ -104,7 +104,7 @@ module.exports = function(grunt) {
 			options: {
 				apiKey: "GpST4zD3uNuHeQbIw7zs3hiL-raKJGMF",
 				checkSigs: true,
-				sigFile: paths.css + '/compiled/img/file_sigs.json',
+				sigFile: paths.css + '/compiled/img/tinypng.json',
 				summarize: true
 			},
 			compress: {
@@ -163,8 +163,12 @@ module.exports = function(grunt) {
 				tasks: ['documentWritify:dev', 'jshint', 'gitBranch'],
 			},
 			imagemin: {
-				files: [paths.css + 'img/*.{png,jpg,gif}'],
-				tasks: ['imagemin:dynamic']
+				files: [paths.css + 'img/**/*.{jpg,gif}'],
+				tasks: ['imagemin:compress']
+			},
+			tinypng: {
+				files: [paths.css + 'img/**/*.png'],
+				tasks: ['tinypng:compress']
 			},
 			options: {
 				livereload: false,
