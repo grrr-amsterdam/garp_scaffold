@@ -1,5 +1,5 @@
 # set :application, "MY_CUTE_APP_NAME"
-# set :repository,  "git@flow.grrr.nl:MY_LOVELY_REPOSITORY"
+# set :repository,  "git@code.grrr.nl:grrr/MY_LOVELY_REPOSITORY"
 
 
 # task :production do
