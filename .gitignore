@@ -16,6 +16,7 @@ public/uploads/sandbox/*
 public/js/build/dev/*
 public/css/compiled/dev/*.css
 node_modules
+bower_components
 .DS_Store
 .project
 .vagrant

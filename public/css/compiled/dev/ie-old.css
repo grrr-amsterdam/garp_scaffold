@@ -1008,7 +1008,7 @@ $breakpoints: (
   }
 }
 
-@media only screen and (max-width: 63.9375em) {
+@media only screen and (min-width: 40em) {
   /**
      * Whole
      */
@@ -1367,6 +1367,14 @@ body {
   background: white;
   margin: 0;
 }
+
+@media only screen and (max-width: 39.9375em) {
+  input {
+    font-size: 16px;
+  }
+}
+
+/* Min font size of 16px disables focus zoom on iOS */
 
 .unstyled-list,
 .nav ul,
