@@ -46,6 +46,9 @@ app.responsive = {
  */
 function disableHoverStylesOnScroll() {
 	var body = document.body, timer;
+	if (!body.classList || !window.addEventListener) {
+		return;
+	}
 	window.addEventListener('scroll', function() {
 		clearTimeout(timer);
 		if(!body.classList.contains('disable-hover')) {
@@ -65,9 +68,9 @@ $(function() {
 
 	disableHoverStylesOnScroll();
 
-	// var cookie_msg = Garp.FlashMessage.parseCookie();
-	// if (cookie_msg) {
-	// 	var fm = new Garp.FlashMessage(cookie_msg);
-	// 	fm.show();
-	// }
+	var cookie_msg = Garp.FlashMessage.parseCookie();
+	if (cookie_msg) {
+		var fm = new Garp.FlashMessage(cookie_msg);
+		fm.show();
+	}
 });

@@ -1,15 +1,4 @@
 /* ==========================================================================
-   variables
-   ========================================================================== */
-
-/*
-$gridColumnWidth: 120px;
-$gridGutterWidth: 40px;
-$gridColumnCount: 6;
-$gridFullWidth: $gridColumnCount*($gridColumnWidth+$gridGutterWidth);
-*/
-
-/* ==========================================================================
    mixins and functions
    ========================================================================== */
 
@@ -20,6 +9,18 @@ $gridFullWidth: $gridColumnCount*($gridColumnWidth+$gridGutterWidth);
  * div { width: pxToEm(300); }
  * Returns:
  * div { width: 30em; }
+ */
+
+/**
+ * Color mixins (other than lighten or darken)
+*/
+
+/**
+ * Responsive padding (include units, so: 20px, ...)
+ * Usage:
+ * .content { @include responsive-padding($margin, $margin*2, $margin, $margin*1.5): }
+ *
+ * author: Koen
  */
 
 /**
@@ -68,46 +69,8 @@ $gridFullWidth: $gridColumnCount*($gridColumnWidth+$gridGutterWidth);
  */
 
 /* ==========================================================================
-   non-semantic helper classes
+   variables
    ========================================================================== */
-
-.hidden {
-  display: none !important;
-  visibility: hidden !important;
-}
-
-.offscreen {
-  position: absolute !important;
-  left: -999em !important;
-}
-
-.invisible {
-  visibility: hidden !important;
-}
-
-.clearfix {
-  zoom: 1;
-}
-
-.clearfix:after {
-  height: 0;
-  visibility: hidden;
-  display: block;
-  clear: both;
-  content: '';
-}
-
-/* Make sure Like buttons do not suffer from cut-off comment-box syndrome */
-
-.fb_iframe_widget span {
-  width: 450px !important;
-}
-
-/* Hide form field that should be left empty */
-
-form .hp {
-  display: none;
-}
 
 /*
  * Custom datatype icons
