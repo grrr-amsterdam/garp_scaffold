@@ -37,7 +37,7 @@ php_value post_max_size 30M
     AddType video/x-flv                                 flv
 
   # Web fonts
-    AddType application/font-woff                       woff
+    AddType application/x-font-woff                     woff
     AddType application/vnd.ms-fontobject               eot
 
     # Browsers usually ignore the font MIME types and sniff the content,
@@ -80,7 +80,7 @@ php_value post_max_size 30M
 	# webfonts
 	ExpiresByType font/truetype             "access plus 1 month"
 	ExpiresByType font/opentype             "access plus 1 month"
-	ExpiresByType font/woff                 "access plus 1 month"
+	ExpiresByType application/x-font-woff   "access plus 1 month"
 	ExpiresByType image/svg+xml             "access plus 1 month"
 	ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
 
@@ -132,6 +132,8 @@ php_value post_max_size 30M
 	AddOutputFilterByType DEFLATE text/html
 	AddOutputFilterByType DEFLATE text/xml
 	AddOutputFilterByType DEFLATE text/css
+	AddOutputFilterByType DEFLATE font/truetype
+	AddOutputFilterByType DEFLATE font/opentype
 	AddOutputFilterByType DEFLATE image/svg+xml
 	AddOutputFilterByType DEFLATE application/xml
 	AddOutputFilterByType DEFLATE application/xhtml+xml
