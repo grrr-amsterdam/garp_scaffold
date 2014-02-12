@@ -1,7 +1,7 @@
 {
-  "name": "multiplejournalism",
+  "name": "garpscaffold",
   "version": "0.0.1",
-  "description": "Multiple Journalism",
+  "description": "Garp scaffold",
   "main": "Gruntfile.js",
   "directories": {
     "doc": "docs",
@@ -9,10 +9,6 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@code.grrr.nl:multiplejournalism"
   },
   "author": "Grrr.nl",
   "gitHead": "",
@@ -24,10 +20,14 @@
     "grunt-contrib-jshint": "~0.7.2",
     "grunt-webfont": "~0.2.1",
     "grunt-contrib-imagemin": "~0.4.0",
-    "grunt-contrib-clean": "~0.5.0",
     "grunt-sass": "~0.9.0",
     "grunt-autoprefixer": "~0.4.2",
     "grunt-contrib-cssmin": "~0.7.0",
-    "grunt-tinypng": "~0.3.1"
+    "grunt-tinypng": "~0.3.1",
+    "grunt-modernizr": "~0.4.1",
+    "grunt-bower-task": "~0.3.4",
+    "grunt-bower-concat": "~0.2.4",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-clean": "~0.5.0"
   }
 }

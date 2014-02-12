@@ -1,0 +1,27 @@
+{
+  "name": "Grrr Default",
+  "version": "0.0.0",
+  "authors": [
+    "Mattijs <mattijs@grrr.nl>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "~2.7.1"
+  },
+  "exportsOverride": {
+    "modernizr": {
+      ".": "modernizr.js"
+    }
+  },
+  "devDependencies": {
+    "fastclick": "~0.6.11"
+  }
+}
