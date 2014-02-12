@@ -1,4 +1,63 @@
+/*
+----------------------------------
+
+Grunt development
+
+['bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'documentWritify:dev', 'sass:dev', 'autoprefixer:dev']
+
+1. Runs bower install, so all the depencies defined in bower.json are installed
+2. Copies over Modernizr and jQuery if used, since these are standalone files
+3. Concatenates all other bower depencies to one libs.js file
+4. Runs modernizr task to automatically determine which tests are necessary, writes resulting file to dev build folder
+5. Runs jshint to validate javascript
+6. Creates a file which writes all javascript files to the DOM dynamically so the html doesn't need updating when depencies are added
+7. Runs sass compilation
+8. Runs autoprefixer to add vender prefixes where necessary
+
+----------------------------------
+
+Grunt production *
+
+['clean:prod', 'bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'uglify:prod', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']
+
+1. Cleans out js and css build folders so no legacy files are left behind
+2. Runs bower install, depencies should already be installed during development, but make sure just in case
+3. Copies over Modernizr and jQuery if used, since these are standalone files
+4. Concatenates all other bower depencies to one libs.js file
+5. Runs modernizr task to automatically determine which tests are necessary, writes resulting file to dev build folder
+6. Runs jshint to validate javascript
+7. Minify javscript and concatenate libs.js with main.js
+8. Runs sass compilation
+9. Runs autoprefixer to add vender prefixes where necessary
+10. Minify css
+11. Compress jpg and gif images used for css
+12. Compress png images used for css
+
+* May produce a warning when jQuery is not used, this is expected behaviour and safe to ignore
+
+----------------------------------
+
+Grunt icons
+
+Generate an icon font as well as selectors for usage
+
+----------------------------------
+
+Grunt images
+
+Compresses images, see steps 11 and 12 of Grunt production
+
+----------------------------------
+
+Grunt default
+
+Run Grunt development by default
+
+----------------------------------
+*/
+
 module.exports = function(grunt) {
+
 
 	// File and path configuration
 	var paths = {};
@@ -10,7 +69,6 @@ module.exports = function(grunt) {
 	paths.js_src   = paths.js + 'src/';
 	paths.js_garp  = paths.js + 'garp/';
 	paths.build    = paths.js + 'build/';
-	paths.js_libs  = paths.js_src + 'libs/';
 
 	paths.sass     = paths.css    + 'sass/';
 
@@ -19,35 +77,99 @@ module.exports = function(grunt) {
 
 	var	build_stack = {
 		'libs': [
-			paths.js_libs + '/fastclick.js',
+			paths.js_src + '/libs.js'
 		],
 		'garp': [
 			paths.js_garp + 'front/styling.js',
 			paths.js_garp + 'front/flashmessage.js',
-			paths.js_garp + 'front/cookies.js',
+			paths.js_garp + 'front/cookies.js'
 		],
 		'src': [
 			paths.js_src + '/main.js'
 		],
-		'jquery':    [ paths.js_libs + '/jquery.js' ],
-		'modernizr': [ paths.js_libs + '/modernizr.js' ]
+		'modernizr': [ paths.js_src + '/modernizr.js' ],
+		'jquery': [ paths.js_src + '/jquery.js' ]
 	};
 	build_stack.main = build_stack.libs.concat(build_stack.garp).concat(build_stack.src);
+
 
 	// Grunt configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		documentWritify: {
-			dev: {
-				files: [
-					{src: build_stack.main, dest: paths.build + 'dev/main.js'},
-					{src: build_stack.jquery,    dest: paths.build + 'dev/jquery.js'},
-					{src: build_stack.modernizr, dest: paths.build + 'dev/modernizr.js'},
-				],
+		bower: {
+			install: {
 				options: {
-					// append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
+					copy: false
 				}
 			}
+		},
+	    bower_concat: {
+		  all: {
+		    dest: paths.js_src + 'libs.js',
+		    exclude: ['jquery', 'modernizr'],
+		    bowerOptions: {
+		      relative: false
+		    }
+		  }
+		},
+		copy: {
+			main: {
+				files: [
+					// Copy modernizr
+					{expand: true, flatten: true, src: ['/bower_components/modernizr/modernizr.js'], dest: '/public/js/src/', filter: 'isFile'},
+					{expand: true, flatten: true, src: ['/bower_components/jquery/jquery.js'], dest: '/public/js/src/', filter: 'isFile'}
+
+				]
+			}
+		},
+		modernizr: {
+		    // [REQUIRED] Path to the build you're using for development.
+		    "devFile" : paths.js_src + "modernizr.js",
+
+		    // [REQUIRED] Path to save out the built file.
+		    "outputFile" : paths.build + "dev/modernizr.js",
+
+		    // Based on default settings on http://modernizr.com/download/
+		    "extra" : {
+		        "shiv" : true,
+		        "printshiv" : false,
+		        "load" : false,
+		        "mq" : false,
+		        "cssclasses" : true
+		    },
+
+		    // Based on default settings on http://modernizr.com/download/
+		    "extensibility" : {
+		        "addtest" : false,
+		        "prefixed" : false,
+		        "teststyles" : false,
+		        "testprops" : false,
+		        "testallprops" : false,
+		        "hasevents" : false,
+		        "prefixes" : false,
+		        "domprefixes" : false
+		    },
+
+		    // By default, source is uglified before saving
+		    "uglify" : false,
+
+		    // Define any tests you want to implicitly include.
+		    "tests" : [],
+
+		    // By default, this task will crawl your project for references to Modernizr tests.
+		    // Set to false to disable.
+		    "parseFiles" : true,
+
+		    // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
+		    // You can override this by defining a "files" array below.
+		    "files" : ['/public/js/src/*', '/public/css/sass/*'],
+
+		    // When parseFiles = true, matchCommunityTests = true will attempt to
+		    // match user-contributed tests.
+		    "matchCommunityTests" : false,
+
+		    // Have custom Modernizr tests? Add paths to their location here.
+		    "customTests" : []
 		},
 		jshint: {
 			main: build_stack.src,
@@ -57,7 +179,18 @@ module.exports = function(grunt) {
 				eqnull: true,
 				trailing: false,
 				browser: true,
-				"-W099": true,
+				"-W099": true
+			}
+		},
+		documentWritify: {
+			dev: {
+				files: [
+					{ src: build_stack.main, dest: paths.build + 'dev/main.js'},
+					{ src: build_stack.modernizr, dest: paths.build + 'dev/modernizr.js'}
+				],
+				options: {
+					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
+				}
 			}
 		},
 		uglify: {
@@ -67,8 +200,8 @@ module.exports = function(grunt) {
 				},
 				files: [
 					{src: build_stack.main,      dest: paths.build + 'prod/main.js'},
-					{src: build_stack.jquery,    dest: paths.build + 'prod/jquery.js'},
 					{src: build_stack.modernizr, dest: paths.build + 'prod/modernizr.js'},
+					{src: build_stack.jquery, dest: paths.build + 'prod/jquery.js'}
 				]
 			}
 		},
@@ -84,7 +217,7 @@ module.exports = function(grunt) {
 					template: paths.sass + 'imports/_icons-template.css',
 					relativeFontPath: '../fonts/icons/',
 					htmlDemo: false,
-					destHtml: paths.fonts,
+					destHtml: paths.fonts
 				}
 			}
 		},
@@ -95,7 +228,7 @@ module.exports = function(grunt) {
 					expand: true,
 					cwd: paths.css + '/img',
 					src: ['**/*.{jpg,gif}'],
-					dest: paths.css + '/compiled/img',
+					dest: paths.css + '/compiled/img'
 				}]
 			}
 		},
@@ -111,7 +244,7 @@ module.exports = function(grunt) {
 				expand: true,
 				src: ['**/*.png'],
 				cwd: paths.css + '/img/',
-				dest: paths.css + '/compiled/img/',
+				dest: paths.css + '/compiled/img/'
 			}
 		},
 		sass: {
@@ -123,9 +256,6 @@ module.exports = function(grunt) {
 				}
 			},
 			prod: {
-				options: {
-					// outputStyle: 'compressed'
-				},
 				files: {
 					'public/css/compiled/prod/base.css': paths.sass + 'base.scss',
 					'public/css/compiled/prod/cms.css': paths.sass + 'cms.scss',
@@ -153,14 +283,10 @@ module.exports = function(grunt) {
 				ext: '.css'
 			}
 		},
-  		watch: {
+		watch: {
 			sass: {
 				files: [paths.sass + '/**/*.scss'],
-				tasks: ['sass:dev', 'autoprefixer:dev', 'gitBranch'],
-			},
-			js: {
-				files: [paths.js_src + '/**/*.js'],
-				tasks: ['documentWritify:dev', 'jshint', 'gitBranch'],
+				tasks: ['sass:dev', 'autoprefixer:dev', 'gitBranch']
 			},
 			imagemin: {
 				files: [paths.css + 'img/**/*.{jpg,gif}'],
@@ -171,17 +297,17 @@ module.exports = function(grunt) {
 				tasks: ['tinypng:compress']
 			},
 			options: {
-				livereload: false,
+				livereload: 35728,
 				spawn: false, // Should improve performance but might introduce bugs
-				interrupt: true, // Should improve performance but might introduce bugs
+				interrupt: true // Should improve performance but might introduce bugs
 			}
 		},
 		clean: {
-			prod: [paths.css + '/compiled/prod', paths.build + '/prod'],
-		},
+			prod: [paths.css + '/compiled/prod', paths.build + '/prod']
+		}
 	});
 
-	// Load NPM tasks thru matchdep
+	// Load tasks through matchdep
 	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
 	/**
@@ -223,14 +349,33 @@ module.exports = function(grunt) {
 		});
 	});
 
-	// Dev build doesn't minify js or css
-	grunt.registerTask('development', ['jshint', 'documentWritify:dev', 'sass:dev', 'autoprefixer:dev']);
-	grunt.registerTask('production', ['clean:prod', 'jshint', 'uglify:prod', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']);
+	/*
+	   grunt development
+	   note: doesn't minify js or css
+	*/
+	grunt.registerTask('development', ['bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'documentWritify:dev', 'sass:dev', 'autoprefixer:dev']);
 
+	/*
+	   grunt production
+	*/
+	grunt.registerTask('production', ['clean:prod', 'bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'uglify:prod', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']);
+
+	/*
+	   grunt icons
+	   note: generates icon font
+	*/
 	grunt.registerTask('icons', ['webfont:icons']);
+
+
+	/*
+	   grunt images
+	   note: compresses images with imagemin and tinypng
+	*/
 	grunt.registerTask('images', ['imagemin:compress', 'tinypng:compress']);
 
-	// Default task(s).
+	/*
+	   grunt
+	*/
 	grunt.registerTask('default', ['development', 'gitBranch', 'watch']);
 
 };
