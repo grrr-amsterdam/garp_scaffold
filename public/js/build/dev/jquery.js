@@ -1,1 +1,0 @@
-document.write("<script src=\"/js/src/libs/jquery.js\"></script>");
