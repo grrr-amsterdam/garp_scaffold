@@ -1,7 +1,6 @@
 /* ==========================================================================
    mixins and functions
    ========================================================================== */
-
 /**
  * For converting pixels to ems
  * Based on a 10px font-size on the html
@@ -10,11 +9,9 @@
  * Returns:
  * div { width: 30em; }
  */
-
 /**
  * Color mixins (other than lighten or darken)
 */
-
 /**
  * Responsive padding (include units, so: 20px, ...)
  * Usage:
@@ -22,18 +19,15 @@
  *
  * author: Koen
  */
-
 /**
  * For image replacement
  */
-
 /**
  * For font-sizing in rem
  * Usage:
  * html { font-size: 62.5%; }
  * p { @include font-size(16); }
  */
-
 /**
  * For using breakpoints
  * Usage:
@@ -43,7 +37,6 @@
  *
  * Pass true as a second parameter to toggle high dpi screens
  */
-
 /**
  * For targetting high dpi screens
  * Usage:
@@ -52,7 +45,6 @@
  *	@include high-dpi() { background: url('image-2x.jpg'); @include background-size(30px 30px); }
  * }
  */
-
 /**
  * For targeting old-IE
  * Usage:
@@ -60,14 +52,12 @@
  *  @include old-ie { zoom: 1; }
  * }
  */
-
 /**
  * Calculate fluid ratio based on two dimensions (width/height)
  * @see http://voormedia.com/blog/2012/11/responsive-background-images-with-fixed-or-fluid-aspect-ratios
  * Usage:
  * .header { @include fluid-ratio(800px 200px, 300px 150px); background-image: url('img/branding.png'); }
  */
-
 /* ==========================================================================
    variables
    ========================================================================== */
@@ -76,9 +66,6 @@
  * Custom datatype icons
  * Usage: .icon-article { @include cms-icon(newspaper); }
  */
-
 /* allow textarea's to be resized! */
-
 textarea {
-  resize: vertical !important;
-}
+  resize: vertical !important; }
