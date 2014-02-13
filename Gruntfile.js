@@ -104,20 +104,20 @@ module.exports = function(grunt) {
 			}
 		},
 	    bower_concat: {
-		  all: {
-		    dest: paths.js_src + 'libs.js',
-		    exclude: ['jquery', 'modernizr'],
-		    bowerOptions: {
-		      relative: false
-		    }
-		  }
+			all: {
+				dest: paths.js_src + 'libs.js',
+				exclude: ['jquery', 'modernizr'],
+				bowerOptions: {
+					relative: false
+				}
+			}
 		},
 		copy: {
 			main: {
 				files: [
 					// Copy modernizr
-					{expand: true, flatten: true, src: ['/bower_components/modernizr/modernizr.js'], dest: '/public/js/src/', filter: 'isFile'},
-					{expand: true, flatten: true, src: ['/bower_components/jquery/jquery.js'], dest: '/public/js/src/', filter: 'isFile'}
+					{expand: true, flatten: true, src: ['bower_components/modernizr/modernizr.js'], dest: 'public/js/src/', filter: 'isFile'},
+					{expand: true, flatten: true, src: ['bower_components/jquery/jquery.js'], dest: 'public/js/src/', filter: 'isFile'}
 
 				]
 			}
