@@ -1,7 +1,13 @@
 /*
 ----------------------------------
 
-Grunt development
+grunt
+
+Run grunt development
+
+----------------------------------
+
+grunt development
 
 ['bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'documentWritify:dev', 'sass:dev', 'autoprefixer:dev']
 
@@ -16,7 +22,7 @@ Grunt development
 
 ----------------------------------
 
-Grunt production *
+grunt production
 
 ['clean:prod', 'bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'uglify:prod', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']
 
@@ -37,21 +43,15 @@ Grunt production *
 
 ----------------------------------
 
-Grunt icons
+grunt icons
 
 Generate an icon font as well as selectors for usage
 
 ----------------------------------
 
-Grunt images
+grunt images
 
 Compresses images, see steps 11 and 12 of Grunt production
-
-----------------------------------
-
-Grunt default
-
-Run Grunt development by default
 
 ----------------------------------
 */
@@ -161,7 +161,7 @@ module.exports = function(grunt) {
 
 		    // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
 		    // You can override this by defining a "files" array below.
-		    "files" : ['/public/js/src/*', '/public/css/sass/*'],
+		    "files" : ['public/js/src/*', 'public/css/sass/*'],
 
 		    // When parseFiles = true, matchCommunityTests = true will attempt to
 		    // match user-contributed tests.
