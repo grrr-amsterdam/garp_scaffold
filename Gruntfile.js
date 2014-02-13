@@ -85,10 +85,10 @@ module.exports = function(grunt) {
 			paths.js_garp + 'front/cookies.js'
 		],
 		'src': [
-			paths.js_src + '/main.js'
+			paths.js_src + 'main.js'
 		],
-		'modernizr': [ paths.js_src + '/modernizr.js' ],
-		'jquery': [ paths.js_src + '/jquery.js' ]
+		'modernizr': [ paths.js_src + 'modernizr.js' ],
+		'jquery': [ paths.js_src + 'jquery.js' ]
 	};
 	build_stack.main = build_stack.libs.concat(build_stack.garp).concat(build_stack.src);
 
@@ -118,7 +118,6 @@ module.exports = function(grunt) {
 					// Copy modernizr
 					{expand: true, flatten: true, src: ['bower_components/modernizr/modernizr.js'], dest: 'public/js/src/', filter: 'isFile'},
 					{expand: true, flatten: true, src: ['bower_components/jquery/jquery.js'], dest: 'public/js/src/', filter: 'isFile'}
-
 				]
 			}
 		},
@@ -185,8 +184,7 @@ module.exports = function(grunt) {
 		documentWritify: {
 			dev: {
 				files: [
-					{ src: build_stack.main, dest: paths.build + 'dev/main.js'},
-					{ src: build_stack.modernizr, dest: paths.build + 'dev/modernizr.js'}
+					{ src: build_stack.main, dest: paths.build + 'dev/main.js'}
 				],
 				options: {
 					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
@@ -201,7 +199,7 @@ module.exports = function(grunt) {
 				files: [
 					{src: build_stack.main,      dest: paths.build + 'prod/main.js'},
 					{src: build_stack.modernizr, dest: paths.build + 'prod/modernizr.js'},
-					{src: build_stack.jquery, dest: paths.build + 'prod/jquery.js'}
+					{src: build_stack.jquery,    dest: paths.build + 'prod/jquery.js'}
 				]
 			}
 		},
