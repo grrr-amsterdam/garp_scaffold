@@ -194,7 +194,9 @@ module.exports = function(grunt) {
 		uglify: {
 			prod: {
 				options: {
-					compress: true
+					compress: {
+						drop_console: true
+					}
 				},
 				files: [
 					{src: build_stack.main,      dest: paths.build + 'prod/main.js'},
@@ -351,12 +353,34 @@ module.exports = function(grunt) {
 	   grunt development
 	   note: doesn't minify js or css
 	*/
-	grunt.registerTask('development', ['bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'documentWritify:dev', 'sass:dev', 'autoprefixer:dev']);
+	grunt.registerTask('development', [
+		'bower',
+		'copy',
+		'bower_concat',
+		'modernizr',
+		'jshint',
+		'documentWritify:dev',
+		'sass:dev',
+		'autoprefixer:dev'
+	]);
 
 	/*
 	   grunt production
 	*/
-	grunt.registerTask('production', ['clean:prod', 'bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'uglify:prod', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']);
+	grunt.registerTask('production', [
+		'clean:prod',
+		'bower',
+		'copy',
+		'bower_concat',
+		'modernizr',
+		'jshint',
+		'uglify:prod',
+		'sass:prod',
+		'autoprefixer:prod',
+		'cssmin:prod',
+		'imagemin:compress',
+		'tinypng:compress'
+	]);
 
 	/*
 	   grunt icons
