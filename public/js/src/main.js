@@ -73,4 +73,6 @@ $(function() {
 		var fm = new Garp.FlashMessage(cookie_msg);
 		fm.show();
 	}
+
+	console.log('hoi');
 });
