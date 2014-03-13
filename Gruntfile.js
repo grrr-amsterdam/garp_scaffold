@@ -90,7 +90,7 @@ module.exports = function(grunt) {
 		],
 		'modernizr': [ paths.js_src + 'modernizr.js' ],
 		'jquery': [ paths.js_src + 'jquery.js' ],
-		'models': [ paths.js + 'models/*.js' ],
+		'models': [ paths.js_garp + 'models/*.js', paths.js + 'models/*.js' ],
 		'cms': [
 			paths.js_garp + 'overrides.js',
 			paths.js_garp + 'garp.config.js',
