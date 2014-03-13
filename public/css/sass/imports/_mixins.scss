@@ -27,6 +27,22 @@
 }
 
 /**
+ * Sprite
+ * Author: Mattijs Bliek
+ *
+ * Use a background sprite for text-replacement or icons
+ *
+ * Usage:
+ * .icon { @include sprite(icons, 300px 200px): }
+ *
+ * It is recommended to replace the size of the sprite with a variable
+ */
+@mixin sprite($spritename, $size) {
+	background-image: url('../img/sprite-#{$spritename}.png'); background-repeat: no-repeat; text-indent: 100%; white-space: nowrap; overflow: hidden;
+	@include high-dpi { background-image: url('../img/sprite-#{$spritename}-2x.png'); background-size: $size; }
+}
+
+/**
  * Responsive padding (include units, so: 20px, ...)
  * Usage:
  * .content { @include responsive-padding($margin, $margin*2, $margin, $margin*1.5): }

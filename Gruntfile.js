@@ -24,7 +24,7 @@ grunt development
 
 grunt production
 
-['clean:prod', 'bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'uglify:prod', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']
+['clean:prod', 'bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'uglify:prod', 'removelogging', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']
 
 1. Cleans out js and css build folders so no legacy files are left behind
 2. Runs bower install, depencies should already be installed during development, but make sure just in case
@@ -33,11 +33,12 @@ grunt production
 5. Runs modernizr task to automatically determine which tests are necessary, writes resulting file to dev build folder
 6. Runs jshint to validate javascript
 7. Minify javscript and concatenate libs.js with main.js
-8. Runs sass compilation
-9. Runs autoprefixer to add vender prefixes where necessary
-10. Minify css
-11. Compress jpg and gif images used for css
-12. Compress png images used for css
+8. Remove all console and alert instances
+9. Runs sass compilation
+10. Runs autoprefixer to add vender prefixes where necessary
+11. Minify css
+12. Compress jpg and gif images used for css
+13. Compress png images used for css
 
 * May produce a warning when jQuery is not used, this is expected behaviour and safe to ignore
 
@@ -170,53 +171,57 @@ module.exports = function(grunt) {
 			}
 		},
 		modernizr: {
-		    // [REQUIRED] Path to the build you're using for development.
-		    "devFile" : paths.js_src + "modernizr.js",
+			dist: {
+			    // [REQUIRED] Path to the build you're using for development.
+			    "devFile" : paths.js_src + "modernizr.js",
 
-		    // [REQUIRED] Path to save out the built file.
-		    "outputFile" : paths.build + "dev/modernizr.js",
+			    // [REQUIRED] Path to save out the built file.
+			    "outputFile" : paths.build + "dev/modernizr.js",
 
-		    // Based on default settings on http://modernizr.com/download/
-		    "extra" : {
-		        "shiv" : true,
-		        "printshiv" : false,
-		        "load" : false,
-		        "mq" : false,
-		        "cssclasses" : true
-		    },
+			    // Based on default settings on http://modernizr.com/download/
+			    "extra" : {
+			        "shiv" : true,
+			        "printshiv" : false,
+			        "load" : false,
+			        "mq" : false,
+			        "cssclasses" : true
+			    },
 
-		    // Based on default settings on http://modernizr.com/download/
-		    "extensibility" : {
-		        "addtest" : false,
-		        "prefixed" : false,
-		        "teststyles" : false,
-		        "testprops" : false,
-		        "testallprops" : false,
-		        "hasevents" : false,
-		        "prefixes" : false,
-		        "domprefixes" : false
-		    },
+			    // Based on default settings on http://modernizr.com/download/
+			    "extensibility" : {
+			        "addtest" : false,
+			        "prefixed" : false,
+			        "teststyles" : false,
+			        "testprops" : false,
+			        "testallprops" : false,
+			        "hasevents" : false,
+			        "prefixes" : false,
+			        "domprefixes" : false
+			    },
 
-		    // By default, source is uglified before saving
-		    "uglify" : false,
+			    // By default, source is uglified before saving
+			    "uglify" : false,
 
-		    // Define any tests you want to implicitly include.
-		    "tests" : [],
+			    // Define any tests you want to implicitly include.
+			    "tests" : [],
 
-		    // By default, this task will crawl your project for references to Modernizr tests.
-		    // Set to false to disable.
-		    "parseFiles" : true,
+			    // By default, this task will crawl your project for references to Modernizr tests.
+			    // Set to false to disable.
+			    "parseFiles" : true,
 
-		    // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
-		    // You can override this by defining a "files" array below.
-		    "files" : ['public/js/src/*', 'public/css/sass/*'],
+			    // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
+			    // You can override this by defining a "files" array below.
+			    "files" : {
+					"src": ['public/js/src/*', 'public/css/compiled/dev/*']
+			    },
 
-		    // When parseFiles = true, matchCommunityTests = true will attempt to
-		    // match user-contributed tests.
-		    "matchCommunityTests" : false,
+			    // When parseFiles = true, matchCommunityTests = true will attempt to
+			    // match user-contributed tests.
+			    "matchCommunityTests" : false,
 
-		    // Have custom Modernizr tests? Add paths to their location here.
-		    "customTests" : []
+			    // Have custom Modernizr tests? Add paths to their location here.
+			    "customTests" : []
+			}
 		},
 		jshint: {
 			main: build_stack.src,
@@ -255,6 +260,14 @@ module.exports = function(grunt) {
 					{src: build_stack.models,    dest: paths.build + 'prod/extended-models.js'},
 					{src: build_stack.cms,       dest: paths.build + 'prod/cms.js'}
 				]
+			}
+		},
+		removelogging: {
+			dist: {
+				src: "public/js/build/prod/*.js",
+				options: {
+					namespace: ['console', 'window.console', 'alert']
+				}
 			}
 		},
 		webfont: {
