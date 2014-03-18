@@ -9,6 +9,7 @@ application/data/logs/*.log
 application/data/sql/*.sql
 chromedriver.log
 public/cached/*
+!public/cached/.gitdir
 public/css/.sass-cache
 public/uploads/private/*
 public/uploads/shared/*
