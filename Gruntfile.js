@@ -165,15 +165,15 @@ module.exports = function(grunt) {
 			main: {
 				files: [
 					// Copy modernizr
-					{expand: true, flatten: true, src: ['bower_components/modernizr/modernizr.js'], dest: 'public/js/src/', filter: 'isFile'},
-					{expand: true, flatten: true, src: ['bower_components/jquery/jquery.js'], dest: 'public/js/src/', filter: 'isFile'}
+					{expand: true, flatten: true, src: ['bower_components/modernizr/modernizr.js'], dest: paths.js_src, filter: 'isFile'},
+					{expand: true, flatten: true, src: ['bower_components/jquery/jquery.js'], dest: paths.js_src, filter: 'isFile'}
 				]
 			}
 		},
 		modernizr: {
 			dist: {
 			    // [REQUIRED] Path to the build you're using for development.
-			    "devFile" : paths.js_src + "modernizr.js",
+			    "devFile" : paths.js_src+"modernizr.js",
 
 			    // [REQUIRED] Path to save out the built file.
 			    "outputFile" : paths.build + "dev/modernizr.js",
