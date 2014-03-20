@@ -13,6 +13,17 @@
  * Color mixins (other than lighten or darken)
 */
 /**
+ * Sprite
+ * Author: Mattijs Bliek
+ *
+ * Use a background sprite for text-replacement or icons
+ *
+ * Usage:
+ * .icon { @include sprite(icons, 300px 200px): }
+ *
+ * It is recommended to replace the size of the sprite with a variable
+ */
+/**
  * Responsive padding (include units, so: 20px, ...)
  * Usage:
  * .content { @include responsive-padding($margin, $margin*2, $margin, $margin*1.5): }
