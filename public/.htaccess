@@ -107,7 +107,8 @@ php_value post_max_size 30M
 	# Disregard slash at the end of request
 	RewriteRule ^(.*)/$ /$1 [L]
 
-	# Work with Zend static cacheRewriteCond %{REQUEST_METHOD} GET
+	# Work with Zend static cache
+	RewriteCond %{REQUEST_METHOD} GET
 	RewriteCond %{DOCUMENT_ROOT}/cached/index.html -f
 	RewriteRule ^/*$ cached/index.html [L]
 	RewriteCond %{QUERY_STRING} .+
