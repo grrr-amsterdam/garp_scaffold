@@ -108,23 +108,29 @@ php_value post_max_size 30M
 	RewriteRule ^(.*)/$ /$1 [L]
 
 	# Work with Zend static cache
+	# Homepage
 	RewriteCond %{REQUEST_METHOD} GET
-	RewriteCond %{DOCUMENT_ROOT}/cached/index.html -f
+	RewriteCond cached/index.html -F
 	RewriteRule ^/*$ cached/index.html [L]
+
+	# Pages with query string ?foo=bar
 	RewriteCond %{QUERY_STRING} .+
 	RewriteCond %{REQUEST_METHOD} GET
-	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}\?%{QUERY_STRING}\.html -f
+	RewriteCond cached/%{REQUEST_URI}\?%{QUERY_STRING}\.html -F
 	RewriteRule .* cached/%{REQUEST_URI}\%3F%{QUERY_STRING}\.html [L]
 
+	# Pages without query string
 	RewriteCond %{REQUEST_METHOD} GET
-	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}\.html -f
+	RewriteCond cached/%{REQUEST_URI}\.html -F
 	RewriteRule .* cached/%{REQUEST_URI}\.html [L]
 
+	# All other requests routed thru PHP
 	RewriteCond %{REQUEST_FILENAME} -s [OR]
 	RewriteCond %{REQUEST_FILENAME} -l [OR]
 	RewriteCond %{REQUEST_FILENAME} -d
 	RewriteRule ^.*$ - [NC,L]
 	RewriteRule ^.*$ index.php [NC,L]
+
 </IfModule>
 
 <IfModule mod_deflate.c>
