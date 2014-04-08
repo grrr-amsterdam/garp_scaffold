@@ -110,21 +110,20 @@ php_value post_max_size 30M
 	# Work with Zend static cache
 	# Homepage
 	RewriteCond %{REQUEST_METHOD} GET
-	RewriteCond cached/index.html -F
+	RewriteCond %{DOCUMENT_ROOT}/cached/index.html -f
 	RewriteRule ^/*$ cached/index.html [L]
 
 	# Pages with query string ?foo=bar
 	RewriteCond %{QUERY_STRING} .+
 	RewriteCond %{REQUEST_METHOD} GET
-	RewriteCond cached/%{REQUEST_URI}\?%{QUERY_STRING}\.html -F
+	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}\?%{QUERY_STRING}\.html -f
 	RewriteRule .* cached/%{REQUEST_URI}\%3F%{QUERY_STRING}\.html [L]
 
 	# Pages without query string
 	RewriteCond %{REQUEST_METHOD} GET
-	RewriteCond cached/%{REQUEST_URI}\.html -F
+	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}\.html -f
 	RewriteRule .* cached/%{REQUEST_URI}\.html [L]
 
-	# All other requests routed thru PHP
 	RewriteCond %{REQUEST_FILENAME} -s [OR]
 	RewriteCond %{REQUEST_FILENAME} -l [OR]
 	RewriteCond %{REQUEST_FILENAME} -d
