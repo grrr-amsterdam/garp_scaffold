@@ -2,12 +2,12 @@
 Ext.ns('Garp');
 Ext.ns('Garp.dataTypes');
 </script>
+<script src="<?php echo $this->assetUrl('/js/models/base/BaseModels.min.js') ?>"></script>
 <?php
 if (isset($this->config()->cms->minifiedAssets) && $this->config()->cms->minifiedAssets):
 	echo $this->script()->src($this->config()->assets->js->root . '/extended-models.js', true);
 else:
 ?>
-<script src="<?php echo $this->assetUrl('/js/models/base/BaseModels.min.js') ?>"></script>
 <!-- BEGIN SPAWNED CALLS -->
 
 <!-- END SPAWNED CALLS -->
