@@ -14,8 +14,10 @@
 	background-image: url(../../../media/images/garp/icons2/#{$icon}.png);
 }
 
+.icon-document { @include cms-icon(page); }
 .icon-img { @include cms-icon(camera); }
 .icon-snippet { @include cms-icon(page-edit); }
+.icon-user { @include cms-icon(user); }
 .icon-video { @include cms-icon(tv); }
 
 /* allow textarea's to be resized! */
