@@ -14,5 +14,9 @@
 	background-image: url(../../../media/images/garp/icons2/#{$icon}.png);
 }
 
+.icon-img { @include cms-icon(camera); }
+.icon-snippet { @include cms-icon(page-edit); }
+.icon-video { @include cms-icon(tv); }
+
 /* allow textarea's to be resized! */
 textarea { resize: vertical !important; }
