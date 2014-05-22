@@ -54,7 +54,7 @@ input { @include bp-max($small) { font-size: 16px; }} /* Min font size of 16px d
 .unstyled-list { list-style: none; padding-left: 0; }
 .nav ul, .nav ol { @extend .unstyled-list; }
 
-a, a:hover, a:active { vertical-align: baseline; text-decoration: none; transition: all .2s;
+a, a:hover, a:active { vertical-align: baseline; text-decoration: none; transition: color .2s;
 	-webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* Remove the blue tap-highlight on mobile */
 }
 a:hover, a:focus { text-decoration: underline; }
