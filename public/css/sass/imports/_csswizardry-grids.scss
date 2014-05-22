@@ -179,11 +179,16 @@ $class-type:            unquote(".");
         $declaration: nth($breakpoint, 2);
 
         @if $media-query == $name and $declaration{
-            $breakpoint-found: true;
-
+          $breakpoint-found: true;
+          
+          @if $old-ie {
+            @content;
+          }
+          @else {
             @media only screen and #{$declaration}{
                 @content;
             }
+          }
         }
     }
 
