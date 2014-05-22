@@ -88,6 +88,12 @@ php_value post_max_size 30M
 	ExpiresByType text/css                  "access plus 1 month"
 	ExpiresByType application/javascript    "access plus 1 month"
 	ExpiresByType text/javascript           "access plus 1 month"
+	ExpiresByType application/x-javascript 	"access plus 1 month"
+
+	ExpiresByType image/x-icon              "access plus 1 day"
+	ExpiresByType application/xhtml+xml     "access plus 300 seconds"
+	ExpiresByType text/html                 "access plus 300 seconds"
+	ExpiresByType application/xml           "access plus 300 seconds"
 
 	Header append Cache-Control "public"
 </IfModule>
@@ -107,14 +113,19 @@ php_value post_max_size 30M
 	# Disregard slash at the end of request
 	RewriteRule ^(.*)/$ /$1 [L]
 
-	# Work with Zend static cacheRewriteCond %{REQUEST_METHOD} GET
+	# Work with Zend static cache
+	# Homepage
+	RewriteCond %{REQUEST_METHOD} GET
 	RewriteCond %{DOCUMENT_ROOT}/cached/index.html -f
 	RewriteRule ^/*$ cached/index.html [L]
+
+	# Pages with query string ?foo=bar
 	RewriteCond %{QUERY_STRING} .+
 	RewriteCond %{REQUEST_METHOD} GET
 	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}\?%{QUERY_STRING}\.html -f
 	RewriteRule .* cached/%{REQUEST_URI}\%3F%{QUERY_STRING}\.html [L]
 
+	# Pages without query string
 	RewriteCond %{REQUEST_METHOD} GET
 	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}\.html -f
 	RewriteRule .* cached/%{REQUEST_URI}\.html [L]
@@ -124,6 +135,7 @@ php_value post_max_size 30M
 	RewriteCond %{REQUEST_FILENAME} -d
 	RewriteRule ^.*$ - [NC,L]
 	RewriteRule ^.*$ index.php [NC,L]
+
 </IfModule>
 
 <IfModule mod_deflate.c>
