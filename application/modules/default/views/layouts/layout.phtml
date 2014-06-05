@@ -59,7 +59,7 @@
 	<link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
 </head>
 <body>
-
+	<?php echo $this->partial('partials/google-tag-manager.phtml', 'g'); ?> 
 	<div class="wrapper">
 		<?php echo $this->partial('partials/header.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
 		<div class="content">
@@ -86,7 +86,6 @@
 		if ($this->social()->needsFacebookInit()) {
 			echo $this->social()->facebookInit();
 		}
-		echo $this->partial('partials/google-analytics.phtml', 'g');
 	?>
 </body>
 </html>
