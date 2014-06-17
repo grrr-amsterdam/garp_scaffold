@@ -27,6 +27,21 @@
 }
 
 /**
+ * Shortcut for :hover, :active, and :focus styles.
+ * 
+ * Usage:
+ * a {
+ *   color: blue;
+ *   @include active() {
+ *     color: red;
+ *   }
+ * }
+ */
+@mixin  active() {
+	&:hover, &:active, &:focus { @content; }
+}
+
+/**
  * Sprite
  * Author: Mattijs Bliek
  *
