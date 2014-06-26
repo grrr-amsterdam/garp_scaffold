@@ -93,6 +93,7 @@ module.exports = function(grunt) {
 		'jquery': [ paths.js_src + 'jquery.js' ],
 		'models': [ paths.js_garp + 'models/*.js', paths.js + 'models/*.js' ],
 		'cms': [
+			paths.js_garp + 'ckeditor/ckeditor.js',
 			paths.js_garp + 'overrides.js',
 			paths.js_garp + 'garp.config.js',
 			paths.js_garp + 'garp.renderers.js',
@@ -107,6 +108,7 @@ module.exports = function(grunt) {
 			paths.js_extux + 'ext.ux.pagingsearchbar.js',
 			paths.js_extux + 'ext.ux.form.searchfield.js',
 			paths.js_extux + 'ext.ux.form.richtexteditor.js',
+			paths.js_extux + 'ext.ux.form.ckeditor.js',
 			paths.js_garp + 'garp.i18n.js',
 			paths.js_garp + 'garp.wysiwygct.js',
 			paths.js_garp + 'garp.wysiwygabstract.js',
