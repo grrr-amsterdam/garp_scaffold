@@ -16,7 +16,8 @@
 		},
 		"html": {
 			"type": "html",
-			"required": false
+			"required": false,
+			"wysiwyg": true
 		},
 		"text": {
 			"required": false
