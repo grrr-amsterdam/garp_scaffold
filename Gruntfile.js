@@ -79,8 +79,8 @@ module.exports = function(grunt) {
 
 	// CDN location for image files referenced from css
 	var cdn = {};
-	cdn.development = 'http://localhost/css/compiled/img';
-	cdn.production = 'http://localhost/css/compiled/img';
+	cdn.development = '/css/img';
+	cdn.production = '/css/img';
 
 	var	build_stack = {
 		'libs': [
