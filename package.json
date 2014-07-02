@@ -26,7 +26,7 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-modernizr": "~0.5.2",
     "grunt-remove-logging": "~0.2.0",
-    "grunt-sass": "^0.11.0",
+    "grunt-sass": "~0.14.0",
     "grunt-tinypng": "^0.5.3",
     "grunt-webfont": "~0.2.1",
     "matchdep": "~0.3.0"

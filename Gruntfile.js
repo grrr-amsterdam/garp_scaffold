@@ -77,6 +77,11 @@ module.exports = function(grunt) {
 	paths.icons    = paths.css    + 'icons/';
 	paths.fonts    = paths.css    + 'compiled/fonts/icons/';
 
+	// CDN location for image files referenced from css
+	var cdn = {};
+	cdn.development = '/css/img';
+	cdn.production = '/css/img';
+
 	var	build_stack = {
 		'libs': [
 			paths.js_src + '/libs.js'
@@ -316,6 +321,10 @@ module.exports = function(grunt) {
 		},
 		sass: {
 			dev: {
+				options: {
+					imagePath: cdn.development,
+					sourceMap: true
+				},
 				files: {
 					'public/css/compiled/dev/base.css': paths.sass + 'base.scss',
 					'public/css/compiled/dev/cms.css': paths.sass + 'cms.scss',
@@ -323,6 +332,9 @@ module.exports = function(grunt) {
 				}
 			},
 			prod: {
+				options: {
+					imagePath: cdn.production
+				},
 				files: {
 					'public/css/compiled/prod/base.css': paths.sass + 'base.scss',
 					'public/css/compiled/prod/cms.css': paths.sass + 'cms.scss',
