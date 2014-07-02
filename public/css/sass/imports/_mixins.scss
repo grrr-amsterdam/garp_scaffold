@@ -37,8 +37,8 @@
  *   }
  * }
  */
-@mixin  active() {
-	&:hover, &:active, &:focus { @content; }
+@mixin active() {
+	.no-touch &:hover, &:active, &:focus { @content; }
 }
 
 /**
