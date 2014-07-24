@@ -9,35 +9,35 @@
 
 // IE8 Fix
 @font-face {
-	font-family:"icons";
-	src:url("../fonts/icons/icons-a8a70f42d8bc3a5a41b0a8328612f36a.eot");
-	font-weight:normal;
-	font-style:normal;
+	font-family: "icons";
+	src: url("../fonts/icons/icons-a8a70f42d8bc3a5a41b0a8328612f36a.eot");
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-	font-family:"icons";
-	src:url("../fonts/icons/icons-a8a70f42d8bc3a5a41b0a8328612f36a.eot");
-	src:url("../fonts/icons/icons-a8a70f42d8bc3a5a41b0a8328612f36a.eot?#iefix") format("embedded-opentype"),
+	font-family: "icons";
+	src: url("../fonts/icons/icons-a8a70f42d8bc3a5a41b0a8328612f36a.eot");
+	src: url("../fonts/icons/icons-a8a70f42d8bc3a5a41b0a8328612f36a.eot?#iefix") format("embedded-opentype"),
 		url("../fonts/icons/icons-a8a70f42d8bc3a5a41b0a8328612f36a.woff") format("woff"),
 		url("../fonts/icons/icons-a8a70f42d8bc3a5a41b0a8328612f36a.ttf") format("truetype");
-	font-weight:normal;
-	font-style:normal;
+	font-weight: normal;
+	font-style: normal;
 }
 
 %icon {
-	font-family:"icons";
-	display:inline-block;
-	font-weight:normal;
-	font-style:normal;
+	font-family: "icons";
+	display: inline-block;
+	font-weight: normal;
+	font-style: normal;
 	vertical-align: baseline;
 	line-height: 1;
-	speak:none;
-	text-decoration:inherit;
-	text-transform:none;
-	text-rendering:optimizeLegibility;
-	-webkit-font-smoothing:antialiased;
-	-moz-osx-font-smoothing:grayscale;
+	speak: none;
+	text-decoration: inherit;
+	text-transform: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 
@@ -49,8 +49,8 @@
  * or --after in de fontname before generating the icons
  */
 
-.icon-close:after { @extend %icon; content:"\f100"; }
-.icon-mail:before { @extend %icon; content:"\f101"; }
+.icon-close:after { @extend %icon; content: "\f100"; }
+.icon-mail:before { @extend %icon; content: "\f101"; }
 
 
 /*
@@ -65,33 +65,35 @@
  */
  
 .extend-icon-close-after {
-	font-family:"icons";
-	display:inline-block;
-	font-weight:normal;
-	font-style:normal;
+	font-family: "icons";
+	display: inline-block;
+	font-weight: normal;
+	font-style: normal;
 	vertical-align: baseline;
 	line-height: 1;
-	speak:none;
-	text-decoration:inherit;
-	text-transform:none;
-	text-rendering:optimizeLegibility;
-	-webkit-font-smoothing:antialiased;
-	-moz-osx-font-smoothing:grayscale;
-	content:"\f100"; }
+	speak: none;
+	text-decoration: inherit;
+	text-transform: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: "\f100"; 
+}
 	
 .extend-icon-mail {
-	font-family:"icons";
-	display:inline-block;
-	font-weight:normal;
-	font-style:normal;
+	font-family: "icons";
+	display: inline-block;
+	font-weight: normal;
+	font-style: normal;
 	vertical-align: baseline;
 	line-height: 1;
-	speak:none;
-	text-decoration:inherit;
-	text-transform:none;
-	text-rendering:optimizeLegibility;
-	-webkit-font-smoothing:antialiased;
-	-moz-osx-font-smoothing:grayscale;
-	content:"\f101"; }
+	speak: none;
+	text-decoration: inherit;
+	text-transform: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: "\f101"; 
+}
 	
 
