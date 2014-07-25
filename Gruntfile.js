@@ -362,6 +362,16 @@ module.exports = function(grunt) {
 				ext: '.css'
 			}
 		},
+		scsslint: {
+			allFiles: [
+      	  	  paths.sass + '**/*.scss',
+    		],
+    		options: {
+      	  	  bundleExec: false,
+      	  	  config: 'scss-lint.yml',
+      	  	  colorizeOutput: true
+    		},
+		},
 		watch: {
 			sass: {
 				files: [paths.sass + '/**/*.scss'],
