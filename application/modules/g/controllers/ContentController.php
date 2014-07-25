@@ -17,6 +17,27 @@ class G_ContentController extends Garp_Controller_Action {
 	const UPLOAD_TYPE_ALL = 'all';
 
 	/**
+ 	 * Called before all actions
+ 	 */
+	public function init() {
+		$config = Zend_Registry::get('config');
+		if (!$config->cms || !$config->cms->ipfilter || !count($config->cms->ipfilter->toArray())) {
+			return true;
+		}
+		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
+		if ($ip === '127.0.0.1') {
+			// i mean come on
+			return true;
+		}
+		if (!in_array($ip, $config->cms->ipfilter->toArray())) {
+			$authVars = Garp_Auth::getInstance()->getConfigValues();
+			$this->_helper->flashMessenger(__($authVars['noPermissionMsg']));
+			$this->_helper->redirector->gotoRoute(array(), $authVars['login']['route']);
+			return false;
+		}
+	}
+
+	/**
 	 * Test page
 	 * @return Void
 	 */
@@ -210,11 +231,14 @@ class G_ContentController extends Garp_Controller_Action {
 			throw new Zend_Controller_Action_Exception('Geen bestandsnaam opgegeven.', 404);
 		}
 
-		$fileHandler = new Garp_File($downloadType, $uploadOrStatic);
-
-		// Process the file
-		$url = $fileHandler->getUrl($file);
-		$this->_downloadFile($url);
+		try {
+			$fileHandler = new Garp_File($downloadType, $uploadOrStatic);
+			$url = $fileHandler->getUrl($file);
+			$this->_downloadFile($url);
+		} catch (Garp_File_Exception_InvalidType $e) {
+			// Just throw a 404, since the error is basically just a wrong URL.
+			throw new Zend_Controller_Action_Exception($e->getMessage(), 404);
+		}
 	}
 
 	/**
