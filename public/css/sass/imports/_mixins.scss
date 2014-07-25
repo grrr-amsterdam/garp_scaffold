@@ -10,7 +10,7 @@
  * Returns:
  * div { width: 30em; }
  */
-@function pxToEm($pixels){
+@function pxToEm($pixels) {
 	@return ($pixels/16)+0em;
 }
 
@@ -18,12 +18,27 @@
  * Color mixins (other than lighten or darken)
 */
 // Add percentage of white to a color
-@function tint($color, $percent){
+@function tint($color, $percent) {
   @return mix(white, $color, $percent);
 }
 // Add percentage of black to a color
 @function shade($color, $percent){
   @return mix(black, $color, $percent);
+}
+
+/**
+ * Shortcut for :hover, :active, and :focus styles.
+ * 
+ * Usage:
+ * a {
+ *   color: blue;
+ *   @include active() {
+ *     color: red;
+ *   }
+ * }
+ */
+@mixin active() {
+	.no-touch &:hover, &:active, &:focus { @content; }
 }
 
 /**
