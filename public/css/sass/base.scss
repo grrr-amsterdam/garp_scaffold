@@ -91,81 +91,18 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 	MODULES
 	========================================================================== */
 
-/* import modules here, eg. _header.scss, _article.scss, etc... */
-
 @import 'modules/cookie-info';
 @import 'modules/flash-message';
 
 /* ==========================================================================
-	HELPERS - margin
-	========================================================================== */
-
-/* no margin */
-.nm 			{ margin: 0; }
-.nmb 			{ margin-bottom: 0; }
-.nmt 			{ margin-top: 0; }
-
-/* margin-top */
-.mt 			{ margin-top: $margin; }
-.mt--half 		{ margin-top: $margin / 2; }
-.mt--double 	{ margin-top: $margin * 2; }
-.mt--triple		{ margin-top: $margin * 3; }
-.mt--quad	 	{ margin-top: $margin * 4; }
-
-/* margin-bottom */
-.mb 			{ margin-bottom: $margin; }
-.mb--half 		{ margin-bottom: $margin / 2; }
-.mb--double 	{ margin-bottom: $margin * 2; }
-.mb--triple	 	{ margin-bottom: $margin * 3; }
-.mb--quad	 	{ margin-bottom: $margin * 4; }
-
-/* pull-top */
-.pt 	 		{ margin-top: -($margin); }
-.pt--double		{ margin-top: -($margin * 2); }
-.pt--triple		{ margin-top: -($margin * 3); }
-.pt--quad 		{ margin-top: -($margin * 4); }
-
-@include bp-max($medium) {
-	.pt 			{ margin-top: -($margin); }
-	.pt--double		{ margin-top: -($margin * 2); }
-	.pt--triple		{ margin-top: -($margin * 3); }
-	.pt--quad 		{ margin-top: -($margin * 4); }
-}
-
-@include bp-max($small) {
-	.pt 			{ margin-top: 0; }
-	.pt--double		{ margin-top: 0; }
-	.pt--triple		{ margin-top: 0; }
-	.pt--quad 		{ margin-top: 0; }
-}
-
-/* padding */
-/* this can be very site specific, so use only when needed. Examples: */
-.p--normal 				{ @include responsive-padding($margin*1.5, $margin*2, $margin, $margin*2); }
-.p--normal--more-left 	{ @include responsive-padding($margin*1.5, $margin*2, $margin, $margin*4); }
-.p--normal--more-right 	{ @include responsive-padding($margin*1.5, $margin*4, $margin, $margin*2); }
-.p--extreme 			{ @include responsive-padding($margin*1.5, $margin*5, $margin*1.5, $margin*5) }
-
-
-/* ==========================================================================
-	HELPERS - color
-	========================================================================== */
-
-.color--white 		{ color: $white; }
-.color--black		{ color: $black; }
-
-.bg--white 			{ background: $white; }
-.bg--black			{ background: $black; }
-
-
-/* ==========================================================================
-   HELPERS - other
+   HELPERS
    ========================================================================== */
 
 .hidden { display: none !important; visibility: hidden !important; }
 .offscreen { position: absolute !important; left: -999em !important; }
 .invisible { visibility: hidden !important; }
-.clearfix { zoom: 1;
+.clearfix { 
+	zoom: 1;
 	&:after { height: 0; visibility: hidden; display: block; clear: both; content: ''; }
 }
 
