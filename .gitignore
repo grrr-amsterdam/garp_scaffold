@@ -15,7 +15,8 @@ public/uploads/private/*
 public/uploads/shared/*
 public/uploads/sandbox/*
 public/js/build/dev/*
-public/css/compiled/dev/*.css
+public/css/build/dev/*.css
+public/css/build/dev/*.css.map
 node_modules
 bower_components
 npm-debug.log
