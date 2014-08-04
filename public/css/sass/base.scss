@@ -20,26 +20,21 @@
  * Specific styles.....Common styles used througout the site
  * Layout..............General layout stuff
  * Modules.............Modules based on SMACSS
- * Helpers (margin)....Non semantic margin-helpers (like pulling, adding more margin, etc...)
- * Helpers (color).....Color classes for direct painting
- * Helpers (other).....Non-semantic helper classes (eg. clearfix)
  * Print styles........Styles for printing
  */
 
 
 /* import order is important */
-@import 'imports/mixins';
-@import 'imports/variables';
-
-@import 'imports/fonts';
-@import 'imports/icons';
-
-@import 'imports/normalize';
-@import 'imports/csswizardry-grids';
+@import 'utility/functions';
+@import 'utility/mixins';
+@import 'utility/variables';
+@import 'utility/fonts';
+@import 'utility/icons';
+@import 'utility/normalize';
 
 
 /* ==========================================================================
-	STYLES (primary)
+	PRIMER
 	========================================================================== */
 
 * { box-sizing: border-box; }
@@ -91,6 +86,7 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 	MODULES
 	========================================================================== */
 
+@import 'modules/csswizardry-grids';
 @import 'modules/cookie-info';
 @import 'modules/flash-message';
 
@@ -124,4 +120,4 @@ form .hp { display: none;}
 	PRINT
 	========================================================================== */
 
-@import 'imports/print';
+@import 'utility/print';
