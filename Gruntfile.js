@@ -75,7 +75,7 @@ module.exports = function(grunt) {
 	paths.sass     = paths.css    + 'sass/';
 
 	paths.icons    = paths.css    + 'icons/';
-	paths.fonts    = paths.css    + 'compiled/fonts/icons/';
+	paths.fonts    = paths.css    + 'build/fonts/icons/';
 
 	// CDN location for image files referenced from css
 	var cdn = {};
@@ -219,7 +219,7 @@ module.exports = function(grunt) {
 			    // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
 			    // You can override this by defining a "files" array below.
 			    "files" : {
-					"src": ['public/js/src/*', 'public/css/compiled/dev/*']
+					"src": ['public/js/src/*', 'public/css/build/dev/*']
 			    },
 
 			    // When parseFiles = true, matchCommunityTests = true will attempt to
@@ -300,7 +300,7 @@ module.exports = function(grunt) {
 					expand: true,
 					cwd: paths.css + '/img',
 					src: ['**/*.{jpg,gif}'],
-					dest: paths.css + '/compiled/img'
+					dest: paths.css + '/build/img'
 				}]
 			}
 		},
@@ -309,14 +309,14 @@ module.exports = function(grunt) {
 			options: {
 				apiKey: "GpST4zD3uNuHeQbIw7zs3hiL-raKJGMF",
 				checkSigs: true,
-				sigFile: paths.css + '/compiled/img/tinypng.json',
+				sigFile: paths.css + '/build/img/tinypng.json',
 				summarize: true
 			},
 			compress: {
 				expand: true,
 				src: ['**/*.png'],
 				cwd: paths.css + '/img/',
-				dest: paths.css + '/compiled/img/'
+				dest: paths.css + '/build/img/'
 			}
 		},
 		sass: {
@@ -326,9 +326,9 @@ module.exports = function(grunt) {
 					sourceMap: true
 				},
 				files: {
-					'public/css/compiled/dev/base.css': paths.sass + 'base.scss',
-					'public/css/compiled/dev/cms.css': paths.sass + 'cms.scss',
-					'public/css/compiled/dev/ie-old.css': paths.sass + 'ie-old.scss'
+					'public/css/build/dev/base.css': paths.sass + 'base.scss',
+					'public/css/build/dev/cms.css': paths.sass + 'cms.scss',
+					'public/css/build/dev/ie-old.css': paths.sass + 'ie-old.scss'
 				}
 			},
 			prod: {
@@ -336,9 +336,9 @@ module.exports = function(grunt) {
 					imagePath: cdn.production
 				},
 				files: {
-					'public/css/compiled/prod/base.css': paths.sass + 'base.scss',
-					'public/css/compiled/prod/cms.css': paths.sass + 'cms.scss',
-					'public/css/compiled/prod/ie-old.css': paths.sass + 'ie-old.scss'
+					'public/css/build/prod/base.css': paths.sass + 'base.scss',
+					'public/css/build/prod/cms.css': paths.sass + 'cms.scss',
+					'public/css/build/prod/ie-old.css': paths.sass + 'ie-old.scss'
 				}
 			}
 		},
@@ -347,18 +347,18 @@ module.exports = function(grunt) {
 				browsers: ['last 3 version', 'ie 8']
 			},
 			dev: {
-				src: paths.css + 'compiled/dev/*.css'
+				src: paths.css + 'build/dev/*.css'
 			},
 			prod: {
-				src: paths.css + 'compiled/prod/*.css'
+				src: paths.css + 'build/prod/*.css'
 			}
 		},
 		cssmin: {
 			prod: {
 				expand: true,
-				cwd: paths.css + 'compiled/prod/',
+				cwd: paths.css + 'build/prod/',
 				src: ['*.css'],
-				dest: paths.css + 'compiled/prod/',
+				dest: paths.css + 'build/prod/',
 				ext: '.css'
 			}
 		},
@@ -392,7 +392,7 @@ module.exports = function(grunt) {
 			}
 		},
 		clean: {
-			prod: [paths.css + '/compiled/prod', paths.build + '/prod']
+			prod: [paths.css + '/build/prod', paths.build + '/prod']
 		}
 	});
 

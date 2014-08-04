@@ -1,5 +1,6 @@
-@import 'imports/mixins';
-@import 'imports/variables';
+@import 'utility/functions';
+@import 'utility/mixins';
+@import 'utility/variables';
 
 .wysiwyg-body {
 	/* To make the WYSIWYG editor look like the real deal, do something like
