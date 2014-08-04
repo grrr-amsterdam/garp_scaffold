@@ -368,7 +368,7 @@ module.exports = function(grunt) {
     		],
     		options: {
       	  	  bundleExec: false,
-      	  	  config: 'scss-lint.yml',
+      	  	  config: '.scss-lint.yml',
       	  	  colorizeOutput: true
     		},
 		},
