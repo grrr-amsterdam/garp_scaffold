@@ -8,13 +8,10 @@
 $black: #000;
 $white: #ffffff;
 
-$blue--dark: #244057;
-$blue--light: #a7c0c6;
-$blue--lighter: tint($blue--light, 60%);
-$blue--lightest: tint($blue--light, 90%);
+$blue: #a7c0c6;
 
-$primaryColor: $blue--dark;
-
+$primaryColor: $blue;
+$linkColor: $primaryColor;
 
 // FONTS
 $defaultFontSize: 20;
@@ -26,10 +23,17 @@ $smallCapFont: sans-serif;
 
 // WIDTHS & SIZES
 $siteInnerWidth: 1020px;
-$siteOuterWidth: 1440px;
 
-// MARGINS
-$margin: 45px;
+/*
+ * z-index
+ * for stacking stuff
+ *
+ * define the stacking order for modules here
+ * within a module you should define it via
+ * the $module-z-index variable
+ */
+$z-index: (
+);
 
 // BREAKPOINTS
 // The following is inspired by this article: http://css-tricks.com/media-queries-sass-3-2-and-codekit/
