@@ -25,3 +25,56 @@
 @function shade($color, $percent){
   @return mix(black, $color, $percent);
 }
+
+/**
+ * z-index function
+ * For dynamically determining the stacking order of elements
+ *
+ * Usage:
+ * .module { z-index: z(module); }
+ * .module__child { z-index: z(module, child); }
+ *
+ * See $z-index variable in _variables.scss for stacking order
+ */
+$stacking-list: (
+	'modal',
+	'navigation'
+);
+
+@function z($element, $child: "") {
+	$z-index: index($stacking-list, $element);
+	
+	@if z-element-does-not-exists($element) {
+		@return null;
+		@warn 'There is no item "#{$element}" in this list; choose one of: #{$stacking-list}';
+	}
+
+	@if z-is-child-of-module($element, $child) {
+		$z-index: index($element, $child);
+	}
+
+	@return $z-index;
+}
+
+@function z-child-is-set ($element, $child) {
+	@if $child == null {
+		@return null;
+	}
+	
+	@if z-element-exists($element, $child) {
+		@warn 'There is no item "#{$child}" in this list; choose one of: #{$element}';
+		@return null;
+	}
+	@return true;
+}
+
+@function z-element-exists($element, $child) {
+	@if $child {
+		$element: index($element, $child);
+	}
+
+	@if $element {
+		@return true;
+	}
+	@return false;
+}
