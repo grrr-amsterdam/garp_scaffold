@@ -46,7 +46,11 @@ PackageRepository.prototype.fetch = function (decEndpoint) {
         info.resolver = resolver;
         isTargetable = resolver.constructor.isTargetable;
 
-        // If force flag is used, bypass cache
+        if (resolver.isNotCacheable()) {
+            return that._resolve(resolver, logger);
+        }
+
+        // If force flag is used, bypass cache, but write to cache anyway
         if (that._config.force) {
             logger.action('resolve', resolver.getSource() + '#' + resolver.getTarget());
             return that._resolve(resolver, logger);
@@ -165,19 +169,25 @@ PackageRepository.clearRuntimeCache = function () {
 // ---------------------
 
 PackageRepository.prototype._resolve = function (resolver, logger) {
+    var that = this;
+
     // Resolve the resolver
     return resolver.resolve()
     // Store in the cache
     .then(function (canonicalDir) {
-        return this._resolveCache.store(canonicalDir, resolver.getPkgMeta());
-    }.bind(this))
+        if (resolver.isNotCacheable()) {
+            return canonicalDir;
+        }
+
+        return that._resolveCache.store(canonicalDir, resolver.getPkgMeta());
+    })
     // Resolve promise with canonical dir and package meta
     .then(function (dir) {
         var pkgMeta = resolver.getPkgMeta();
 
         logger.info('resolved', resolver.getSource() + (pkgMeta._release ? '#' + pkgMeta._release : ''));
         return [dir, pkgMeta, resolver.constructor.isTargetable()];
-    }.bind(this));
+    });
 };
 
 PackageRepository.prototype._extendLog = function (log, info) {
