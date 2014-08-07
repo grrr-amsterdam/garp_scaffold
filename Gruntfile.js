@@ -370,7 +370,7 @@ module.exports = function(grunt) {
       	  	  bundleExec: false,
       	  	  config: '.scss-lint.yml',
       	  	  colorizeOutput: true
-    		},
+    		}
 		},
 		watch: {
 			sass: {
