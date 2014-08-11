@@ -246,7 +246,7 @@ module.exports = function(grunt) {
 				files: [
 					{ src: build_stack.main,   dest: paths.build + 'dev/main.js'},
 					{ src: build_stack.models, dest: paths.build + 'dev/extended-models.js'},
-					{ src: build_stack.cms,    dest: paths.build + 'dev/cms.js'}					
+					{ src: build_stack.cms,    dest: paths.build + 'dev/cms.js'}
 				],
 				options: {
 					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
@@ -386,7 +386,7 @@ module.exports = function(grunt) {
 				tasks: ['tinypng:compress']
 			},
 			options: {
-				livereload: 35728,
+				livereload: 35727,
 				spawn: false, // Should improve performance but might introduce bugs
 				interrupt: true // Should improve performance but might introduce bugs
 			}

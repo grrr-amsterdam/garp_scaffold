@@ -5,7 +5,7 @@
 
 /**
  * Shortcut for :hover, :active, and :focus styles.
- * 
+ *
  * Usage:
  * a {
  *   color: blue;
@@ -83,7 +83,13 @@
 		@content;
 	} @else {
 		@if $highDpi == true {
-			@media only screen and (min-width: pxToEm($point)) and (-webkit-min-device-pixel-ratio: 2), only screen and (min-width: $point) and (min--moz-device-pixel-ratio: 2), only screen and (min-width: $point) and (-o-min-device-pixel-ratio: 2/1), only screen and (min-width: $point) and (min-device-pixel-ratio: 2) { @content; }
+			@media
+            only screen and (min-width: pxToEm($point)) and (-webkit-min-device-pixel-ratio: 2),
+            only screen and (min-width: pxToEm($point)) and (   min--moz-device-pixel-ratio: 2),
+            only screen and (min-width: pxToEm($point)) and (     -o-min-device-pixel-ratio: 2/1),
+            only screen and (min-width: pxToEm($point)) and (        min-device-pixel-ratio: 2),
+            only screen and (min-width: pxToEm($point)) and (                min-resolution: 192dpi),
+            only screen and (min-width: pxToEm($point)) and (                min-resolution: 2dppx) { @content; }
 		} @else {
 			@media only screen and (min-width: pxToEm($point)) { @content; }
 		}
@@ -92,7 +98,14 @@
 
 @mixin bp-max($point: 0em, $highDpi: false) {
 	@if($highDpi == true) {
-		@media only screen and (max-width: (pxToEm($point) - 0.0625em)) and (-webkit-min-device-pixel-ratio: 2), only screen and (max-width: $point) and (min--moz-device-pixel-ratio: 2), only screen and (max-width: $point) and (-o-min-device-pixel-ratio: 2/1), only screen and (max-width: $point) and (min-device-pixel-ratio: 2) { @content; }
+		@media
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (   min--moz-device-pixel-ratio: 2),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (        min-device-pixel-ratio: 2),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (                min-resolution: 192dpi),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (                min-resolution: 2dppx) { @content; }
+
 	} @else {
 		@media only screen and (max-width: (pxToEm($point) - 0.0625em)) { @content; }
 	}
@@ -100,7 +113,13 @@
 
 @mixin bp-min-max($minPoint: 0em, $maxPoint: 0em, $highDpi: false) {
 	@if($highDpi == true) {
-		@media only screen and (min-width: pxToEm($minPoint)) and (-webkit-min-device-pixel-ratio: 2), only screen and (min-width: $minPoint) and (min--moz-device-pixel-ratio: 2), only screen and (min-width: $minPoint) and (-o-min-device-pixel-ratio: 2/1), only screen and (min-width: $minPoint) and (min-device-pixel-ratio: 2) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (-webkit-min-device-pixel-ratio: 2), only screen and (max-width: $maxPoint) and (min--moz-device-pixel-ratio: 2), only screen and (max-width: $maxPoint) and (-o-min-device-pixel-ratio: 2/1), only screen and (max-width: $maxPoint) and (min-device-pixel-ratio: 2) { @content; }
+		@media
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (   min--moz-device-pixel-ratio: 2),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (        min-device-pixel-ratio: 2),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (                min-resolution: 192dpi),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (                min-resolution: 2dppx) { @content; }
 	} @else {
 		@media only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) { @content; }
 	}
@@ -115,7 +134,13 @@
  * }
  */
 @mixin high-dpi() {
-	@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and(min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2) { @content; }
+	@media
+    only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (   min--moz-device-pixel-ratio: 2),
+    only screen and (     -o-min-device-pixel-ratio: 2/1),
+    only screen and (        min-device-pixel-ratio: 2),
+    only screen and (                min-resolution: 192dpi),
+    only screen and (                min-resolution: 2dppx) { @content; }
 }
 
 /**
