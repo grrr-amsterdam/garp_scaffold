@@ -12,7 +12,7 @@ grunt development
 ['bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'documentWritify:dev', 'sass:dev', 'autoprefixer:dev']
 
 1. Runs bower install, so all the depencies defined in bower.json are installed
-2. Copies over Modernizr and jQuery if used, since these are standalone files
+2. Copies over Modernizr, since it is a stand-alone file
 3. Concatenates all other bower depencies to one libs.js file
 4. Runs modernizr task to automatically determine which tests are necessary, writes resulting file to dev build folder
 5. Runs jshint to validate javascript
@@ -28,7 +28,7 @@ grunt production
 
 1. Cleans out js and css build folders so no legacy files are left behind
 2. Runs bower install, depencies should already be installed during development, but make sure just in case
-3. Copies over Modernizr and jQuery if used, since these are standalone files
+3. Copies over Modernizr, since it is a stand-alone file
 4. Concatenates all other bower depencies to one libs.js file
 5. Runs modernizr task to automatically determine which tests are necessary, writes resulting file to dev build folder
 6. Runs jshint to validate javascript
@@ -39,8 +39,6 @@ grunt production
 11. Minify css
 12. Compress jpg and gif images used for css
 13. Compress png images used for css
-
-* May produce a warning when jQuery is not used, this is expected behaviour and safe to ignore
 
 ----------------------------------
 
@@ -95,7 +93,6 @@ module.exports = function(grunt) {
 			paths.js_src + 'main.js'
 		],
 		'modernizr': [ paths.js_src + 'modernizr.js' ],
-		'jquery': [ paths.js_src + 'jquery.js' ],
 		'models': [ paths.js_garp + 'models/*.js', paths.js + 'models/*.js' ],
 		'cms': [
 			paths.js_garp + 'ckeditor/ckeditor.js',
@@ -173,7 +170,6 @@ module.exports = function(grunt) {
 				files: [
 					// Copy modernizr
 					{expand: true, flatten: true, src: ['bower_components/modernizr/modernizr.js'], dest: paths.js_src, filter: 'isFile'},
-					{expand: true, flatten: true, src: ['bower_components/jquery/jquery.js'], dest: paths.js_src, filter: 'isFile'}
 				]
 			}
 		},
@@ -263,7 +259,6 @@ module.exports = function(grunt) {
 				files: [
 					{src: build_stack.main,      dest: paths.build + 'prod/main.js'},
 					{src: build_stack.modernizr, dest: paths.build + 'prod/modernizr.js'},
-					{src: build_stack.jquery,    dest: paths.build + 'prod/jquery.js'},
 					{src: build_stack.models,    dest: paths.build + 'prod/extended-models.js'},
 					{src: build_stack.cms,       dest: paths.build + 'prod/cms.js'}
 				]
