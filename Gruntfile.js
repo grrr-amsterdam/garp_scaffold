@@ -262,6 +262,18 @@ module.exports = function(grunt) {
 					{src: build_stack.cms,       dest: paths.build + 'prod/cms.js'},
 					{src: build_stack.build + 'dev/modernizr.js', dest: paths.build + 'prod/modernizr.js'}				
 				]
+			},
+			dev: {
+				options: {
+					compress: {
+						drop_console: true
+					}
+				},
+				files: [
+					// Do not documentWritify modernizr cause we want to include it directly in the
+					// head.
+					{src: paths.build + "dev/modernizr.js", dest: paths.build + 'dev/modernizr.js'}
+				]
 			}
 		},
 		removelogging: {
@@ -444,6 +456,7 @@ module.exports = function(grunt) {
 		'modernizr',
 		'jshint',
 		'documentWritify:dev',
+		'uglify:dev',
 		'sass:dev',
 		'autoprefixer:dev'
 	]);
