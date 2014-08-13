@@ -258,9 +258,9 @@ module.exports = function(grunt) {
 				},
 				files: [
 					{src: build_stack.main,      dest: paths.build + 'prod/main.js'},
-					{src: build_stack.modernizr, dest: paths.build + 'prod/modernizr.js'},
 					{src: build_stack.models,    dest: paths.build + 'prod/extended-models.js'},
-					{src: build_stack.cms,       dest: paths.build + 'prod/cms.js'}
+					{src: build_stack.cms,       dest: paths.build + 'prod/cms.js'},
+					{src: build_stack.build + 'dev/modernizr.js', dest: paths.build + 'prod/modernizr.js'}				
 				]
 			}
 		},
