@@ -75,8 +75,8 @@ module.exports = function(grunt) {
 	// CDN location for image files referenced from css
 	var cdn = {
 		development: '/css/img',
-		staging: '/css/img',
-		production: '/css/img'
+		staging:     '/css/img',
+		production:  '/css/img'
 	};
 
 	var	build_stack = {
@@ -96,7 +96,6 @@ module.exports = function(grunt) {
 		'cms': require('./garp/public/js/cmsBuildStack.js').stack
 	};
 	build_stack.main = build_stack.libs.concat(build_stack.garp).concat(build_stack.src);
-
 
 	// Grunt configuration.
 	grunt.initConfig({
@@ -131,7 +130,7 @@ module.exports = function(grunt) {
 			    "devFile": paths.js_src+"modernizr.js",
 
 			    // [REQUIRED] Path to save out the built file.
-			    "outputFile": paths.js_build + "dev/modernizr.js",
+			    "outputFile": paths.js_build + "dev/<%=semver%>/modernizr.js",
 
 			    // Based on default settings on http://modernizr.com/download/
 			    "extra": {
@@ -167,7 +166,7 @@ module.exports = function(grunt) {
 			    // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
 			    // You can override this by defining a "files" array below.
 			    "files": {
-					"src": [ paths.js_src + '*', paths.css_build + 'dev/*']
+					"src": [ paths.js_src + '*', paths.css_build + 'dev/<%=semver%>/*']
 			    },
 
 			    // When parseFiles = true, matchCommunityTests = true will attempt to
@@ -192,9 +191,9 @@ module.exports = function(grunt) {
 		documentWritify: {
 			dev: {
 				files: [
-					{ src: build_stack.main,   dest: paths.js_build + 'dev/main.js'},
-					{ src: build_stack.models, dest: paths.js_build + 'dev/extended-models.js'},
-					{ src: build_stack.cms,    dest: paths.js_build + 'dev/cms.js'}					
+					{ src: build_stack.main,   dest: paths.js_build + 'dev/<%=semver%>/main.js'},
+					{ src: build_stack.models, dest: paths.js_build + 'dev/<%=semver%>/extended-models.js'},
+					{ src: build_stack.cms,    dest: paths.js_build + 'dev/<%=semver%>/cms.js'}					
 				],
 				options: {
 					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
@@ -209,10 +208,10 @@ module.exports = function(grunt) {
 					}
 				},
 				files: [
-					{src: build_stack.main, dest: paths.js_build + 'prod/main.js'},
-					{src: build_stack.models, dest: paths.js_build + 'prod/extended-models.js'},
-					{src: build_stack.cms, dest: paths.js_build + 'prod/cms.js'},
-					{src: paths.js_build + 'dev/modernizr.js', dest: paths.js_build + 'prod/modernizr.js'}				
+					{src: build_stack.main, dest: paths.js_build + 'prod/<%=semver%>/main.js'}, 
+					{src: build_stack.models, dest: paths.js_build + 'prod/<%=semver%>/extended-models.js'},
+					{src: build_stack.cms, dest: paths.js_build + 'prod/<%=semver%>/cms.js'},
+					{src: paths.js_build + 'dev/<%=semver%>/modernizr.js', dest: paths.js_build + 'prod/<%=semver%>/modernizr.js'}				
 				]
 			},
 			dev: {
@@ -224,7 +223,7 @@ module.exports = function(grunt) {
 				files: [
 					// Do not documentWritify modernizr cause we want to include it directly in the
 					// head.
-					{src: paths.js_build + "dev/modernizr.js", dest: paths.js_build + 'dev/modernizr.js'}
+					{src: paths.js_build + "dev/<%=semver%>/modernizr.js", dest: paths.js_build + 'dev/<%=semver%>/modernizr.js'}
 				]
 			}
 		},
@@ -278,9 +277,9 @@ module.exports = function(grunt) {
 				},
 				files: (function() {
 					var obj = {};
-					obj[paths.css_build + 'dev/base.css']   = paths.sass + 'base.scss';
-					obj[paths.css_build + 'dev/cms.css']    = paths.sass + 'cms.scss';
-					obj[paths.css_build + 'dev/ie-old.css'] = paths.sass + 'ie-old.scss';
+					obj[paths.css_build + 'dev/<%=semver%>/base.css']   = paths.sass + 'base.scss';
+					obj[paths.css_build + 'dev/<%=semver%>/cms.css']    = paths.sass + 'cms.scss';
+					obj[paths.css_build + 'dev/<%=semver%>/ie-old.css'] = paths.sass + 'ie-old.scss';
 					return obj;
 				})()
 			},
@@ -290,9 +289,9 @@ module.exports = function(grunt) {
 				},
 				files: (function() {
 					var obj = {};
-					obj[paths.css_build + 'prod/base.css'] = paths.sass + 'base.scss';
-					obj[paths.css_build + 'prod/cms.css'] = paths.sass + 'cms.scss';
-					obj[paths.css_build + 'prod/ie-old.css'] = paths.sass + 'ie-old.scss';
+					obj[paths.css_build + 'prod/<%=semver%>/base.css'] = paths.sass + 'base.scss';
+					obj[paths.css_build + 'prod/<%=semver%>/cms.css'] = paths.sass + 'cms.scss';
+					obj[paths.css_build + 'prod/<%=semver%>/ie-old.css'] = paths.sass + 'ie-old.scss';
 					return obj;
 				})()
 			}
@@ -302,18 +301,18 @@ module.exports = function(grunt) {
 				browsers: ['last 3 version', 'ie 8']
 			},
 			dev: {
-				src: paths.css_build + 'dev/*.css'
+				src: paths.css_build + 'dev/<%=semver%>/*.css'
 			},
 			prod: {
-				src: paths.css_build + 'prod/*.css'
+				src: paths.css_build + 'prod/<%=semver%>/*.css'
 			}
 		},
 		cssmin: {
 			prod: {
 				expand: true,
-				cwd: paths.css_build + 'prod/',
+				cwd: paths.css_build + 'prod/<%=semver%>',
 				src: ['*.css'],
-				dest: paths.css_build + 'prod/',
+				dest: paths.css_build + 'prod/<%=semver%>',
 				ext: '.css'
 			}
 		},
@@ -347,7 +346,7 @@ module.exports = function(grunt) {
 			}
 		},
 		clean: {
-			prod: [paths.css_build + 'prod', paths.js_build + 'prod']
+			prod: [paths.css_build + 'prod/<%=semver%>', paths.js_build + 'prod/<%=semver%>']
 		}
 	});
 
@@ -383,28 +382,39 @@ module.exports = function(grunt) {
 	 * Author: Larix Kortbeek
 	 */
 	grunt.registerTask("gitBranch", "Echo current git branch", function () {
+		var done = this.async();
 		grunt.util.spawn({
 			cmd : 'git',
 			args : ['rev-parse', '--abbrev-ref', 'HEAD']
 		}, function (err, result) {
 		  if (!err) {
-			grunt.log.writeln('').writeln('Working on: ' + (result + "").yellow);
+			grunt.log.writeln('Working on: ' + (result + "").yellow);
+			return done();
 		  }
+		  done(false);
 		});
 	});
 
 	/**
 	 * Echo the project's semver
 	 */
-	grunt.registerTask('semver', 'Echo current version', function() {
+	grunt.registerTask('echoSemver', 'Echo current version', function() {
+		grunt.log.writeln('Current version: ' + (grunt.config('semver') + '').yellow);
+	});
+
+	grunt.registerTask('determineSemver', 'Figure out which version we\'re at', function() {
+		var done = this.async();
 		grunt.util.spawn({
 			cmd: 'semver'
 		}, function(err, result) {
 			if (err) {
 				grunt.log.error(err);
+				done(false);
 				return false;
 			}
-			grunt.log.writeln('Current version: ' + (result + '').yellow);
+			grunt.config('semver', result);
+			grunt.log.writeln('Semver is at ' + grunt.config('semver'));
+			done();
 		});
 	});
 
@@ -413,6 +423,7 @@ module.exports = function(grunt) {
 	 * note: doesn't minify js or css
 	 */
 	grunt.registerTask('development', [
+		'determineSemver',
 		'bower',
 		'copy',
 		'bower_concat',
@@ -428,6 +439,7 @@ module.exports = function(grunt) {
 	 * grunt production
 	 */
 	grunt.registerTask('production', [
+		'determineSemver',
 		'clean:prod',
 		'bower',
 		'copy',
@@ -446,17 +458,17 @@ module.exports = function(grunt) {
 	 * grunt icons
 	 * note: generates icon font
 	 */
-	grunt.registerTask('icons', ['webfont:icons']);
+	grunt.registerTask('icons', ['determineSemver', 'webfont:icons']);
 
 	/**
 	 * grunt images
 	 * note: compresses images with imagemin and tinypng
 	 */
-	grunt.registerTask('images', ['imagemin:compress', 'tinypng:compress']);
+	grunt.registerTask('images', ['determineSemver', 'imagemin:compress', 'tinypng:compress']);
 
 	/**
 	 * grunt
 	 */
-	grunt.registerTask('default', ['development', 'gitBranch', 'semver', 'watch']);
+	grunt.registerTask('default', ['development', 'gitBranch', 'echoSemver', 'watch']);
 
 };
