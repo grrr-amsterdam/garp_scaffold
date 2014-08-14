@@ -15,8 +15,8 @@ public/uploads/private/*
 public/uploads/shared/*
 public/uploads/sandbox/*
 public/js/build/dev/*
-public/css/build/dev/*.css
-public/css/build/dev/*.css.map
+public/css/build/dev/**/*.css
+public/css/build/dev/**/*.css.map
 npm-debug.log
 .DS_Store
 .project
