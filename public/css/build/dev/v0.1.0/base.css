@@ -432,6 +432,9 @@ body {
   background: #fff;
   margin: 0; }
 
+body {
+  background-image: url("/css/img/isitgoldinhereorisitjustme.jpg"); }
+
 @media only screen and (max-width: 39.9375em) {
   input {
     font-size: 16px; } }

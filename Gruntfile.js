@@ -413,7 +413,6 @@ module.exports = function(grunt) {
 				return false;
 			}
 			grunt.config('semver', result);
-			grunt.log.writeln('Semver is at ' + grunt.config('semver'));
 			done();
 		});
 	});
