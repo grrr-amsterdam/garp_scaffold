@@ -56,8 +56,6 @@ Compresses images, see steps 11 and 12 of Grunt production
 */
 
 module.exports = function(grunt) {
-
-
 	// File and path configuration
 	var paths = {};
 	paths.public   = 'public/';
@@ -94,54 +92,7 @@ module.exports = function(grunt) {
 		],
 		'modernizr': [ paths.js_src + 'modernizr.js' ],
 		'models': [ paths.js_garp + 'models/*.js', paths.js + 'models/*.js' ],
-		'cms': [
-			paths.js_garp + 'ckeditor/ckeditor.js',
-			paths.js_garp + 'overrides.js',
-			paths.js_garp + 'garp.config.js',
-			paths.js_garp + 'garp.renderers.js',
-			paths.js_extux + 'ext.ux.searchbar.js',
-			paths.js_extux + 'ext.ux.form.datetime.js',
-			paths.js_garp + 'garp.mapwindow.js',
-			paths.js_garp + 'garp.mapfield.js',
-			paths.js_extux + 'ext.ux.form.rendereddisplayfield.js',
-			paths.js_extux + 'ext.ux.form.fileuploadfield.js',
-			paths.js_extux + 'ext.ux.form.uploadcombo.js',
-			paths.js_extux + 'ext.ux.form.uploadfield.js',
-			paths.js_extux + 'ext.ux.pagingsearchbar.js',
-			paths.js_extux + 'ext.ux.form.searchfield.js',
-			paths.js_extux + 'ext.ux.form.richtexteditor.js',
-			paths.js_extux + 'ext.ux.form.ckeditor.js',
-			paths.js_garp + 'garp.i18n.js',
-			paths.js_garp + 'garp.wysiwygct.js',
-			paths.js_garp + 'garp.wysiwygabstract.js',
-			paths.js_garp + 'garp.filtermenu.js',
-			paths.js_garp + 'garp.tweetwindow.js',
-			paths.js_garp + 'garp.imageeditor.js',
-			paths.js_garp + 'garp.imagepickerwindow.js',
-			paths.js_garp + 'garp.modelpickerwindow.js',
-			paths.js_garp + 'garp.relatecreatewindow.js',
-			paths.js_garp + 'garp.inlinerelator.js',
-			paths.js_garp + 'youtubeuploadwindow.js',
-			paths.js_extux + 'ext.ux.relationfield.js',
-			paths.js_extux + 'ext.ux.relationpanel.js',
-			paths.js_extux + 'ext.ux.superboxselect.js',
-			paths.js_garp + 'garp.metapanel.js',
-			paths.js_garp + 'garp.modelmenu.js',
-			paths.js_garp + 'garp.welcomepanel.js',
-			paths.js_garp + 'garp.gridpanel.js',
-			paths.js_garp + 'garp.formpanel.js',
-			paths.js_garp + 'garp.toolbar.js',
-			paths.js_garp + 'garp.infopanel.js',
-			paths.js_garp + 'garp.viewport.js',
-			paths.js_garp + 'garp.exportwindow.js',
-			paths.js_garp + 'garp.importwindow.js',
-			paths.js_garp + 'garp.passwordfieldset.js',
-			paths.js_extux + 'ext.ux.datetimepicker.js',
-			paths.js_extux + 'ext.ux.menu.datetimemenu.js',
-			paths.js_garp + 'garp.datatype.js',
-			paths.js_garp + 'overrides.postinit.js',
-			paths.js_garp + 'garp.js'
-		]
+		'cms': require('./garp/public/js/cmsBuildStack.js').stack
 	};
 	build_stack.main = build_stack.libs.concat(build_stack.garp).concat(build_stack.src);
 
@@ -445,10 +396,25 @@ module.exports = function(grunt) {
 		});
 	});
 
-	/*
-	   grunt development
-	   note: doesn't minify js or css
-	*/
+	/**
+	 * Echo the project's semver
+	 */
+	grunt.registerTask('semver', 'Echo current version', function() {
+		grunt.util.spawn({
+			cmd: 'semver'
+		}, function(err, result) {
+			if (err) {
+				grunt.log.error(err);
+				return false;
+			}
+			grunt.log.writeln('Current version: ' + (result + '').yellow);
+		});
+	});
+
+	/**
+	 * grunt development
+	 * note: doesn't minify js or css
+	 */
 	grunt.registerTask('development', [
 		'bower',
 		'copy',
@@ -461,9 +427,9 @@ module.exports = function(grunt) {
 		'autoprefixer:dev'
 	]);
 
-	/*
-	   grunt production
-	*/
+	/**
+	 * grunt production
+	 */
 	grunt.registerTask('production', [
 		'clean:prod',
 		'bower',
@@ -479,22 +445,22 @@ module.exports = function(grunt) {
 		'tinypng:compress'
 	]);
 
-	/*
-	   grunt icons
-	   note: generates icon font
-	*/
+	/**
+	 * grunt icons
+	 * note: generates icon font
+	 */
 	grunt.registerTask('icons', ['webfont:icons']);
 
 
-	/*
-	   grunt images
-	   note: compresses images with imagemin and tinypng
-	*/
+	/**
+	 * grunt images
+	 * note: compresses images with imagemin and tinypng
+	 */
 	grunt.registerTask('images', ['imagemin:compress', 'tinypng:compress']);
 
-	/*
-	   grunt
-	*/
-	grunt.registerTask('default', ['development', 'gitBranch', 'watch']);
+	/**
+	 * grunt
+	 */
+	grunt.registerTask('default', ['development', 'gitBranch', 'semver', 'watch']);
 
 };
