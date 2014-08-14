@@ -24,7 +24,7 @@ grunt development
 
 grunt production
 
-['clean:prod', 'bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'uglify:prod', 'removelogging', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']
+['clean:prod', 'bower', 'copy', 'bower_concat', 'modernizr', 'jshint', 'uglify:prod', 'sass:prod', 'autoprefixer:prod', 'cssmin:prod', 'imagemin:compress', 'tinypng:compress']
 
 1. Cleans out js and css build folders so no legacy files are left behind
 2. Runs bower install, depencies should already be installed during development, but make sure just in case
@@ -209,9 +209,9 @@ module.exports = function(grunt) {
 					}
 				},
 				files: [
-					{src: build_stack.main,      dest: paths.js_build + 'prod/main.js'},
-					{src: build_stack.models,    dest: paths.js_build + 'prod/extended-models.js'},
-					{src: build_stack.cms,       dest: paths.js_build + 'prod/cms.js'},
+					{src: build_stack.main, dest: paths.js_build + 'prod/main.js'},
+					{src: build_stack.models, dest: paths.js_build + 'prod/extended-models.js'},
+					{src: build_stack.cms, dest: paths.js_build + 'prod/cms.js'},
 					{src: paths.js_build + 'dev/modernizr.js', dest: paths.js_build + 'prod/modernizr.js'}				
 				]
 			},
@@ -226,14 +226,6 @@ module.exports = function(grunt) {
 					// head.
 					{src: paths.js_build + "dev/modernizr.js", dest: paths.js_build + 'dev/modernizr.js'}
 				]
-			}
-		},
-		removelogging: {
-			dist: {
-				src: paths.js_build + "prod/*.js",
-				options: {
-					namespace: ['console', 'window.console', 'alert']
-				}
 			}
 		},
 		webfont: {
