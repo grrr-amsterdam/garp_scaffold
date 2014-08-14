@@ -366,6 +366,7 @@ button, .btn, input[type="button"], input[type="reset"], input[type="submit"] {
   cursor: pointer;
   -moz-user-select: -moz-none;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   -moz-user-drag: -moz-none;
   -webkit-user-drag: none;
@@ -385,8 +386,6 @@ input[type="checkbox"], input[type="radio"] {
 
 input[type="search"] {
   -webkit-appearance: textfield;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   box-sizing: content-box; }
 
 input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button {
@@ -445,6 +444,7 @@ body {
 a, a:hover, a:active {
   vertical-align: baseline;
   text-decoration: none;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   /* Remove the blue tap-highlight on mobile */ }
@@ -653,9 +653,7 @@ $breakpoints: (
   /* [3] */
   width: 100%;
   /* [4] */
-  -webkit-box-sizing: border-box;
   /* [5] */
-  -moz-box-sizing: border-box;
   /* [5] */
   box-sizing: border-box;
   /* [5] */ }
@@ -1158,17 +1156,21 @@ $breakpoints: (
   color: #111;
   background: #FF4136;
   opacity: 0;
+  -webkit-transform: translate3d(0, -50px, 0);
   transform: translate3d(0, -50px, 0);
+  -webkit-transition: opacity 0.25s ease-out, -webkit-transform 0.25s ease-out;
   transition: opacity 0.25s ease-out, transform 0.25s ease-out; }
   .flash-message p {
     margin-bottom: 0; }
 
 .flash-message-active .flash-message {
   opacity: 1;
+  -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0); }
 
 .flash-message-inactive .flash-message {
   opacity: 0;
+  -webkit-transform: translate3d(0, -50px, 0);
   transform: translate3d(0, -50px, 0); }
 
 /* ==========================================================================
@@ -1237,6 +1239,7 @@ form .hp {
     background: transparent !important;
     color: #000 !important;
     text-shadow: none !important;
+    -webkit-filter: none !important;
     filter: none !important;
     -ms-filter: none !important; }
   a, a:visited {
@@ -1261,5 +1264,4 @@ form .hp {
     widows: 3; }
   h2, h3 {
     page-break-after: avoid; } }
-
 /*# sourceMappingURL=base.css.map */
