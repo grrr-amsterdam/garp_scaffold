@@ -54,29 +54,30 @@ Compresses images, see steps 11 and 12 of Grunt production
 
 ----------------------------------
 */
-
 module.exports = function(grunt) {
 	// File and path configuration
 	var paths = {};
-	paths.public   = 'public/';
+	paths.public    = 'public/';
 
-	paths.js       = paths.public + 'js/';
-	paths.css      = paths.public + 'css/';
+	paths.js        = paths.public + 'js/';
+	paths.css       = paths.public + 'css/';
 
-	paths.js_src   = paths.js + 'src/';
-	paths.js_garp  = paths.js + 'garp/';
-	paths.js_extux = paths.js_garp + 'extux/';
-	paths.build    = paths.js + 'build/';
+	paths.js_src    = paths.js + 'src/';
+	paths.js_build  = paths.js + 'build/';
+	paths.js_garp   = paths.js + 'garp/';
 
-	paths.sass     = paths.css    + 'sass/';
+	paths.sass      = paths.css + 'sass/';
+	paths.css_build = paths.css + 'build/';
 
-	paths.icons    = paths.css    + 'icons/';
-	paths.fonts    = paths.css    + 'build/fonts/icons/';
+	paths.icons     = paths.css + 'icons/';
+	paths.fonts     = paths.css_build + 'fonts/icons/';
 
 	// CDN location for image files referenced from css
-	var cdn = {};
-	cdn.development = '/css/img';
-	cdn.production = '/css/img';
+	var cdn = {
+		development: '/css/img',
+		staging: '/css/img',
+		production: '/css/img'
+	};
 
 	var	build_stack = {
 		'libs': [
@@ -127,54 +128,54 @@ module.exports = function(grunt) {
 		modernizr: {
 			dist: {
 			    // [REQUIRED] Path to the build you're using for development.
-			    "devFile" : paths.js_src+"modernizr.js",
+			    "devFile": paths.js_src+"modernizr.js",
 
 			    // [REQUIRED] Path to save out the built file.
-			    "outputFile" : paths.build + "dev/modernizr.js",
+			    "outputFile": paths.js_build + "dev/modernizr.js",
 
 			    // Based on default settings on http://modernizr.com/download/
-			    "extra" : {
-			        "shiv" : true,
-			        "printshiv" : false,
-			        "load" : false,
-			        "mq" : false,
-			        "cssclasses" : true
+			    "extra": {
+			        "shiv":       true,
+			        "printshiv":  false,
+			        "load":       false,
+			        "mq":         false,
+			        "cssclasses": true
 			    },
 
 			    // Based on default settings on http://modernizr.com/download/
-			    "extensibility" : {
-			        "addtest" : false,
-			        "prefixed" : false,
-			        "teststyles" : false,
-			        "testprops" : false,
-			        "testallprops" : false,
-			        "hasevents" : false,
-			        "prefixes" : false,
-			        "domprefixes" : false
+			    "extensibility": {
+			        "addtest":      false,
+			        "prefixed":     false,
+			        "teststyles":   false,
+			        "testprops":    false,
+			        "testallprops": false,
+			        "hasevents":    false,
+			        "prefixes":     false,
+			        "domprefixes":  false
 			    },
 
 			    // By default, source is uglified before saving
-			    "uglify" : false,
+			    "uglify": false,
 
 			    // Define any tests you want to implicitly include.
-			    "tests" : [],
+			    "tests": [],
 
 			    // By default, this task will crawl your project for references to Modernizr tests.
 			    // Set to false to disable.
-			    "parseFiles" : true,
+			    "parseFiles": true,
 
 			    // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
 			    // You can override this by defining a "files" array below.
-			    "files" : {
-					"src": ['public/js/src/*', 'public/css/build/dev/*']
+			    "files": {
+					"src": [ paths.js_src + '*', paths.css_build + 'dev/*']
 			    },
 
 			    // When parseFiles = true, matchCommunityTests = true will attempt to
 			    // match user-contributed tests.
-			    "matchCommunityTests" : false,
+			    "matchCommunityTests": false,
 
 			    // Have custom Modernizr tests? Add paths to their location here.
-			    "customTests" : []
+			    "customTests": []
 			}
 		},
 		jshint: {
@@ -191,9 +192,9 @@ module.exports = function(grunt) {
 		documentWritify: {
 			dev: {
 				files: [
-					{ src: build_stack.main,   dest: paths.build + 'dev/main.js'},
-					{ src: build_stack.models, dest: paths.build + 'dev/extended-models.js'},
-					{ src: build_stack.cms,    dest: paths.build + 'dev/cms.js'}					
+					{ src: build_stack.main,   dest: paths.js_build + 'dev/main.js'},
+					{ src: build_stack.models, dest: paths.js_build + 'dev/extended-models.js'},
+					{ src: build_stack.cms,    dest: paths.js_build + 'dev/cms.js'}					
 				],
 				options: {
 					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
@@ -208,10 +209,10 @@ module.exports = function(grunt) {
 					}
 				},
 				files: [
-					{src: build_stack.main,      dest: paths.build + 'prod/main.js'},
-					{src: build_stack.models,    dest: paths.build + 'prod/extended-models.js'},
-					{src: build_stack.cms,       dest: paths.build + 'prod/cms.js'},
-					{src: build_stack.build + 'dev/modernizr.js', dest: paths.build + 'prod/modernizr.js'}				
+					{src: build_stack.main,      dest: paths.js_build + 'prod/main.js'},
+					{src: build_stack.models,    dest: paths.js_build + 'prod/extended-models.js'},
+					{src: build_stack.cms,       dest: paths.js_build + 'prod/cms.js'},
+					{src: paths.js_build + 'dev/modernizr.js', dest: paths.js_build + 'prod/modernizr.js'}				
 				]
 			},
 			dev: {
@@ -223,13 +224,13 @@ module.exports = function(grunt) {
 				files: [
 					// Do not documentWritify modernizr cause we want to include it directly in the
 					// head.
-					{src: paths.build + "dev/modernizr.js", dest: paths.build + 'dev/modernizr.js'}
+					{src: paths.js_build + "dev/modernizr.js", dest: paths.js_build + 'dev/modernizr.js'}
 				]
 			}
 		},
 		removelogging: {
 			dist: {
-				src: "public/js/build/prod/*.js",
+				src: paths.js_build + "prod/*.js",
 				options: {
 					namespace: ['console', 'window.console', 'alert']
 				}
@@ -258,7 +259,7 @@ module.exports = function(grunt) {
 					expand: true,
 					cwd: paths.css + '/img',
 					src: ['**/*.{jpg,gif}'],
-					dest: paths.css + '/build/img'
+					dest: paths.css_build + 'img'
 				}]
 			}
 		},
@@ -267,14 +268,14 @@ module.exports = function(grunt) {
 			options: {
 				apiKey: "GpST4zD3uNuHeQbIw7zs3hiL-raKJGMF",
 				checkSigs: true,
-				sigFile: paths.css + '/build/img/tinypng.json',
+				sigFile: paths.css_build + 'img/tinypng.json',
 				summarize: true
 			},
 			compress: {
 				expand: true,
 				src: ['**/*.png'],
 				cwd: paths.css + '/img/',
-				dest: paths.css + '/build/img/'
+				dest: paths.css_build + 'img/'
 			}
 		},
 		sass: {
@@ -283,21 +284,25 @@ module.exports = function(grunt) {
 					imagePath: cdn.development,
 					sourceMap: true
 				},
-				files: {
-					'public/css/build/dev/base.css': paths.sass + 'base.scss',
-					'public/css/build/dev/cms.css': paths.sass + 'cms.scss',
-					'public/css/build/dev/ie-old.css': paths.sass + 'ie-old.scss'
-				}
+				files: (function() {
+					var obj = {};
+					obj[paths.css_build + 'dev/base.css']   = paths.sass + 'base.scss';
+					obj[paths.css_build + 'dev/cms.css']    = paths.sass + 'cms.scss';
+					obj[paths.css_build + 'dev/ie-old.css'] = paths.sass + 'ie-old.scss';
+					return obj;
+				})()
 			},
 			prod: {
 				options: {
 					imagePath: cdn.production
 				},
-				files: {
-					'public/css/build/prod/base.css': paths.sass + 'base.scss',
-					'public/css/build/prod/cms.css': paths.sass + 'cms.scss',
-					'public/css/build/prod/ie-old.css': paths.sass + 'ie-old.scss'
-				}
+				files: (function() {
+					var obj = {};
+					obj[paths.css_build + 'prod/base.css'] = paths.sass + 'base.scss';
+					obj[paths.css_build + 'prod/cms.css'] = paths.sass + 'cms.scss';
+					obj[paths.css_build + 'prod/ie-old.css'] = paths.sass + 'ie-old.scss';
+					return obj;
+				})()
 			}
 		},
 		autoprefixer: {
@@ -305,18 +310,18 @@ module.exports = function(grunt) {
 				browsers: ['last 3 version', 'ie 8']
 			},
 			dev: {
-				src: paths.css + 'build/dev/*.css'
+				src: paths.css_build + 'dev/*.css'
 			},
 			prod: {
-				src: paths.css + 'build/prod/*.css'
+				src: paths.css_build + 'prod/*.css'
 			}
 		},
 		cssmin: {
 			prod: {
 				expand: true,
-				cwd: paths.css + 'build/prod/',
+				cwd: paths.css_build + 'prod/',
 				src: ['*.css'],
-				dest: paths.css + 'build/prod/',
+				dest: paths.css_build + 'prod/',
 				ext: '.css'
 			}
 		},
@@ -350,7 +355,7 @@ module.exports = function(grunt) {
 			}
 		},
 		clean: {
-			prod: [paths.css + '/build/prod', paths.build + '/prod']
+			prod: [paths.css_build + 'prod', paths.js_build + 'prod']
 		}
 	});
 
@@ -450,7 +455,6 @@ module.exports = function(grunt) {
 	 * note: generates icon font
 	 */
 	grunt.registerTask('icons', ['webfont:icons']);
-
 
 	/**
 	 * grunt images
