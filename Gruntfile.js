@@ -249,7 +249,7 @@ module.exports = function(grunt) {
 					{ src: build_stack.cms,    dest: paths.build + 'dev/cms.js'}
 				],
 				options: {
-					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
+					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35727/livereload.js?snipver=1\\\"></script>\");"
 				}
 			}
 		},
