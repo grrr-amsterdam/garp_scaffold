@@ -36,7 +36,9 @@
 	PRIMER
 	========================================================================== */
 
-* { box-sizing: border-box; }
+/* Better box-sizing reset, see: http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
 
 html { font-size: 62.5%; line-height: 1.4; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 	@include bp-max($small) { font-size: 50%; }
@@ -113,7 +115,7 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 .hidden { display: none !important; visibility: hidden !important; }
 .offscreen { position: absolute !important; left: -999em !important; }
 .invisible { visibility: hidden !important; }
-.clearfix { 
+.clearfix {
 	zoom: 1;
 	&:after { height: 0; visibility: hidden; display: block; clear: both; content: ''; }
 }

@@ -55,6 +55,9 @@ Compresses images, see steps 11 and 12 of Grunt production
 ----------------------------------
 */
 module.exports = function(grunt) {
+
+	var LIVERELOAD_PORT = 35728;
+
 	// File and path configuration
 	var paths = {};
 	paths.public    = 'public/';
@@ -193,10 +196,10 @@ module.exports = function(grunt) {
 				files: [
 					{ src: build_stack.main,   dest: paths.js_build + 'dev/<%=semver%>/main.js'},
 					{ src: build_stack.models, dest: paths.js_build + 'dev/<%=semver%>/extended-models.js'},
-					{ src: build_stack.cms,    dest: paths.js_build + 'dev/<%=semver%>/cms.js'}					
+					{ src: build_stack.cms,    dest: paths.js_build + 'dev/<%=semver%>/cms.js'}
 				],
 				options: {
-					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
+					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:" + LIVERELOAD_PORT + "/livereload.js?snipver=1\\\"></script>\");"
 				}
 			}
 		},
@@ -208,10 +211,10 @@ module.exports = function(grunt) {
 					}
 				},
 				files: [
-					{src: build_stack.main, dest: paths.js_build + 'prod/<%=semver%>/main.js'}, 
+					{src: build_stack.main, dest: paths.js_build + 'prod/<%=semver%>/main.js'},
 					{src: build_stack.models, dest: paths.js_build + 'prod/<%=semver%>/extended-models.js'},
 					{src: build_stack.cms, dest: paths.js_build + 'prod/<%=semver%>/cms.js'},
-					{src: paths.js_build + 'dev/<%=semver%>/modernizr.js', dest: paths.js_build + 'prod/<%=semver%>/modernizr.js'}				
+					{src: paths.js_build + 'dev/<%=semver%>/modernizr.js', dest: paths.js_build + 'prod/<%=semver%>/modernizr.js'}
 				]
 			},
 			dev: {
@@ -339,10 +342,15 @@ module.exports = function(grunt) {
 				files: [paths.css + 'img/**/*.png'],
 				tasks: ['tinypng:compress']
 			},
-			options: {
-				livereload: 35728,
-				spawn: false, // Should improve performance but might introduce bugs
-				interrupt: true // Should improve performance but might introduce bugs
+			livereload: {
+				options: {
+					livereload: LIVERELOAD_PORT
+				},
+				files: [
+					paths.css_build + '**/*.css',
+					paths.js_src + '**/*.js',
+					'application/modules/default/views/**/*.phtml',
+				]
 			}
 		},
 		clean: {
