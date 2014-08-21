@@ -59,6 +59,7 @@ Compresses images, see steps 11 and 12 of Grunt production
 
 module.exports = function(grunt) {
 
+	var LIVERELOAD_PORT = 35728;
 
 	// File and path configuration
 	var paths = {};
@@ -249,7 +250,7 @@ module.exports = function(grunt) {
 					{ src: build_stack.cms,    dest: paths.build + 'dev/cms.js'}
 				],
 				options: {
-					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:35728/livereload.js?snipver=1\\\"></script>\");"
+					append: "\ndocument.write(\"<script src=\\\"http://127.0.0.1:" + LIVERELOAD_PORT + "/livereload.js?snipver=1\\\"></script>\");"
 				}
 			}
 		},
@@ -385,10 +386,15 @@ module.exports = function(grunt) {
 				files: [paths.css + 'img/**/*.png'],
 				tasks: ['tinypng:compress']
 			},
-			options: {
-				livereload: 35727,
-				spawn: false, // Should improve performance but might introduce bugs
-				interrupt: true // Should improve performance but might introduce bugs
+			livereload: {
+				options: {
+					livereload: LIVERELOAD_PORT
+				},
+				files: [
+					paths.css_build + '**/*.css',
+					paths.js_src + '**/*.js',
+					'application/modules/default/views/**/*.phtml',
+				]
 			}
 		},
 		clean: {
