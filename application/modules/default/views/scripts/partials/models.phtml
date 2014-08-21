@@ -5,10 +5,23 @@ Ext.ns('Garp.dataTypes');
 <script src="<?php echo $this->assetUrl('/js/models/base/BaseModels.min.js') ?>"></script>
 <?php
 if (isset($this->config()->cms->minifiedAssets) && $this->config()->cms->minifiedAssets):
-	echo $this->script()->src($this->config()->assets->js->root . '/extended-models.js', true, array('crossorigin' => 'anonymous'));
+	echo $this->script()->src('extended-models.js', true, array('crossorigin' => 'anonymous'));
 else:
 ?>
 <!-- BEGIN SPAWNED CALLS -->
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/models/AuthLocal.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/garp/models/ClusterClearCacheJob.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/models/ClusterClearCacheJob.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/garp/models/ClusterRecurringJob.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/models/ClusterRecurringJob.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/garp/models/ClusterServer.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/models/ClusterServer.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/garp/models/Image.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/models/Image.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/garp/models/Snippet.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/models/Snippet.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/garp/models/User.js') ?>"></script>
+<script crossorigin="anonymous" src="<?php echo $this->assetUrl('/js/models/User.js') ?>"></script>
 
 <!-- END SPAWNED CALLS -->
 <?php
