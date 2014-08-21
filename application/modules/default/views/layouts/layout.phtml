@@ -50,12 +50,16 @@
 	<?php // echo $this->social()->facebookOgData($this->ogData ?: array()); ?>
 
 	<!--[if lte IE 8]>
-	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/ie-old.css') ?>">
+	<link rel="stylesheet" href="<?php echo $this->assetUrl('ie-old.css') ?>">
 	<![endif]-->
 	<!--[if gt IE 8]><!-->
-	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/base.css') ?>">
+	<link rel="stylesheet" href="<?php echo $this->assetUrl('base.css') ?>">
 	<!--<![endif]-->
-	<script src="<?php echo $this->assetUrl($this->config()->assets->js->root . '/modernizr.js') ?>"></script>
+	<?php
+		// Inline Modernizr since it's such a wee script
+	?>
+	<script><?php require_once(APPLICATION_PATH . '/../public/' . 
+			$this->assetUrl()->getVersionedBuildPath('modernizr.js')) ?></script>
 	<link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
 </head>
 <body>
@@ -75,7 +79,7 @@
 		JS_ROOT = "<?php echo $this->config()->assets->js->root ?>";
 	</script>
 	<?php
-		$this->script()->src($this->config()->assets->js->root . '/main.js');
+		$this->script()->src('main.js');
 		echo $this->script()->render();
 		if ($browseboxConfig = $this->browsebox()->config()):
 			echo $browseboxConfig;
