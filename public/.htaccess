@@ -38,6 +38,7 @@ php_value post_max_size 30M
 
   # Web fonts
     AddType application/x-font-woff                     woff
+    AddType application/font-woff2  					woff2
     AddType application/vnd.ms-fontobject               eot
 
     # Browsers usually ignore the font MIME types and sniff the content,
@@ -75,7 +76,7 @@ php_value post_max_size 30M
 	ExpiresByType application/rss+xml       "access plus 1 hour"
 
 	# favicon (cannot be renamed)
-	ExpiresByType image/vnd.microsoft.icon  "access plus 1 week" 
+	ExpiresByType image/vnd.microsoft.icon  "access plus 1 week"
 
 	# webfonts
 	ExpiresByType font/truetype             "access plus 1 month"
