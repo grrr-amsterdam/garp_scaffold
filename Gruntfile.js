@@ -53,6 +53,13 @@ grunt images
 Compresses images, see steps 11 and 12 of Grunt production
 
 ----------------------------------
+
+grunt stats
+
+Provides with statistics of your css, such as the number of font-sizes used etc.
+Run with --e=production if you want to check the production css
+
+----------------------------------
 */
 module.exports = function(grunt) {
 
@@ -310,6 +317,17 @@ module.exports = function(grunt) {
 				src: paths.css_build + 'prod/<%=semver%>/*.css'
 			}
 		},
+		stylestats: {
+			options: {
+  	  	  	  gzippedSize: true,
+			},
+			dev: {
+				src: [paths.css_build + 'dev/<%=semver%>' ]
+			},
+			production: {
+				src: [paths.css_build + 'prod/<%=semver%>' ]
+			}
+		},
 		cssmin: {
 			prod: {
 				expand: true,
@@ -473,6 +491,14 @@ module.exports = function(grunt) {
 	 */
 	grunt.registerTask('images', ['determineSemver', 'imagemin:compress', 'tinypng:compress']);
 
+	/*
+	 * grunt stats
+	 * note: display stats for stylesheets
+	 * usage: pass -e=production to run on production css
+	 */
+	var env = grunt.option('e') || 'dev';
+	grunt.registerTask('stats', ['stylestats:' + env]);
+	
 	/**
 	 * grunt
 	 */
