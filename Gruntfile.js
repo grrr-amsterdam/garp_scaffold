@@ -82,6 +82,11 @@ module.exports = function(grunt) {
 	paths.icons     = paths.css + 'icons/';
 	paths.fonts     = paths.css_build + 'fonts/icons/';
 
+	// Domain URL form webpagetest grunt task
+	var domain = {};
+	domain.staging = 'http://staging.grrr.nl';
+	domain.production = 'http://grrr.nl';
+
 	// CDN location for image files referenced from css
 	var cdn = {
 		development: '/css/img',
@@ -328,6 +333,21 @@ module.exports = function(grunt) {
 				src: [paths.css_build + 'prod/<%=semver%>' ]
 			}
 		},
+		/* limited to 200 pageloads per day per API key */
+		perfbudget: {
+			default: {
+				options: {
+					url: domain.staging,
+					key: '501e7c4914294a25ab9279ded5f1ce0c'
+				}
+			},
+			production: {
+				options: {
+					url: domain.production,
+					key: '501e7c4914294a25ab9279ded5f1ce0c'
+				}
+			}
+		},
 		cssmin: {
 			prod: {
 				expand: true,
@@ -499,6 +519,14 @@ module.exports = function(grunt) {
 	var env = grunt.option('e') || 'dev';
 	grunt.registerTask('stats', ['stylestats:' + env]);
 	
+	/*
+	 * grunt webpagetest
+	 * note: domain has to be externally accessible, so no local install
+	 * usage: pass -e=production to run on production
+	 */
+	var env = grunt.option('e') || 'default';
+	grunt.registerTask('webpagetest', ['perfbudget:' + env]);
+
 	/**
 	 * grunt
 	 */
