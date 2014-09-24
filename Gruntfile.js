@@ -333,18 +333,23 @@ module.exports = function(grunt) {
 				src: [paths.css_build + 'prod/<%=semver%>' ]
 			}
 		},
-		/* limited to 200 pageloads per day per API key */
+		/* limited to 200 pageloads per day per API key
+		 * for a list of possible locations and browsers, see:
+		 * http://www.webpagetest.org/getLocations.php?f=xml
+		 */
 		perfbudget: {
 			default: {
 				options: {
 					url: domain.staging,
-					key: '501e7c4914294a25ab9279ded5f1ce0c'
+					key: '501e7c4914294a25ab9279ded5f1ce0c',
+					location: 'Amsterdam_IISpeed:Chrome'
 				}
 			},
 			production: {
 				options: {
 					url: domain.production,
-					key: '501e7c4914294a25ab9279ded5f1ce0c'
+					key: '501e7c4914294a25ab9279ded5f1ce0c',
+					location: 'Amsterdam_IISpeed:Chrome'
 				}
 			}
 		},
