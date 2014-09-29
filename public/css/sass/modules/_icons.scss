@@ -1,0 +1,35 @@
+/*
+ * $ icons
+ * For icons with an icon font
+ * As used throughout the site
+ */
+%icon {
+    font-family: 'Melkweg Icons'; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; -webkit-font-smoothing: antialiased;
+    @include bp-min($small) { @include font-size(12); margin-right: 5px; }
+    @include bp-max($small) { @include font-size(10); margin-right: 3px; }
+}
+
+.icon-arrow-down:after {      @extend %icon; content: "\e00d"; margin-right: 0; margin-left: 5px; }
+.icon-arrow-left:before {     @extend %icon; content: "\e011"; }
+.icon-arrow-right:after {     @extend %icon; content: "\e00b"; margin-right: 0; margin-left: 5px; }
+.icon-calendar:before {       @extend %icon; content: "\e007"; }
+.icon-camera:before {         @extend %icon; content: "\e010"; }
+.icon-checkbox-off:before {   @extend %icon; content: "\e016"; }
+.icon-checkbox-on:before {    @extend %icon; content: "\e015"; }
+.icon-clock:before {          @extend %icon; content: "\e006"; }
+.icon-close:before {          @extend %icon; content: "\e013"; }
+.icon-delete:before {         @extend %icon; content: "\e00a"; }
+.icon-facebook:before {       @extend %icon; content: "\e004"; }
+.icon-info:before {           @extend %icon; content: "\e012"; }
+.icon-link:before {           @extend %icon; content: "\e00f"; }
+.icon-location:before {       @extend %icon; content: "\e000"; }
+.icon-mail:before {           @extend %icon; content: "\e009"; }
+.icon-menu:before {           @extend %icon; content: "\e00e"; @include font-size(18); margin-right: 0; }
+.icon-paper-plane:before {    @extend %icon; content: "\e014"; }
+.icon-play:before {           @extend %icon; content: "\e008"; }
+.icon-search:before {         @extend %icon; content: "\e002"; }
+.icon-soundcloud:before {     @extend %icon; content: "\e00c"; }
+.icon-speaker:before {        @extend %icon; content: "\e005"; }
+.icon-tag {                   color: $grey; }
+.icon-tag:before {            @extend %icon; content: "\e001"; margin-right: 6px; }
+.icon-twitter:before {        @extend %icon; content: "\e003"; }

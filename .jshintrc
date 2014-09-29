@@ -1,0 +1,8 @@
+{
+	"curly": true,
+	"latedef": true,
+	"eqnull": true,
+	"trailing": false,
+	"browser": true,
+	"-W099": true
+}

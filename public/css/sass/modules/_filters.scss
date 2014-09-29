@@ -1,0 +1,247 @@
+/*
+ * $ filters
+ * The box that allows filtering of the agenda
+ * As used on the agenda list page
+ */
+
+.filters-wrapper {
+    transition: transform .2s; transform: translate3d(0,0,0);
+	&.stick-to-top { 
+		top: 45px; 
+		@include bp-min($small) {
+			top: 50px;
+		}
+	}
+
+	@include bp-min-max($small, $medium) {
+		z-index: 20; display: block; position: fixed; right: 0; top: 75px;
+	}
+	@include bp-max($small) { 
+		z-index: 1001; position: fixed; top: 45px; left: 0; right: 0; padding: 5px 5px 0; background: $black; box-shadow: 0 0 3px rgba(0,0,0,0.7);
+		&.is-hidden { transform: translateY(-55px); }
+		&.is-open {
+			// Reset position because of nested position: fixed bug
+			position: static; transform: none; transition: none;
+		}
+	}
+    @include bp-max($medium) {
+		.filters {
+			position: relative; width: 100%; min-width: 300px;
+			&.filters-open { transform: none; opacity: 1; }
+		}
+
+		.filters--datepicker {
+			height: 45px; margin-bottom: 0; background: nth($themes, 6); 
+			button { background: transparent; height: 45px; width: 45px; }
+			.icon-calendar:before { @include font-size(24); }
+		}
+
+		.filters--search {
+			left: 0; width: auto; height: 45px; margin-bottom: 0; margin-right: 47px; margin-left: 92px; padding: 7px 15px; background: nth($themes, 6);
+			&.extended { margin-right: 0; }
+			.icon-search { 
+				top: 4px; right: 3px; 
+				&:before { @include font-size(16); }
+			}
+			.icon-delete { 
+				top: 8px; right: 3px;
+				&:before { @include font-size(14); }
+			}
+			input {	height: auto; line-height: 22px; padding: 5px 0 2px; }
+		}
+	}
+    @include bp-min($medium) { z-index: 3; position: fixed; right: 0; top: 150px; transform: translate3d(0,0,0); }
+}
+
+.filters__toggle { 
+	float: left; display: block; height: 45px; width: 90px; border: 0; background: nth($themes, 6); color: #fff; line-height: 45px; font-weight: bold; text-transform: uppercase; text-align: center;
+	&:hover, &:focus { background: nth($themesDark, 6); color: #fff; }
+	@include bp-min($medium) { display: none; }
+}
+
+// .filters-inner-wrapper { max-width: 1400px; margin: 0 auto; }
+
+.filters {
+	position: relative; width: 300px; margin: 0; padding: 0; background: transparent; color: #fff; -webkit-font-smoothing: antialiased;
+	@include bp-min ($small) { float: right; }
+}
+
+%filter-item {
+	@include font-size(12); user-select: none;
+	ul { 
+		margin: 0; padding: 10px 15px;
+	}
+	li { display: block; }
+	input[type="checkbox"] { 
+		display: none; 
+		@include old-ie() { position: absolute; display: block; margin-top: 8px; }
+		&:checked + label { background: #fff; }
+		&:checked + label:after { content: "\00D7"; position: absolute; right: 32px; /*@include font-size(14);*/ }
+	}
+	label, span {
+		width: 100%; box-sizing: border-box; display: inline-block; margin: 1px 0; padding: 0 10px; background: transparent; color: #fff; line-height: 35px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: all .2s;
+		@include old-ie() { margin-left: 13px; }
+
+	}
+}
+
+@include bp-min($small) {
+	%filter-item {
+		ul { padding: 20px; }
+		li { padding: 3px; }
+		label, span { 
+			line-height: 30px;
+			.no-touch &:hover { background: rgba(255,255,255,.2); }
+		}
+	}
+}
+
+.filter-slide-menu {
+	@extend %filter-item;
+	position: relative; padding: 0; background: nth($themes, 6);
+	@include bp-min-max($small, $medium) {
+		width: 250px; float: left;
+		// This is a hack and should really be done in javascript, fix later
+		height: 350px;
+	}
+	@include bp-min($medium) {
+		width: 230px; box-shadow: rgba(0, 0, 0, .5) 10px 0 10px 0; transition: all .2s;
+	}
+	input[type="checkbox"]:checked + label { color: nth($themes, 6); }
+}
+
+.filter-front { 
+	@include bp-min($medium) {
+		position: absolute; z-index: 100; 
+	}
+}
+
+.filter-faded {
+	@include bp-min($medium) {
+		position: relative; z-index: 40; margin-left: 215px; /* @include translateX(215px);*/ filter: blur(1px); /* @include scale(.9); */
+	}
+	@include old-ie() { margin-left: 235px; }
+}
+
+.filter-disabler {
+	@include bp-min($small) {
+		background: rgba(0,0,0,.5); position: absolute; z-index: 50; height: 100%; width: 100%; transition: all .2s; &:hover { background: rgba(0,0,0,.3); }
+	}
+	@include old-ie() { background: image-url('ie-black-transparent.png'); }
+}
+
+.filter-faded .filter-disabler { display: block; }
+.filter-front .filter-disabler { display: none; }
+
+.filter-spacer {
+	position: relative; overflow: hidden; width: 100%; display: block;
+	@include bp-max($small) { 
+		padding-top: 10px; border-top: 2px solid nth($themesDark, 6); background: nth($themes, 6);
+	}
+}
+
+%search-box {
+	input { transition: all .2s; color: #fff; border: 0; border-bottom: 1px solid #fff; outline: none; border-radius: 0; }
+	.icon-search, .icon-delete {
+		cursor: pointer; position: absolute; z-index: 50; padding: 10px; color: #fff; @include font-size(0); line-height: 0;
+		&:before { line-height: 1; }
+		&:hover, &:focus { color: $orange; }
+	}
+	.icon-search { top: 12px; right: 5px; &:before { @include font-size(20); }}
+	.icon-delete { top: 14px; right: 8px; &:before { @include font-size(15); }}
+}
+
+.filters--menu-wrapper {
+	@include bp-max($small) {
+		z-index: 1003; position: fixed; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); overflow-y: scroll; -webkit-overflow-scrolling: touch;
+	}
+	@include bp-max($medium) {
+		display: none;
+		.filters-open & { display: block; }
+	}
+}
+
+.filters--menu-inner {
+	@include bp-max($small) {
+		padding: 50px 5px 5px;
+	}
+}
+
+.filters--menu {
+	display: block; position: relative; overflow: hidden; margin-top: 2px;
+	/* @include bp-max($medium) { opacity: 0; height: 0; visibility: hidden; } */
+}
+
+.filters--menu--close {
+	display: none;
+	@include bp-max($small) {
+		position: absolute; top: 5px; right: 5px; display: none; width: 40px; height: 40px; border: 0; background: nth($themes, 6); color: #fff; @include font-size(20); font-weight: bold; line-height: 35px; text-align: center; cursor: pointer;
+		.filters-open & { display: block; }
+	}
+}
+
+.filters--menu__disciplines {
+	@include bp-min($small) {
+		float: left;
+	}
+}
+
+.filters--menu__genres {
+	@include bp-max($small) {
+		display: none;
+	}
+}
+
+.filters--menu__bottom {
+	display: block;	@extend %filter-item; position: relative; padding: 0 15px; background: nth($themes, 6);
+	input[type=checkbox]:checked + label { color: $darkGrey; }
+	@include bp-max($small) {
+		&:last-child { padding-bottom: 15px; }
+		&.last { padding-bottom: 5px; }
+	}
+	@include bp-min($small) { 
+		margin-top: 5px; padding-top: 15px; padding-bottom: 15px; background: $darkGrey; 
+	}
+}
+
+.filters--search {
+	@extend %search-box; position: relative; width: 230px; height: 65px; padding: 12px 20px; background: nth($themes, 1); box-sizing: border-box; margin-bottom: 5px;
+	input {
+		display: inline-block; width: 100%; height: auto; line-height: 1.5; padding: 10px 0 2px; vertical-align: baseline; background: transparent; box-sizing: border-box; @include font-size(18);
+		@include bp-max($small) { @include font-size(16); padding: 4px 2px; }
+	}
+	&.search-active input { background: nth($themes, 3); }
+}
+
+.filters--datepicker {
+	top: 0; right: 0; position: absolute; margin-bottom: 5px;
+	button { transition: all .2s; position: relative; border: 0; outline: none; background: nth($themes, 1); @include font-size(0); height: 65px; width: 65px;
+		&:hover { 
+			background: nth($themes, 6);
+			@include bp-min($small) {
+				background: nth($themes, 3);
+			}
+		}
+		.icon-calendar { 
+			color: #fff; 
+			&:before { @include font-size(28); }
+		}
+	}
+	&.datepicker-visible button { background: nth($themes, 3); z-index: 9999; }
+}
+
+body .filters__show_all {
+	display: none;
+	@include bp-min($small) {
+		display: inline-block;
+		span { margin-bottom: 0; color: rgba(255,255,255,.5); }
+	}
+}
+
+.filters__confirmation-button {
+	margin: 5px 0 0 10px; padding: 5px 20px;
+}
+
+.no-results {
+	@include bp-max($small) { margin-top: 60px; margin-bottom: 30px; }
+}

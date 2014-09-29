@@ -1,0 +1,48 @@
+/*
+ * $ status labels
+ * Used on agenda page or event page in place of a ticket button.
+ */
+.status-label { @extend .button;}
+span.status-label {pointer-events: none;}
+.status-label__cornered {
+    // margin-left: 105px; margin-bottom: 5px;
+    // @include bp-min($small) { position: absolute; right: 0; bottom: 0; width: 110px; margin-bottom: 0; margin-left: 0; text-align: center; }
+
+    position: absolute; bottom: 0; z-index: 10; text-align: center;
+    @include bp-min($small) { right: 0; width: 110px; margin-bottom: 0; margin-left: 0; }
+    @include bp-max($small) { left: 0; width: 100px; box-sizing: border-box; text-align: left; }
+}
+.status-label__large {
+    @extend .button__large;
+    &:after { display: none; }
+}
+.status-label__canceled {
+	@extend .status-label; color: #fff; background: $grey;
+	&:hover, &:focus { color: #fff; background: $darkGrey; }
+}
+.status-label__private { @extend .status-label__canceled; }
+.status-label__moved { @extend .status-label__canceled; padding: 10px 13px; }
+.status-label__free { @extend .status-label; }
+.status-label__soldout { @extend .status-label; }
+
+.status-label__large__canceled { @extend .status-label__large; @extend .status-label__canceled; }
+.status-label__large__private { @extend .status-label__large; @extend .status-label__private; }
+.status-label__large__free { @extend .status-label__large; @extend .status-label__free; }
+.status-label__large__soldout { @extend .status-label__large; @extend .status-label__soldout; }
+.status-label__large__moved { @extend .status-label__large; @extend .status-label__moved; }
+
+.event-status-label__soldout {
+	display: block; padding: 10px; color: #fff; font-family: $headerFontStack; @include font-size(14); line-height: 1; vertical-align: top; font-weight: bold; text-transform: uppercase; -webkit-font-smoothing: antialiased;
+	@include bp-min($small) { @include font-size(18); }
+}
+.event-status-label__soldout-spacer { display: inline-block; width: 1px; margin-right: 10px; }
+
+ @for $i from 1 through length($themes) {
+	.theme-#{$i} .event-status-label__soldout {
+		@if ($i == length($themes)) {
+			background-color: nth($themes, 1);
+		} @else {
+			background-color: nth($themes, $i+1);
+		}
+	}
+}

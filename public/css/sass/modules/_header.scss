@@ -1,0 +1,19 @@
+/*
+ * $ header
+ */
+header[role="banner"] {
+    /*transform: translate3d(0,0,0);*/
+    background: nth($themes, 1);
+    @include bp-min($small) { 
+    	position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; background: rgba($black,0.8); transform: translate3d(0,0,0); 
+    	@include old-ie { background: image-url('ie-black-transparent.png'); }
+    }
+    nav { max-width: 1440px; margin: 0 auto; }
+}
+
+.medewerkers header[role="banner"] {
+	background: nth($themes, 5);
+    @include bp-min($small) { 
+    	background: #fff;
+    }
+}

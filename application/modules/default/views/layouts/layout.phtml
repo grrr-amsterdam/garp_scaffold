@@ -55,11 +55,14 @@
 	<!--[if gt IE 8]><!-->
 	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/base.css') ?>">
 	<!--<![endif]-->
+	<?php if ($this->config()->assets->js->useModernizr) : ?>
 	<script src="<?php echo $this->assetUrl($this->config()->assets->js->root . '/modernizr.js') ?>"></script>
+	<?php endif; ?>
+
 	<link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
 </head>
 <body>
-	<?php echo $this->partial('partials/google-tag-manager.phtml', 'g'); ?> 
+	<?php //echo $this->partial('partials/google-tag-manager.phtml', 'g'); ?> 
 	<div class="wrapper">
 		<?php echo $this->partial('partials/header.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
 		<div class="content">

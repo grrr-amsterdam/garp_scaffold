@@ -1,0 +1,109 @@
+/*
+ * $ buttons
+ * Styling for buttons
+ * As used throughout the site
+ *
+ */
+//normal version of the button
+.button { display: inline-block; padding: 10px; font-weight: bold; text-transform: uppercase; text-decoration: none; border: 0; }
+
+ // Button modifiers that show arrows after or before button text
+ // <a href="button button--arrow-right">Button</a>
+.button--arrow-right {
+    @extend .button; @extend .icon-arrow-right;
+    &:after {
+        @include font-size(22); line-height: 0.909090909; vertical-align: top;
+        @include bp-max($medium) { @include font-size(18); line-height: 1.166666667; }
+    }
+}
+// arrow icon points to the left inside button
+.button--arrow-left {
+    @extend .button; @extend .icon-arrow-left;
+    padding: 30px 60px;
+    &:before {
+        @include font-size(22); line-height: 0.909090909; vertical-align: top;
+        // @include bp-max($medium) { @include font-size(20); line-height: 1.166666667; }
+        margin-right: 10px; @include font-size(30); line-height: 1.1;
+    }
+}
+.button--arrow-down {
+    @extend .button; @extend .icon-arrow-down;
+}
+//extends extended button adds additional padding
+//button--large button--arrow-right
+.button--large{
+    @extend .button;
+    color:#fff; border:none;
+    box-sizing: border-box; padding: 10px 15px; @include defaultFont; @include font-size(20); line-height: 1.75; font-weight: bold; text-align: center; -webkit-font-smoothing: antialiased;
+    &:after { @include font-size(30); line-height: 1.1; @include bp-max($medium) { @include font-size(22); }}
+    @include bp-max($mediumLarge) { @include font-size(20);
+        &:after { @include font-size(24); }} /* prevents the ticket-button from <br/>'ing' */
+}
+//extends large button adds additional padding
+// button--huge button--arrow-right
+.button--huge {
+    @extend .button--large;
+    padding: 15px 40px;
+    @include bp-min($small) { padding-top: 30px; padding-bottom: 30px; }
+    &:after {
+        margin-left: 10px; line-height: 1.5; @include font-size(22);
+        @include bp-min($medium) { @include font-size(30); }
+    }
+}
+//used to position the arrow icon correctly
+.button-full-width {
+    display: block;
+    text-align: left; text-transform: none;
+    &:after { float: right; }
+}
+// used in the twitter stream partial which isnt used
+.button-related {
+    box-sizing: border-box; padding: 10px 15px; @include defaultFont; @include font-size(16); line-height: 1.75; font-weight: bold; text-align: center; -webkit-font-smoothing: antialiased;
+    &:after { @include font-size(24); line-height: 1.1; }
+}
+// used in the twitter stream partial which isnt used
+.button-related--arrow-right {
+    @extend .button-related; @extend .icon-arrow-right;
+    &:after { @include font-size(22); line-height: 1.1; vertical-align: top; }
+}
+//buy tickets button
+.button-tickets {
+    @extend .button--arrow-right;
+    z-index: 10; bottom: 0; position: absolute; text-align: center;
+    @include bp-min($small) { right: 0; width: 110px; margin-bottom: 0; margin-left: 0; }
+    @include bp-max($small) { left: 0; width: 100px; line-height: 1; box-sizing: border-box; text-align: left;
+        &:after { @include font-size(18); line-height: .75; } }
+    &:hover, &:focus { background: $darkBlue; color: #fff; }
+}
+//constraines the social media buttons to a max width
+.button--text-uppercase { text-transform: uppercase; }
+
+/*
+ * $ Spotify
+ * Used on the event detail page
+ */
+.button-spotify {
+    background: $spotifyDark; b { background: $spotifyLight; } &:hover, &:active { color: $spotifyDark; }
+    span { background-position: 0 0; }
+}
+
+/*
+ * $ Deezer
+ * Used on the event detail page
+ */
+.button-deezer {
+    background: $deezerDark; b { background: $deezerLight; } &:hover, &:active { color: $deezerDark; }
+    span { background-position: 0 63%; }
+}
+
+
+.button-socialplay {
+    max-width: 120px; color: #fff; &:hover, &:active { b:before { text-shadow: none; }}
+    b:before { text-shadow: rgba(0,0,0, 0.5) 0 0 15px; }
+    span {
+        display: block; width: 100%; max-width: 105px; height: 22px; margin: 0 auto; line-height: 0; font-size: 0;
+        background: image-url('socialplay.png') no-repeat; background-size: 100%;
+    }
+}
+
+.button__constrained { max-width: 120px; }

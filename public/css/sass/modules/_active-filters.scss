@@ -1,0 +1,33 @@
+/*
+ * Active filters
+ * Used on the agenda page to show which filters are active
+ */
+.active-filters {
+	margin-top: 2px; padding: 10px; background: nth($themes, 6); color: #fff; @include font-size(10); text-transform: uppercase;
+	@include bp-min($small) {
+		margin: 0 0 5px; padding: 15px 30px; background: #fff; color: nth($themes, 6);
+		//display: none;
+	}
+}
+
+.active-filters__description {
+	float: left; margin: 0 5px 0 0; font-weight: bold; line-height: 25px;
+	@include bp-min($small) {
+		@include font-size(12); line-height: 35px;
+	}
+}
+
+.active-filters__button-list {
+	@extend .unstyled-list; overflow: hidden; margin: 0;
+	li { float: left; padding: 2px;}
+}
+
+.active-filters__button {
+	display: block; padding: 0 7px; border: 0; background: nth($themesDark, 6); color: #fff; @include font-size(10); line-height: 20px; text-transform: uppercase;
+	b { @include font-size(12); font-weight: normal; }
+	@include bp-min($small) {
+		padding: 0 12px; line-height: 30px; background: nth($themes, 6); @include font-size(12); font-weight: bold; -webkit-font-smoothing: antialiased;
+		&:hover, &:focus, &:active { background: nth($themesDark, 6); }
+		b { margin-left: 5px; font-weight: bold; }
+	}
+}
