@@ -1,0 +1,39 @@
+/*
+ * $ date block
+ * For displaying dates and times
+ * As used throughout the site
+ */
+.date {
+    @extend .delta; display: block; /*padding: 15px 10px 0;*/ padding: 20px 10px; color: #fff; @include font-size(14); line-height: 1; text-transform: uppercase;
+
+    b {
+        @extend .alpha; display: block; line-height: 0.9;
+    }
+}
+@include bp-min($small) { 
+	.date {
+		padding: 20px 15px; @include font-size(18); 
+		b { @include font-size(36); }
+	}
+}
+
+@include bp-min($medium) {
+	.date {
+		padding-left: 25px;
+	}
+}
+
+@include bp-max($small) { 
+	.date b { @include font-size(18); }
+}
+
+.date__small {
+    @extend .date; @extend .zeta; height: auto; padding: 0; @include font-size(16); font-weight: normal; line-height: 40px; vertical-align: middle; text-align: center;
+    b { @extend .zeta; display: inline; font-weight: bold; }
+}
+
+.date__larger { @extend .date; padding-left: 30px; padding-right: 30px; }
+
+@for $i from 1 through length($themes) {
+	.theme-#{$i} .date { background: nth($themes, $i); color: #fff; }
+}

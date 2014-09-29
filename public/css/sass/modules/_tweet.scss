@@ -1,0 +1,11 @@
+/*
+ * $ tweet
+ * For displaying tweets
+ * As used throughout the site
+ */
+.tweet--author { font-weight: bold; font-style: normal; }
+.tweet--link {
+    text-decoration: underline;
+    &:hover, &:focus { text-decoration: none; }
+}
+.lt-ie9 .tweet--link { display: none; }

@@ -1,0 +1,17 @@
+/*
+    news item 'first' gets some custom styling
+    As used on the news index
+*/
+.news-list {
+    position: relative; z-index: 1;
+    @include bp-min($medium) { /*width: 100%;*/ margin-top: 0px; margin-left: 115px; margin-right: 355px; }
+    a { &:hover, &:focus { .block-item--description__large__padded-left { background: $lightGrey; } .read-more__small { text-decoration: none; }}}
+}
+.news-item__first {
+    display: block;
+    figure { margin-bottom: -80px; }
+}
+.news-item__first .block-item--description__large__padded-left {
+    position: relative; margin-left: 70px;
+    @include bp-min($small) { margin-left: 120px; }
+}

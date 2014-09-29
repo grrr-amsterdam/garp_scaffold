@@ -1,0 +1,42 @@
+/*
+ * $ loader
+ * Used for displaying a spinner while waiting for ajax content
+ */
+.loader { z-index: 2; position: fixed; bottom: -140px; left: 50%; width: 116px; height: 116px; margin-left: -58px; border: 0; display: inline-block; background: image-url('spinner.gif') center center no-repeat #000; background: image-url('spinner.gif') center center no-repeat rgba(0,0,0,0.5); transition: bottom .3s ease-out; transform: translate3d(0,0,0);}
+.loader.js-active { bottom: 50px; }
+
+
+@-webkit-keyframes fadeInAfterLoad
+{
+from {opacity: 0;}
+to {opacity: 1;}
+}
+
+@keyframes fadeInAfterLoad
+{
+from {opacity: 0;}
+to {opacity: 1;}
+}
+
+/* search results list when empty */
+.after-load {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .5s ease-out 1s;
+}
+.after-load.js-active {
+    visibility: visible;
+    opacity: 1;
+}
+
+@include bp-min ($small) {
+	.unpacked {
+	    visibility: hidden;
+	}
+}
+
+@include old-ie {
+	.unpacked {
+	    visibility: hidden;
+	}
+}
