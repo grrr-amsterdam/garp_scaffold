@@ -375,7 +375,7 @@ module.exports = function(grunt) {
 		watch: {
 			sass: {
 				files: [paths.sass + '/**/*.scss'],
-				tasks: ['sass:dev', 'autoprefixer:dev', 'gitBranch']
+				tasks: ['determineSemver', 'sass:dev', 'autoprefixer:dev', 'gitBranch', 'echoSemver']
 			},
 			imagemin: {
 				files: [paths.css + 'img/**/*.{jpg,gif}'],
