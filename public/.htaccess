@@ -38,6 +38,7 @@ php_value post_max_size 30M
 
   # Web fonts
     AddType application/x-font-woff                     woff
+    AddType application/font-woff2  					woff2
     AddType application/vnd.ms-fontobject               eot
 
     # Browsers usually ignore the font MIME types and sniff the content,
@@ -75,7 +76,7 @@ php_value post_max_size 30M
 	ExpiresByType application/rss+xml       "access plus 1 hour"
 
 	# favicon (cannot be renamed)
-	ExpiresByType image/vnd.microsoft.icon  "access plus 1 week" 
+	ExpiresByType image/vnd.microsoft.icon  "access plus 1 week"
 
 	# webfonts
 	ExpiresByType font/truetype             "access plus 1 month"
@@ -139,17 +140,6 @@ php_value post_max_size 30M
 </IfModule>
 
 <IfModule mod_deflate.c>
-	# compress text, html, javascript, css, xml:
-	AddOutputFilterByType DEFLATE text/plain
-	AddOutputFilterByType DEFLATE text/html
-	AddOutputFilterByType DEFLATE text/xml
-	AddOutputFilterByType DEFLATE text/css
-	AddOutputFilterByType DEFLATE font/truetype
-	AddOutputFilterByType DEFLATE font/opentype
-	AddOutputFilterByType DEFLATE image/svg+xml
-	AddOutputFilterByType DEFLATE application/xml
-	AddOutputFilterByType DEFLATE application/xhtml+xml
-	AddOutputFilterByType DEFLATE application/rss+xml
-	AddOutputFilterByType DEFLATE application/javascript
-	AddOutputFilterByType DEFLATE application/x-javascript
+	# compress text, html, javascript, css, xml, svg:
+	AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css text/javascript image/svg+xml application/xml application/xhtml+xml application/rss+xml application/javascript application/x-javascript
 </IfModule>
