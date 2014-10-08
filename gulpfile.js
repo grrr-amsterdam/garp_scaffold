@@ -1,20 +1,22 @@
 var gulp           = require('gulp'),
+	autoprefixer   = require('gulp-autoprefixer'),
 	gutil          = require('gulp-util'),
 	concat         = require('gulp-concat'),
-	sass           = require('gulp-sass'),
-	autoprefixer   = require('gulp-autoprefixer'),
+	jshint         = require('gulp-jshint');
+	imagemin       = require('gulp-imagemin');
     minifycss      = require('gulp-minify-css'),
+	modernizr      = require('gulp-modernizr'),
+	sass           = require('gulp-sass'),
 	browserSync    = require('browser-sync'),
 	ini            = require('multi-ini'),
 	merge          = require('merge'),
-	jshint         = require('gulp-jshint');
 	jshintStylish  = require('jshint-stylish'),
-	modernizr      = require('gulp-modernizr'),
-	imagemin       = require('gulp-imagemin');
 	mainBowerFiles = require('main-bower-files'),
 	gulpif         = require('gulp-if'),
 	uglify         = require('gulp-uglify'),
-	sourcemaps     = require('gulp-sourcemaps');
+	rename         = require('gulp-rename'),
+	sourcemaps     = require('gulp-sourcemaps'),
+	sh             = require('execSync');
 
 /**
  * Init variables
@@ -47,6 +49,16 @@ function getConfig() {
 }
 var config = getConfig();
 
+var semver;
+gulp.task('semver', function() {
+	result = sh.exec('semver');
+    if (result.stderr) {
+        gutil.log(gutil.colors.red('semver error: ' + result.stderr));
+        gutil.beep();
+    }
+    semver = result.stdout;
+});
+
 /**
  * Wait for sass build, then launch the proxy
  */
@@ -62,17 +74,26 @@ gulp.task('browser-sync', ['sass'], function() {
 /**
  * Build sass files
  */
-gulp.task('sass', function () {
-	var buildDir = paths.public + config.development.assets.css.root;
-    return gulp.src(paths.public + config.production.assets.sass.root + '/base.scss')
+gulp.task('sass', ['semver'], function () {
+	var buildDir = paths.public + config.development.assets.css.root + '/' + semver;
+    var base = gulp.src(paths.public + config.production.assets.sass.root + '/base.scss')
         .pipe(sass({
 			onError: browserSync.notify
         }))
-		.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1'))
+		.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'opera 12.1'))
 		.pipe(minifycss())
         .pipe(gulp.dest(buildDir))
 		.pipe(browserSync.reload({stream:true}))
 		.pipe(gulp.dest(buildDir));
+
+	var oldIE = gulp.src(paths.public + config.production.assets.sass.root + '/ie-old.scss')
+        .pipe(sass({
+			onError: browserSync.notify
+        }))
+		.pipe(autoprefixer('ie 8'))
+		.pipe(minifycss())
+        .pipe(gulp.dest(buildDir));
+
 });
 
 /*
@@ -90,12 +111,13 @@ gulp.task('sass', function () {
  * Build js files
  */
 gulp.task('javascript', ['jshint', 'bower-concat'], function() {
+    var buildDir = paths.public + config.development.assets.js.root + '/' + semver;
     return gulp.src(paths.public + config.production.assets.js.basePath + '/src/**/*.js')
 	.pipe(sourcemaps.init())
 		.pipe(concat('main.js'))
 		.pipe(uglify())
 	.pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.public + config.development.assets.js.root))
+    .pipe(gulp.dest(buildDir))
 });
 
 /**
