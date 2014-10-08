@@ -131,7 +131,7 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 .hidden { display: none !important; visibility: hidden !important; }
 .offscreen { position: absolute !important; left: -999em !important; }
 .invisible { visibility: hidden !important; }
-.clearfix { 
+.clearfix {
 	zoom: 1;
 	&:after { height: 0; visibility: hidden; display: block; clear: both; content: ''; }
 }
