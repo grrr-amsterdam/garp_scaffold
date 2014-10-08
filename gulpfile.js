@@ -12,57 +12,65 @@ var gulp           = require('gulp'),
 	merge          = require('merge'),
 	jshintStylish  = require('jshint-stylish'),
 	mainBowerFiles = require('main-bower-files'),
-	gulpif         = require('gulp-if'),
 	uglify         = require('gulp-uglify'),
-	rename         = require('gulp-rename'),
 	sourcemaps     = require('gulp-sourcemaps'),
 	sh             = require('execSync');
 
-/**
- * Init variables
- */
+var config,
+	semver;
 var paths = {};
-paths.public      = 'public';
+var arguments = require('yargs').argv;
+var ENV = arguments.e ? arguments.e : 'development';
 
-paths.dev         = 'dev/';
-paths.stag        = 'stag';
-paths.prod        = 'prod/';
-
-paths.icons       = paths.css      + 'icons/';
-paths.fonts       = paths.css      + 'compiled/fonts/icons/';
-
-/**
- * Get config values from ini file
- * Zend config contains key names like 'development : staging'
- * This converts those to just 'development'
- */
 function getConfig() {
 	var zendApp = ini.read('./application/configs/app.ini');
 	var zendAssets = ini.read('./application/configs/assets.ini');
 
-	var config = {};
+	var zendConfig = {};
 	for (var i in zendApp) {
 		var shortname = i.split(" ")[0];
-		config[shortname] = merge(zendApp[i],zendAssets[i]);
+		zendConfig[shortname] = merge(zendApp[i],zendAssets[i]);
 	}
-	return config;
-}
-var config = getConfig();
+	return zendConfig;
+};
 
-var semver;
-gulp.task('semver', function() {
+function getSemver() {
 	result = sh.exec('semver');
     if (result.stderr) {
         gutil.log(gutil.colors.red('semver error: ' + result.stderr));
         gutil.beep();
     }
-    semver = result.stdout;
+    return result.stdout;
+};
+
+function constructPaths() {
+	paths.public      = 'public';
+
+	paths.js          = paths.public + config.production.assets.js.basePath;
+	paths.jsSrc       = paths.js + '/src';
+	paths.jsBuild     = paths.js + config[ENV].assets.js.root + '/' + semver;
+
+	paths.css         = paths.public + '/css';
+	paths.cssSrc      = paths.css + '/' + config.production.assets.sass.root;
+	paths.cssBuild    = paths.css + '/' + config[ENV].assets.css.root + '/' + semver;
+
+	paths.icons       = paths.css      + 'icons/';
+	paths.fonts       = paths.css      + 'build/fonts/icons/';
+	return paths;
+};
+
+
+gulp.task('configure', function() {
+	config = getConfig();
+	semver = getSemver();
+	paths  = constructPaths();
 });
+
 
 /**
  * Wait for sass build, then launch the proxy
  */
-gulp.task('browser-sync', ['sass'], function() {
+gulp.task('browser-sync', ['sass', 'javascript'], function() {
 	if(!config.development.app.domain) {
 		gutil.log(gutil.colors.red('No domain set in application/configs/app.ini'));
 	}
@@ -74,26 +82,32 @@ gulp.task('browser-sync', ['sass'], function() {
 /**
  * Build sass files
  */
-gulp.task('sass', ['semver'], function () {
-	var buildDir = paths.public + config.development.assets.css.root + '/' + semver;
-    var base = gulp.src(paths.public + config.production.assets.sass.root + '/base.scss')
+gulp.task('sass', function () {
+	gutil.log('Building css to ' + paths.cssBuild);
+    var base = gulp.src(paths.css.src + '/base.scss')
         .pipe(sass({
 			onError: browserSync.notify
         }))
 		.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'opera 12.1'))
 		.pipe(minifycss())
-        .pipe(gulp.dest(buildDir))
+        .pipe(gulp.dest(paths.cssBuild))
 		.pipe(browserSync.reload({stream:true}))
-		.pipe(gulp.dest(buildDir));
+		.pipe(gulp.dest(paths.cssBuild));
 
-	var oldIE = gulp.src(paths.public + config.production.assets.sass.root + '/ie-old.scss')
+	var oldIE = gulp.src(paths.css.src + '/ie-old.scss')
         .pipe(sass({
 			onError: browserSync.notify
         }))
 		.pipe(autoprefixer('ie 8'))
 		.pipe(minifycss())
-        .pipe(gulp.dest(buildDir));
+        .pipe(gulp.dest(paths.cssBuild));
 
+	var cms = gulp.src(paths.css.src + '/css.scss')
+        .pipe(sass({
+			onError: browserSync.notify
+        }))
+		.pipe(minifycss())
+        .pipe(gulp.dest(paths.cssBuild));
 });
 
 /*
@@ -111,13 +125,12 @@ gulp.task('sass', ['semver'], function () {
  * Build js files
  */
 gulp.task('javascript', ['jshint', 'bower-concat'], function() {
-    var buildDir = paths.public + config.development.assets.js.root + '/' + semver;
-    return gulp.src(paths.public + config.production.assets.js.basePath + '/src/**/*.js')
+    return gulp.src(paths.js.src + '/**/*.js')
 	.pipe(sourcemaps.init())
 		.pipe(concat('main.js'))
 		.pipe(uglify())
 	.pipe(sourcemaps.write())
-    .pipe(gulp.dest(buildDir))
+    .pipe(gulp.dest(paths.jsBuild))
 });
 
 /**
@@ -125,11 +138,12 @@ gulp.task('javascript', ['jshint', 'bower-concat'], function() {
  */
 gulp.task('bower-concat', function() {
 	if (mainBowerFiles().length == 0) {
+		gutil.log('No bower dependencies');
 		return;
 	}
     return gulp.src(mainBowerFiles())
     .pipe(concat('libs.js'))
-    .pipe(gulp.dest(paths.public + config.development.assets.js.root))
+    .pipe(gulp.dest(paths.jsBuild))
 });
 
 /**
@@ -137,7 +151,7 @@ gulp.task('bower-concat', function() {
  * Checks writing style of js files
  */
 gulp.task('jshint', function () {
-    gulp.src(paths.public + config.production.assets.js.basePath + '/src/**/*.js')
+    gulp.src(paths.jsSrc + '/**/*.js')
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('jshint-stylish'));
 });
@@ -149,9 +163,9 @@ gulp.task('jshint', function () {
  * NOTE: this task produces erros which are safe to ignore
  */
 gulp.task('modernizr', function() {
-  gulp.src([paths.public + config.production.assets.js.basePath + '/src/**/*.js'])
+  gulp.src([paths.cssSrc, paths.jsSrc])
     .pipe(modernizr())
-    .pipe(gulp.dest(paths.public + config.development.assets.js.root))
+    .pipe(gulp.dest(paths.jsBuild))
 });
 
 /**
@@ -179,4 +193,5 @@ gulp.task('watch', function () {
     gulp.watch(['application/modules/default/*'], browserSync.reload);
 });
 
-gulp.task('default', ['browser-sync', 'watch'] );
+gulp.task('default', ['configure', 'browser-sync', 'modernizr', 'watch'] );
+gulp.task('production', ['configure', 'sass', 'javascript', 'modernizr'] );

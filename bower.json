@@ -14,7 +14,8 @@
     "tests"
   ],
   "dependencies": {
-    "modernizr": "~2.7.1"
+    "modernizr": "~2.7.1",
+    "fastclick": "~0.6.11"
   },
   "exportsOverride": {
     "modernizr": {
@@ -22,6 +23,5 @@
     }
   },
   "devDependencies": {
-    "fastclick": "~0.6.11"
   }
 }
