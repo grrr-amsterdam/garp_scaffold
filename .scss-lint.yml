@@ -1,6 +1,7 @@
 exclude: 
     - '**/_csswizardry-grids.scss'
     - '**/_mixins.scss'
+    - '**/_functions.scss'
     - '**/_normalize.scss'
 
 linters:

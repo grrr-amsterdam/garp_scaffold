@@ -1,0 +1,6 @@
+# @TODO: Remove the set :password line and the password parameter after the public keys are installed with setup:deploy.
+set :password, ask("SSH password:", nil)
+#server '??????????????', user: '????????????', password: fetch(:password), roles: %w{web app} 
+#set :deploy_to, "?????????"
+set :garp_env, "staging"
+set :branch, "develop"

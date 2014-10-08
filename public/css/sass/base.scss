@@ -32,12 +32,13 @@
 @import 'utility/icons';
 @import 'utility/normalize';
 
-
 /* ==========================================================================
 	PRIMER
 	========================================================================== */
 
-* { box-sizing: border-box; }
+/* Better box-sizing reset, see: http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
 
 html { font-size: 62.5%; line-height: 1.4; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 	@include bp-max($small) { font-size: 50%; }
@@ -127,6 +128,23 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 /* ==========================================================================
    HELPERS
    ========================================================================== */
+
+@include bp-max($small) {
+	.hide-on-palm { display: none !important; }
+}
+
+@include bp-min($small) {
+	.hide-on-lap { display: none !important; }
+}
+
+@include old-ie {
+	.hide-on-lap { display: none !important; }
+}
+
+.show-only-on-palm { display: none; }
+@include bp-max($small) {
+	.show-only-on-palm { display: block !important; }
+}
 
 .hidden { display: none !important; visibility: hidden !important; }
 .offscreen { position: absolute !important; left: -999em !important; }

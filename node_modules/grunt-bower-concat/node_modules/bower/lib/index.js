@@ -1,11 +1,11 @@
 var abbrev = require('abbrev');
 var mout = require('mout');
 var commands = require('./commands');
-var PackageRepository = require('./core/PackageRepository');
 
 var abbreviations = abbrev(expandNames(commands));
 abbreviations.i = 'install';
 abbreviations.rm = 'uninstall';
+abbreviations.unlink = 'uninstall';
 abbreviations.ls = 'list';
 
 function expandNames(obj, prefix, stack) {
@@ -29,6 +29,7 @@ function clearRuntimeCache() {
     // Note that in edge cases, some architecture components instance's
     // in-memory cache might be skipped.
     // If that's a problem, you should create and fresh instances instead.
+    var PackageRepository = require('./core/PackageRepository');
     PackageRepository.clearRuntimeCache();
 }
 
