@@ -62,6 +62,7 @@ function disableHoverStylesOnScroll() {
 }
 
 app.init();
+console.log('working on it');
 
 //FastClick.attach(document.body);
 
