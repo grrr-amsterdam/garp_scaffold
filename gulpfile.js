@@ -48,7 +48,7 @@ function constructPaths() {
 
 	paths.js          = paths.public + config.production.assets.js.basePath;
 	paths.jsSrc       = paths.js + '/src';
-	paths.jsBuild     = paths.js + config[ENV].assets.js.root + '/' + semver;
+	paths.jsBuild     = paths.js + '/' + config[ENV].assets.js.root + '/' + semver;
 
 	paths.css         = paths.public + '/css';
 	paths.cssSrc      = paths.css + '/' + config.production.assets.sass.root;
@@ -59,8 +59,13 @@ function constructPaths() {
 	return paths;
 };
 
+function handleError (error) {
+	console.log(error.toString());
+	gutil.log(gutil.colors.red(error.toString()));
+	this.emit('end');
+}
 
-gulp.task('configure', function() {
+gulp.task('init', function() {
 	config = getConfig();
 	semver = getSemver();
 	paths  = constructPaths();
@@ -83,8 +88,7 @@ gulp.task('browser-sync', ['sass', 'javascript'], function() {
  * Build sass files
  */
 gulp.task('sass', function () {
-	gutil.log('Building css to ' + paths.cssBuild);
-    var base = gulp.src(paths.css.src + '/base.scss')
+    var base = gulp.src(paths.cssSrc + '/base.scss')
         .pipe(sass({
 			onError: browserSync.notify
         }))
@@ -94,7 +98,7 @@ gulp.task('sass', function () {
 		.pipe(browserSync.reload({stream:true}))
 		.pipe(gulp.dest(paths.cssBuild));
 
-	var oldIE = gulp.src(paths.css.src + '/ie-old.scss')
+	var oldIE = gulp.src(paths.cssSrc + '/ie-old.scss')
         .pipe(sass({
 			onError: browserSync.notify
         }))
@@ -102,7 +106,7 @@ gulp.task('sass', function () {
 		.pipe(minifycss())
         .pipe(gulp.dest(paths.cssBuild));
 
-	var cms = gulp.src(paths.css.src + '/css.scss')
+	var cms = gulp.src(paths.cssSrc + '/css.scss')
         .pipe(sass({
 			onError: browserSync.notify
         }))
@@ -125,7 +129,8 @@ gulp.task('sass', function () {
  * Build js files
  */
 gulp.task('javascript', ['jshint', 'bower-concat'], function() {
-    return gulp.src(paths.js.src + '/**/*.js')
+	gutil.log(paths.jsSrc);
+    var main = gulp.src(paths.jsSrc + '/**/*.js')
 	.pipe(sourcemaps.init())
 		.pipe(concat('main.js'))
 		.pipe(uglify())
@@ -162,9 +167,10 @@ gulp.task('jshint', function () {
  *
  * NOTE: this task produces erros which are safe to ignore
  */
-gulp.task('modernizr', function() {
-  gulp.src([paths.cssSrc, paths.jsSrc])
-    .pipe(modernizr())
+gulp.task('modernizr', ['init'], function() {
+  gulp.src([paths.cssBuild + '/base.css', paths.jsBuild + '/main.js'])
+    .pipe(modernizr('modernizr.js')).on('error', handleError)
+    .pipe(uglify())
     .pipe(gulp.dest(paths.jsBuild))
 });
 
@@ -188,10 +194,10 @@ gulp.task('crush-images', function () {
  * Watch html/md files, run jekyll & reload BrowserSync
  */
 gulp.task('watch', function () {
-	gulp.watch(paths.public + config.production.assets.sass.root + '/**/*.scss', ['sass']);
-	gulp.watch(paths.public + config.production.assets.js.basePath + '/src/**/*.js', ['javascript']);
+	gulp.watch(paths.cssSrc + '/**/*.scss', ['sass']);
+	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
     gulp.watch(['application/modules/default/*'], browserSync.reload);
 });
 
-gulp.task('default', ['configure', 'browser-sync', 'modernizr', 'watch'] );
-gulp.task('production', ['configure', 'sass', 'javascript', 'modernizr'] );
+gulp.task('default', ['init', 'browser-sync', 'modernizr', 'watch'] );
+gulp.task('build', ['init', 'sass', 'javascript', 'modernizr'] );
