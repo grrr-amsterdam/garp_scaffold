@@ -36,13 +36,14 @@
 	PRIMER
 	========================================================================== */
 
-/* Better box-sizing reset, see: http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
-html { box-sizing: border-box; }
-*, *:before, *:after { box-sizing: inherit; }
-
-html { font-size: 62.5%; line-height: 1.4; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+html {
+	box-sizing: border-box; font-size: 62.5%; line-height: 1.4; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 	@include bp-max($small) { font-size: 50%; }
 }
+
+/* Better box-sizing reset, see: http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+*, *:before, *:after { box-sizing: inherit; }
+
 body, button, input, select, textarea { font-family: $bodyFont; @include font-size($defaultFontSize); color: #000; }
 body { background: #fff; margin: 0; }
 
@@ -91,40 +92,6 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 @import 'modules/cookie-info';
 @import 'modules/flash-message';
 
-
-@import 'modules/button/regular';
-@import 'modules/button/share';
-
-@import 'modules/datepicker/modal';
-@import 'modules/datepicker/table';
-
-@import 'modules/active-filters';
-@import 'modules/block-item';
-@import 'modules/block-link';
-@import 'modules/cookie-info';
-@import 'modules/date';
-@import 'modules/date-container';
-@import 'modules/featured-agenda-toggle';
-@import 'modules/filters';
-@import 'modules/flash-message';
-@import 'modules/forms';
-@import 'modules/google-maps';
-@import 'modules/header';
-@import 'modules/icons';
-@import 'modules/job-vacancy-flip';
-@import 'modules/lists';
-@import 'modules/loader';
-@import 'modules/media';
-@import 'modules/nav';
-@import 'modules/news-item';
-@import 'modules/notice';
-@import 'modules/promotional-banner';
-@import 'modules/separator';
-@import 'modules/socialcount';
-@import 'modules/status-label';
-@import 'modules/tweet';
-@import 'modules/video-link';
-@import 'modules/video-player';
 /* ==========================================================================
    HELPERS
    ========================================================================== */
@@ -146,7 +113,7 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 	.show-only-on-palm { display: block !important; }
 }
 
-.hidden { display: none !important; visibility: hidden !important; }
+.is-hidden { display: none !important; visibility: hidden !important; }
 .offscreen { position: absolute !important; left: -999em !important; }
 .invisible { visibility: hidden !important; }
 .clearfix {
