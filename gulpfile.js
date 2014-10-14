@@ -1,3 +1,27 @@
+/*
+ * Gulp is used to manage and generate front-end assets, such as
+ * css, javascript, and compressed images. You can run gulp from
+ * the command line with the commands below.
+ *
+ * IMPORTANT:
+ * Gulp needs to be installed globally on your system before
+ * you're able to run tasks. This can be done by running:
+ * `npm install -g gulp`
+ *
+ * OWNER:
+ * Mattijs Bliek
+ *
+ * COMMANDS:
+ * Generate a build for an environment (set environment with --e):
+ * `gulp`
+ *
+ * Generate images for an environment:
+ * `gulp images`
+ *
+ * Watch files and run a server (use for development only):
+ * `gulp watch`
+ *
+ */
 var gulp           = require('gulp'),
 	autoprefixer   = require('gulp-autoprefixer'),
 	gutil          = require('gulp-util'),
@@ -18,12 +42,13 @@ var gulp           = require('gulp'),
 	cache          = require('gulp-cached'),
 	tinypng        = require('gulp-tinypng'),
 	gulpif         = require('gulp-if'),
+	argv           = require('yargs').argv,
 	sh             = require('execSync');
 
 var config,
 	semver;
 var paths = {};
-var ENV = 'development';
+var ENV = argv.e ? argv.e : 'development';
 
 function getConfig() {
 	var zendApp = ini.read('./application/configs/app.ini');
@@ -79,11 +104,7 @@ gulp.task('init', function() {
 	gutil.log(gutil.colors.green('Environment: ' + ENV));
 });
 
-gulp.task('set-env', function() {
-	ENV = 'production';
-});
-
-gulp.task('browser-sync', ['sass', 'javascript'], function() {
+gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], function() {
 	if(!config.development.app.domain) {
 		gutil.log(gutil.colors.red('No domain set in application/configs/app.ini'));
 	}
@@ -95,22 +116,35 @@ gulp.task('browser-sync', ['sass', 'javascript'], function() {
 /**
  * TODO:
  * - Sourcemaps are not rendering properly
- * - Generate ie-old.scss & cms.scss without causing latency for
- *   regular Sass task
  * - Implement gulp-css-url-adjuster to generate cdn img paths
  */
 gulp.task('sass', ['scss-lint'], function () {
     gutil.log(gutil.colors.green('Building css to ' + paths.cssBuild));
     return gulp.src([paths.cssSrc + '/base.scss'])
-    	.pipe(gulpif(ENV == 'development', sourcemaps.init()))
-        	.pipe(sass({
+		.pipe(gulpif(ENV == 'development', sourcemaps.init()))
+			.pipe(sass({
 				onError: browserSync.notify
-        	})).on('error', handleError)
+			})).on('error', handleError)
 		.pipe(gulpif(ENV == 'development', sourcemaps.write()))
 		.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'opera 12.1'))
 		.pipe(minifycss())
         .pipe(gulp.dest(paths.cssBuild))
 		.pipe(browserSync.reload({stream:true}))
+		.pipe(gulp.dest(paths.cssBuild));
+
+});
+
+gulp.task('sass-cms', function() {
+    return gulp.src(paths.cssSrc + '/cms.scss')
+		.pipe(sass()).on('error', handleError)
+		.pipe(minifycss())
+		.pipe(gulp.dest(paths.cssBuild));
+});
+
+gulp.task('sass-ie', function() {
+    return gulp.src(paths.cssSrc + '/ie-old.scss')
+		.pipe(sass()).on('error', handleError)
+		.pipe(minifycss())
 		.pipe(gulp.dest(paths.cssBuild));
 });
 
@@ -153,7 +187,9 @@ gulp.task('jshint', function () {
 });
 
 /**
- * NOTE: this task produces erros which are safe to ignore
+ * NOTE: this task produces erros which are safe to ignore,
+ * this is due to Modernizr not being tool agnostic and
+ * looking for grunt modules.
  */
 gulp.task('modernizr', ['sass', 'javascript'], function() {
   return gulp.src([paths.cssBuild + '/base.css', paths.jsBuild + '/main.js'])
@@ -177,12 +213,10 @@ gulp.task('images', ['init', 'tinypng'], function () {
         .pipe(gulp.dest(paths.imgBuild));
 });
 
-gulp.task('watch', function () {
-	gulp.watch(paths.cssSrc + '/**/*.scss', ['sass']);
+gulp.task('watch', ['init', 'browser-sync', 'modernizr'], function() {
+	gulp.watch(paths.cssSrc + '/**/*.scss', ['sass-ie', 'sass-cms', 'sass']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
     gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
 });
 
-gulp.task('default', ['init', 'browser-sync', 'modernizr', 'watch'] );
-gulp.task('build', ['init', 'sass', 'javascript', 'modernizr']);
-gulp.task('production', ['set-env', 'build', 'images'] );
+gulp.task('default', ['init', 'sass-ie', 'sass-cms', 'sass', 'javascript', 'modernizr', 'images']);
