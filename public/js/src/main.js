@@ -61,16 +61,14 @@ function disableHoverStylesOnScroll() {
 	}, false);
 }
 
-$(function() {
-	app.init();
+app.init();
 
-	FastClick.attach(document.body);
+//FastClick.attach(document.body);
 
-	disableHoverStylesOnScroll();
+disableHoverStylesOnScroll();
 
-	var cookie_msg = Garp.FlashMessage.parseCookie();
-	if (cookie_msg) {
-		var fm = new Garp.FlashMessage(cookie_msg);
-		fm.show();
-	}
-});
+//var cookie_msg = Garp.FlashMessage.parseCookie();
+if (cookie_msg) {
+	//var fm = new Garp.FlashMessage(cookie_msg);
+	fm.show();
+}

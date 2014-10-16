@@ -58,12 +58,12 @@
 	<?php
 		// Inline Modernizr since it's such a wee script
 	?>
-	<script><?php require_once(APPLICATION_PATH . '/../public/' . 
+	<script><?php require_once(APPLICATION_PATH . '/../public/' .
 			$this->assetUrl()->getVersionedBuildPath('modernizr.js')) ?></script>
 	<link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
 </head>
 <body>
-	<?php echo $this->partial('partials/google-tag-manager.phtml', 'g'); ?> 
+	<?php //echo $this->partial('partials/google-tag-manager.phtml', 'g'); ?>
 	<div class="wrapper">
 		<?php echo $this->partial('partials/header.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
 		<div class="content">

@@ -85,6 +85,9 @@ linters:
     enabled: true
     max_depth: 4
 
+  SelectorFormat:
+    enabled: false
+
   Shorthand:
     enabled: true
 
