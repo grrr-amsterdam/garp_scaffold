@@ -77,6 +77,7 @@ php_value post_max_size 30M
 
 	# favicon (cannot be renamed)
 	ExpiresByType image/vnd.microsoft.icon  "access plus 1 week"
+	ExpiresByType image/x-icon              "access plus 1 week"
 
 	# webfonts
 	ExpiresByType font/truetype             "access plus 1 month"
