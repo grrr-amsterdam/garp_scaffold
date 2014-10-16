@@ -21,4 +21,5 @@ npm-debug.log
 .DS_Store
 .project
 .vagrant
+.gulp
 tags

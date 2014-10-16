@@ -184,7 +184,6 @@ gulp.task('bower-concat', function() {
 });
 
 gulp.task('jshint', function () {
-    gutil.log(paths.jsSrc);
     gulp.src(paths.jsSrc + '/**/*.js')
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('jshint-stylish'));
