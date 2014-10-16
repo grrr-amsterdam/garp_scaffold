@@ -62,10 +62,10 @@ function getConfig() {
 	return zendConfig;
 };
 
-function getSemver() {
-	result = sh.exec('semver');
+function getShellOutput(command) {
+	result = sh.exec(command);
     if (result.stderr) {
-        gutil.log(gutil.colors.red('Semver error: ' + result.stderr));
+        gutil.log(gutil.colors.red('Error getting shell output: ' + result.stderr));
         gutil.beep();
     }
     // Do a replace because of newline in shell output
@@ -98,7 +98,7 @@ function handleError (error) {
 
 gulp.task('init', function() {
 	config = getConfig();
-	semver = getSemver();
+	semver = getShellOutput('semver');
 	paths  = constructPaths();
 	gutil.log(gutil.colors.green('Semver: ' + semver));
 	gutil.log(gutil.colors.green('Environment: ' + ENV));
