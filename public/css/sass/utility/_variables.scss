@@ -44,3 +44,115 @@ $large: 1400;
 
 $fix-mqs: false !default;
 $old-ie: false !default;
+
+/*
+ * $colors
+ *
+ * The following is inspired by this article: http://sachagreif.com/sass-color-variables/
+ */
+$black: #141414;
+$lightGrey: #c5c6c6;
+$grey: #666;
+$darkGrey: #333;
+
+$red: #b52400;
+$darkRed: #641b09;
+$pink: #c53d7d;
+$darkPink: #6c2848;
+$turquoise: #1b94ab;
+$darkTurquoise: #17535f;
+$green: #349400;
+$darkGreen: #235309;
+$blue: #0079ff;
+$darkBlue: #0b4688;
+$purple: #5231b2;
+$darkPurple: #322162;
+$orange: #e79200;
+$darkOrange: #7d5209;
+
+/* themes */
+$themes: (
+	$red,
+	$pink,
+	$turquoise,
+	$green,
+	$blue,
+	$purple,
+	$orange
+);
+
+$themesDark: (
+	$darkRed,
+	$darkPink,
+	$darkTurquoise,
+	$darkGreen,
+	$darkBlue,
+	$darkPurple,
+	$darkOrange
+);
+
+/* special color */
+$spotifyLight: #72A528;
+$spotifyDark: #4D7218;
+$deezerLight: #27AAC9;
+$deezerDark: #0F7A93;
+
+$facebookLight: #3b5998;
+$facebookDark: #274775;
+$twitterLight: #267da8;
+$twitterDark: #00aced;
+
+
+/* text and links */
+$textColor: $darkGrey;
+$linkColor: nth($themes, 1);
+$subtleColor: $grey;
+
+
+/*
+ * $typography
+ */
+$defaultFontSize: 14;
+$defaultLineHeight: 1.375em;
+$defaultFontStack: 'Gibson', 'Helvetica', 'Arial', sans-serif;
+$headerFontStack: 'TVNord', 'Arial', sans-serif;
+$mobileFontStack: Tahoma, Geneva, sans-serif;
+
+
+/*
+ * $grid units
+ */
+$gridColumnWidth: 50px;
+$gridGutterWidth: 0;
+$gridColumnCount: 12;
+$gridFullWidth: $gridColumnCount*($gridColumnWidth+$gridGutterWidth);
+
+$margin: 20px;
+$marginHalf: 10px;
+$marginDouble: 40px;
+
+
+/*
+ * $breakpoints
+ *
+ * The following is inspired by this article: http://css-tricks.com/media-queries-sass-3-2-and-codekit/
+ */
+$small: 640;
+$medium: 1024;
+$large: 1200;
+
+/* the following breakpoints are used for a few edge cases in base.scss */
+$smallMedium: 750;
+$mediumLarge: 1150;
+
+$fix-mqs: false !default;
+$old-ie: false !default;
+
+@mixin defaultFont {
+	font-family: $mobileFontStack; 
+	@include bp-min($small) { font-family: $defaultFontStack;}
+}
+
+@function grayscale($value) {
+  @return #{ "grayscale(" + $value + ")" };
+}

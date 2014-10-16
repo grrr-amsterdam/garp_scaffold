@@ -6,11 +6,11 @@
  */
 $cookie_script = <<<EOT
 (function() {
-	var localStorage = typeof window.localStorage !== 'undefined' ? window.localStorage : null;
+	//var localStorage = typeof window.localStorage !== 'undefined' ? window.localStorage : null;
 	var cookie_bar_html = '<section id="cookie-announcement" class="cookie-announcement"> \
 	    Deze site maakt gebruik van cookies. \
 	    <a href="{$this->url(array(), 'cookie_info')}">Meer informatie?</a>';
-	if (localStorage) {
+	if (Modernizr.localStorage) {
 	    cookie_bar_html += '<button>&times;</button>';
 	}
 	cookie_bar_html += '</section>';

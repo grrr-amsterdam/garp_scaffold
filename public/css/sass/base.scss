@@ -36,13 +36,14 @@
 	PRIMER
 	========================================================================== */
 
-/* Better box-sizing reset, see: http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
-html { box-sizing: border-box; }
-*, *:before, *:after { box-sizing: inherit; }
-
-html { font-size: 62.5%; line-height: 1.4; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+html {
+	box-sizing: border-box; font-size: 62.5%; line-height: 1.4; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 	@include bp-max($small) { font-size: 50%; }
 }
+
+/* Better box-sizing reset, see: http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+*, *:before, *:after { box-sizing: inherit; }
+
 body, button, input, select, textarea { font-family: $bodyFont; @include font-size($defaultFontSize); color: #000; }
 body { background: #fff; margin: 0; }
 
@@ -112,7 +113,7 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 	.show-only-on-palm { display: block !important; }
 }
 
-.hidden { display: none !important; visibility: hidden !important; }
+.is-hidden { display: none !important; visibility: hidden !important; }
 .offscreen { position: absolute !important; left: -999em !important; }
 .invisible { visibility: hidden !important; }
 .clearfix {
