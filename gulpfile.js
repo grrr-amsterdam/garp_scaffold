@@ -129,36 +129,35 @@ gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], functio
 gulp.task('sass', ['scss-lint'], function () {
     gutil.log(gutil.colors.green('Building css to ' + paths.cssBuild));
     return gulp.src([paths.cssSrc + '/base.scss'])
-		.pipe(gulpif(ENV == 'development', sourcemaps.init()))
-			.pipe(sass({
-				onError: browserSync.notify
-			})).on('error', handleError)
-		.pipe(gulpif(ENV == 'development', sourcemaps.write()))
+		// .pipe(gulpif(ENV == 'development', sourcemaps.init()))
+		.pipe(sass({
+			onError: browserSync.notify
+		})).on('error', handleError)
 		.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'opera 12.1'))
-		.pipe(minifycss())
+		.pipe(gulpif(ENV == 'development', minifycss()))
+		// .pipe(gulpif(ENV == 'development', sourcemaps.write()))
         .pipe(gulp.dest(paths.cssBuild))
 		.pipe(browserSync.reload({stream:true}))
 		.pipe(gulp.dest(paths.cssBuild));
-
 });
 
 gulp.task('sass-cms', function() {
     return gulp.src(paths.cssSrc + '/cms.scss')
 		.pipe(sass()).on('error', handleError)
-		.pipe(minifycss())
+		.pipe(gulpif(ENV == 'development', minifycss()))
 		.pipe(gulp.dest(paths.cssBuild));
 });
 
 gulp.task('sass-ie', function() {
     return gulp.src(paths.cssSrc + '/ie-old.scss')
 		.pipe(sass()).on('error', handleError)
-		.pipe(minifycss())
+		.pipe(gulpif(ENV == 'development', minifycss()))
 		.pipe(gulp.dest(paths.cssBuild));
 });
 
 gulp.task('scss-lint', ['init'], function() {
 	gulp.src(paths.cssSrc + '/**/*.scss')
-		.pipe(cache('scsslint'))
+		// .pipe(cache('scsslint'))
 		.pipe(scsslint({'config': __dirname + '/.scss-lint.yml'})).on('error', handleError);
 });
 
@@ -167,7 +166,7 @@ gulp.task('javascript', ['jshint', 'bower-concat'], function() {
     return gulp.src(paths.jsSrc + '/**/*.js')
 	.pipe(gulpif(ENV == 'development', sourcemaps.init()))
 		.pipe(concat('main.js'))
-		.pipe(gulpif(ENV == 'development', uglify(), uglify({ 'compress': { 'pure_funcs': ['console.log'] } }))).on('error', handleError)
+		.pipe(gulpif(ENV == 'development', uglify(), uglify({ 'compress': 'drop_console' }))).on('error', handleError)
 	.pipe(gulpif(ENV == 'development', sourcemaps.write()))
     .pipe(gulp.dest(paths.jsBuild));
 });

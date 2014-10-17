@@ -37,11 +37,9 @@
 	========================================================================== */
 
 html {
-	box-sizing: border-box; font-size: 62.5%; line-height: 1.4; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-	@include bp-max($small) { font-size: 50%; }
+	box-sizing: border-box; font-size: 62.5%; line-height: 1.4;
+	-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
-
-/* Better box-sizing reset, see: http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
 *, *:before, *:after { box-sizing: inherit; }
 
 body, button, input, select, textarea { font-family: $bodyFont; @include font-size($defaultFontSize); color: #000; }
