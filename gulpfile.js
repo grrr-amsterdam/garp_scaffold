@@ -221,7 +221,7 @@ gulp.task('images', ['init', 'tinypng'], function () {
 });
 
 gulp.task('watch', ['init', 'browser-sync', 'modernizr'], function() {
-	gulp.watch(paths.cssSrc + '/**/*.scss', ['sass-cms', 'sass']);
+	gulp.watch(paths.cssSrc + '/**/*.scss', ['sass-ie', 'sass-cms', 'sass']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
     gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
 });
