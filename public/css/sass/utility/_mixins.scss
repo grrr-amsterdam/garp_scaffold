@@ -34,18 +34,6 @@
 	@include high-dpi { background-image: url('../img/sprite-#{$spritename}-2x.png'); background-size: $size; }
 }
 
-/**
- * Responsive padding (include units, so: 20px, ...)
- * Usage:
- * .content { @include responsive-padding($margin, $margin*2, $margin, $margin*1.5): }
- *
- * author: Koen
- */
-@mixin responsive-padding($top, $right, $bottom, $left) {
-								  padding: #{$top} #{$right} #{$bottom} #{$left};
-	@include bp-max($medium) 	{ padding: #{$top/2} #{$right/2} #{$bottom/2} #{$left/2}; }
-	@include bp-max($small) 	{ padding: #{$top/2} $margin/3 #{$bottom/2} $margin/3; }
-}
 
 /**
  * For image replacement
