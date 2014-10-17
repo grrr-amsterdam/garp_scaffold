@@ -37,9 +37,8 @@
 	========================================================================== */
 
 html {
-	box-sizing: border-box; font-size: 50%; line-height: 1.4;
+	box-sizing: border-box; font-size: 62.5%; line-height: 1.4;
 	-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-	@include bp-min($small) { font-size: 62.5%; }
 }
 *, *:before, *:after { box-sizing: inherit; }
 
