@@ -24,3 +24,10 @@ npm-debug.log
 .vagrant
 .gulp
 tags
+cache.properties
+vendor/.git
+composer.lock
+build/api
+build/build
+build/logs
+build/phpdox
