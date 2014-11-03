@@ -16,7 +16,7 @@
 
 /**
  * Color mixins (other than lighten or darken)
-*/
+ */
 // Add percentage of white to a color
 @function tint($color, $percent) {
   @return mix(white, $color, $percent);
