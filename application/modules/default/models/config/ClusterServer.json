@@ -1,0 +1,15 @@
+{
+	"inputs": {
+		"hostname": {
+			"maxLength": 100,
+			"editable": false,
+			"visible": true
+		}
+	},
+	
+	"listFields": "hostname",
+	
+	"visible": false,
+
+	"module": "garp"
+}
