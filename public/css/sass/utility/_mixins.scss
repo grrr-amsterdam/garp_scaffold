@@ -1,0 +1,178 @@
+/* ==========================================================================
+   mixins
+   ========================================================================== */
+
+
+/**
+ * Shortcut for :hover, :active, and :focus styles.
+ *
+ * Usage:
+ * a {
+ *   color: blue;
+ *   @include active() {
+ *     color: red;
+ *   }
+ * }
+ */
+@mixin active() {
+	.no-touch &:hover, &:active, &:focus { @content; }
+}
+
+/*
+ * Bare list
+ * Author: Mattijs Bliek
+ *
+ * Get rid of list-style and padding
+ */
+@mixin bare-list() {
+	margin: 0; padding: 0; list-style-type: none;
+}
+
+/**
+ * Sprite
+ * Author: Mattijs Bliek
+ *
+ * Use a background sprite for text-replacement or icons
+ *
+ * Usage:
+ * .icon { @include sprite(icons, 300px 200px): }
+ *
+ * It is recommended to replace the size of the sprite with a variable
+ */
+@mixin sprite($spritename, $size) {
+	background-image: url('../img/sprite-#{$spritename}.png'); background-repeat: no-repeat; text-indent: 100%; white-space: nowrap; overflow: hidden;
+	@include high-dpi { background-image: url('../img/sprite-#{$spritename}-2x.png'); background-size: $size; }
+}
+
+
+/**
+ * For image replacement
+ */
+@mixin hide-text {
+	font: 0/0 a;
+	text-shadow: none;
+	color: transparent;
+	background-color: transparent;
+	border: 0 none;
+}
+
+/**
+ * For font-sizing in rem
+ * Usage:
+ * html { font-size: 62.5%; }
+ * p { @include font-size(16); }
+ */
+@mixin font-size($font-size) {
+	font-size: #{$font-size}px;
+	font-size: #{$font-size / 10}rem;
+}
+
+/**
+ * For using breakpoints
+ * Usage:
+ * div { width: 60px;
+ *	@include breakpoint-min($small) { width: 80px; }
+ * }
+ *
+ * Pass true as a second parameter to toggle high dpi screens
+ */
+@mixin bp-min($point: 0em, $highDpi: false) {
+	@if $fix-mqs {
+		@content;
+	} @else {
+		@if $highDpi == true {
+			@media
+            only screen and (min-width: pxToEm($point)) and (-webkit-min-device-pixel-ratio: 2),
+            only screen and (min-width: pxToEm($point)) and (   min--moz-device-pixel-ratio: 2),
+            only screen and (min-width: pxToEm($point)) and (     -o-min-device-pixel-ratio: 2/1),
+            only screen and (min-width: pxToEm($point)) and (        min-device-pixel-ratio: 2),
+            only screen and (min-width: pxToEm($point)) and (                min-resolution: 192dpi),
+            only screen and (min-width: pxToEm($point)) and (                min-resolution: 2dppx) { @content; }
+		} @else {
+			@media only screen and (min-width: pxToEm($point)) { @content; }
+		}
+	}
+}
+
+@mixin bp-max($point: 0em, $highDpi: false) {
+	@if($highDpi == true) {
+		@media
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (   min--moz-device-pixel-ratio: 2),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (        min-device-pixel-ratio: 2),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (                min-resolution: 192dpi),
+        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (                min-resolution: 2dppx) { @content; }
+
+	} @else {
+		@media only screen and (max-width: (pxToEm($point) - 0.0625em)) { @content; }
+	}
+}
+
+@mixin bp-min-max($minPoint: 0em, $maxPoint: 0em, $highDpi: false) {
+	@if($highDpi == true) {
+		@media
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (   min--moz-device-pixel-ratio: 2),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (        min-device-pixel-ratio: 2),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (                min-resolution: 192dpi),
+        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (                min-resolution: 2dppx) { @content; }
+	} @else {
+		@media only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) { @content; }
+	}
+}
+
+/**
+ * For targetting high dpi screens
+ * Usage:
+ * div {
+ *	width: 30px; height: 30px; background: url('img.jpg');
+ *	@include high-dpi() { background: url('image-2x.jpg'); @include background-size(30px 30px); }
+ * }
+ */
+@mixin high-dpi() {
+	@media
+    only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (   min--moz-device-pixel-ratio: 2),
+    only screen and (     -o-min-device-pixel-ratio: 2/1),
+    only screen and (        min-device-pixel-ratio: 2),
+    only screen and (                min-resolution: 192dpi),
+    only screen and (                min-resolution: 2dppx) { @content; }
+}
+
+/**
+ * For targeting old-IE
+ * Usage:
+ * div {
+ *  @include old-ie { zoom: 1; }
+ * }
+ */
+@mixin old-ie {
+	// Only use this content if we're dealing with old IE
+	@if $old-ie {
+		@content;
+	}
+}
+
+/**
+ * Calculate fluid ratio based on two dimensions (width/height)
+ * @see http://voormedia.com/blog/2012/11/responsive-background-images-with-fixed-or-fluid-aspect-ratios
+ * Usage:
+ * .header { @include fluid-ratio(800px 200px, 300px 150px); background-image: url('img/branding.png'); }
+ */
+@mixin fluid-ratio($large-size, $small-size) {
+  $width-large: nth($large-size, 1);
+  $width-small: nth($small-size, 1);
+  $height-large: nth($large-size, 2);
+  $height-small: nth($small-size, 2);
+  $slope: ($height-large - $height-small) / ($width-large - $width-small);
+  $height: $height-small - $width-small * $slope;
+
+  padding-top: $slope * 100%;
+  height: $height;
+
+  background-size: cover;
+  -moz-background-size: cover;  /* Firefox 3.6 */
+  background-position: center;  /* Internet Explorer 7/8 */
+}
