@@ -77,4 +77,13 @@ interface Garp_Store_Interface {
  	 * @return $this
  	 */
 	public function destroy($key = false);
+<<<<<<< HEAD
+=======
+
+	/**
+ 	 * To array converter
+ 	 * @return Array
+ 	 */
+	public function toArray();
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }

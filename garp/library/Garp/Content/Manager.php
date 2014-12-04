@@ -60,8 +60,13 @@ class Garp_Content_Manager {
 				->setDefault('sort', array())
 				->setDefault('start', null)
 				->setDefault('limit', null)
+<<<<<<< HEAD
 				->setDefault('query', false)
 				->setDefault('fields', Zend_Db_Table_Select::SQL_WILDCARD)
+=======
+				->setDefault('fields', null)
+				->setDefault('query', false)
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 				->setDefault('group', array())
 				->setDefault('rule', null)
 				->setDefault('bindingModel', null)
@@ -79,6 +84,7 @@ class Garp_Content_Manager {
 			$select = $this->_model->select();
 			$select->setIntegrityCheck(false);
 
+<<<<<<< HEAD
 			// FROM
 			// ============================================================
 			$fields = $options['fields'];
@@ -92,6 +98,12 @@ class Garp_Content_Manager {
 			// ============================================================
 			if ($options['query'] && !empty($options['query'])) {
 				$related = array();
+=======
+			// FILTER WHERES AND JOINS
+			// ============================================================
+			$related = array();
+			if ($options['query'] && !empty($options['query'])) {
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 				/**
 				 * Check for other model names in the conditions. These are indicated by a dot (".") in the name.
 				 * If available, add these models as joins to the Select object.
@@ -103,6 +115,7 @@ class Garp_Content_Manager {
 						unset($options['query'][$column]);
 					}
 				}
+<<<<<<< HEAD
 
 				$this->_addJoinClause($select, $related, $options['rule'], $options['bindingModel']);
 
@@ -111,6 +124,41 @@ class Garp_Content_Manager {
 				if ($options['query']) {
 					$select->where($this->_createWhereClause($options['query']));
 				}
+=======
+			}
+
+			// FROM
+			// ============================================================
+			if ($options['fields']) {
+				$fields = $options['fields'];
+			} elseif (count($related)) {
+				// When using a join filter (used for the relationpanel), it's more performant to 
+				// specify only a model's list fields, otherwise the query can get pretty heavy for 
+				// tables with 100.000+ records.
+				$primary = array_values($this->_model->info(Zend_Db_Table_Abstract::PRIMARY));
+				$fields = array_merge($this->_model->getListFields(), $primary);
+			} else {
+				$fields = Zend_Db_Table_Select::SQL_WILDCARD;
+			}
+			// If filterForeignKeys is true, filter out the foreign keys 
+			if ($options['filterForeignKeys']) {
+				$fields = $this->_filterForeignKeyColumns($fields, $referenceMap);
+			}
+			$select->from($tableName, $fields);
+
+			// JOIN
+			// ============================================================
+			if (count($related)) {
+				$this->_addJoinClause($select, $related, $options['rule'], $options['bindingModel']);
+			}
+
+			// WHERE
+			// Add WHERE clause if there still remains something after 
+			// filtering.
+			// ============================================================
+			if ($options['query']) {
+				$select->where($this->_createWhereClause($options['query']));
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			}
 
 			// GROUP
@@ -146,7 +194,11 @@ class Garp_Content_Manager {
 			$isCountQuery = count($fields) == 1 && !empty($fields[0]) && strtolower($fields[0]) == 'count(*)';
 			if (!$isCountQuery) {
 				$select->limit($options['limit'], $options['start']);
+<<<<<<< HEAD
 			}			
+=======
+			}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			$results = $this->_model->fetchAll($select)->toArray();
 		} else {
 			$results = $this->_model->fetchAll();

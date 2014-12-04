@@ -28,32 +28,54 @@ class Garp_Loader {
 	 * @var String
 	 */
 	protected $_folderSeparator = '_';
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 	/**
 	 * The search roots. Multiple roots possible, specified on namespace.
 	 * @var String
 	 */
 	protected $_includePaths = array();
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Collection of string manipulation functions
 	 * @var Array
 	 */
 	protected $_filters = array();
+<<<<<<< HEAD
 	
 
 	/**
  	 * Check wether the file exists before including it.
  	 * Set to true when you want this loader to be chainable. It will return 
  	 * false if the file does not exist, allowing other autoloaders to be 
+=======
+
+
+	/**
+ 	 * Check wether the file exists before including it.
+ 	 * Set to true when you want this loader to be chainable. It will return
+ 	 * false if the file does not exist, allowing other autoloaders to be
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  	 * registered and try their luck.
  	 * @var Boolean
  	 */
 	protected $_checkIfFileExists = false;
 
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Class constructor
 	 * @param Array|Garp_Util_Configuration $options
@@ -98,15 +120,25 @@ class Garp_Loader {
 		$this->_checkIfFileExists = $flag;
 		return $this;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Set the include path (meaning, in this case, the root from which class files are found).
 	 * $options may contain three config values: 'path', the actual path, 'namespace', to use the path exclusively for
 	 * certain namespaces, and 'ignore'. This last one is used to specify strings at the start of the classname that
 	 * are not used in generating the path to the class file.
+<<<<<<< HEAD
 	 * Example: if 'ignore' is "Foo_Bar" and include path = "/my/classes/", the class "Foo_Bar_Baz" will be searched for 
 	 * in "/my/classes/Baz.php". If 'ignore' would've been NULL, the generated path would be "/my/classes/Foo/Bar/Baz.php". 
+=======
+	 * Example: if 'ignore' is "Foo_Bar" and include path = "/my/classes/", the class "Foo_Bar_Baz" will be searched for
+	 * in "/my/classes/Baz.php". If 'ignore' would've been NULL, the generated path would be "/my/classes/Foo/Bar/Baz.php".
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	 * @param Array|Garp_Util_Configuration $options
 	 * @return $this
 	 */
@@ -126,8 +158,13 @@ class Garp_Loader {
 		);
 		return $this;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Get one of the registered include paths
 	 * @param String $namespace Return path for given namespace only
@@ -139,8 +176,13 @@ class Garp_Loader {
 		}
 		return $this->_includePaths[$namespace];
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Set folder separator
 	 * @param String $char The character separating "namespaces"
@@ -150,8 +192,13 @@ class Garp_Loader {
 		$this->_folderSeparator = $char;
 		return $this;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Get folder separator
 	 * @return String
@@ -159,11 +206,19 @@ class Garp_Loader {
 	public function getFolderSeparator() {
 		return $this->_folderSeparator;
 	}
+<<<<<<< HEAD
 	
 	
 	/**
 	 * Add a filter to the stack.
 	 * Note that the filter will be tested for validity: it MUST return 
+=======
+
+
+	/**
+	 * Add a filter to the stack.
+	 * Note that the filter will be tested for validity: it MUST return
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	 * a string.
 	 * @param String $alias String alias, so you can retrieve the filter
 	 * @param Closure $filter
@@ -173,6 +228,7 @@ class Garp_Loader {
 		$test = 'Garp_Foo_Bar';
 		if (!is_string($filter($test))) {
 			throw new Garp_Loader_Exception('Filter "'.$alias.'" is invalid. Returntype MUST be \'string\'.');
+<<<<<<< HEAD
 		}		
 		
 		$this->_filters[$alias] = $filter;
@@ -180,6 +236,15 @@ class Garp_Loader {
 	}
 	
 	
+=======
+		}
+
+		$this->_filters[$alias] = $filter;
+		return $this;
+	}
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Retrieve a filter
 	 * @param String $alias
@@ -188,8 +253,13 @@ class Garp_Loader {
 	public function getFilter($alias) {
 		return array_key_exists($alias, $this->_filters) ? $this->_filters[$alias] : null;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Remove filter
 	 * @param String $alias
@@ -199,8 +269,13 @@ class Garp_Loader {
 		unset($this->_filters[$alias]);
 		return $this;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Installs this class loader on the SPL autoload stack.
 	 * @return $this
@@ -209,8 +284,13 @@ class Garp_Loader {
 		spl_autoload_register(array($this, 'loadClass'));
 		return $this;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Uninstalls this class loader from the SPL autoload stack.
 	 * @return $this
@@ -219,8 +299,13 @@ class Garp_Loader {
 		spl_autoload_unregister(array($this, 'loadClass'));
 		return $this;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Load a class file
 	 * @param String $className The name of the class to load
@@ -295,8 +380,13 @@ class Garp_Loader {
 		$includePath .= '.'.$extension;
 		return $includePath;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Apply registered filters to the classname
 	 * @param String $className

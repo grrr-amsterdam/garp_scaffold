@@ -53,7 +53,11 @@ class Garp_View_Helper_AssetUrlTest extends Garp_Test_PHPUnit_TestCase {
 				:major: 0
 				:minor: 9
 				:patch: 10
+<<<<<<< HEAD
 				:special: ''"); 
+=======
+				:special: ''");
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		}
 		$this->assertEquals($this->_getHelper()->assetUrl('main.css'),
 			'/css/build/prod/' . new Garp_Semver . '/main.css');
@@ -73,7 +77,11 @@ class Garp_View_Helper_AssetUrlTest extends Garp_Test_PHPUnit_TestCase {
 			'assets' => array(
 				'js' => array('root' => 'foo/bar/lorem/ipsum')
 			)
+<<<<<<< HEAD
 		));	
+=======
+		));
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$shouldRemoveSemver = false;
 		if (!file_exists(APPLICATION_PATH . '/../.semver')) {
 			$shouldRemoveSemver = true;
@@ -82,7 +90,11 @@ class Garp_View_Helper_AssetUrlTest extends Garp_Test_PHPUnit_TestCase {
 				:major: 0
 				:minor: 9
 				:patch: 10
+<<<<<<< HEAD
 				:special: ''"); 
+=======
+				:special: ''");
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		}
 
 		$this->assertEquals(
@@ -116,7 +128,11 @@ class Garp_View_Helper_AssetUrlTest extends Garp_Test_PHPUnit_TestCase {
 				:major: 34
 				:minor: 129
 				:patch: 10
+<<<<<<< HEAD
 				:special: ''"); 
+=======
+				:special: ''");
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		}
 		$this->assertEquals($this->_getHelper()->assetUrl('main.css'),
 			'http://static.sesamestreet.co.uk/css/build/prod/' . new Garp_Semver . '/main.css');
@@ -141,7 +157,12 @@ class Garp_View_Helper_AssetUrlTest extends Garp_Test_PHPUnit_TestCase {
 		return Zend_Registry::get('application')->getBootstrap()->getResource('View');
 	}
 
+<<<<<<< HEAD
 	protected function tearDown() {
+=======
+	public function tearDown() {
+		parent::tearDown();
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$this->_getView()->clearVars();
 	}
 

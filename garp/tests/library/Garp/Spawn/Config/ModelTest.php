@@ -17,6 +17,7 @@
 // 		$modelConfig = $this->_loadBogusModelConfig('Bogus');
 
 // 		$this->assertArrayHasKey('order', (array)$modelConfig);
+<<<<<<< HEAD
 // 		$this->assertInternalType('string', $modelConfig['order']);
 // 		$this->assertGreaterThan(0, strlen($modelConfig['order']));
 // 	}
@@ -39,6 +40,30 @@
 // 	public function testLoadingAModelConfigFileShouldReturnLabel() {
 // 		$modelConfig = $this->_loadBogusModelConfig('Bogus');
 	
+=======
+// 		$this->assertTrue(is_string($modelConfig['order']));
+// 		$this->assertGreaterThan(0, strlen($modelConfig['order']));
+// 	}
+
+// 	public function testLoadingAModelConfigFileShouldReturnConfigurationTree() {
+// 		$modelConfig = $this->_loadBogusModelConfig('Bogus');
+
+// 		$this->assertGreaterThan(0, count($modelConfig));
+// 	}
+
+
+// 	public function testLoadingAModelConfigFileShouldReturnName() {
+// 		$modelName = 'Bogus';
+// 		$modelConfig = $this->_loadBogusModelConfig($modelName);
+
+// 		$this->assertEquals($modelName, $modelConfig['id']);
+// 	}
+
+
+// 	public function testLoadingAModelConfigFileShouldReturnLabel() {
+// 		$modelConfig = $this->_loadBogusModelConfig('Bogus');
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 // 		$this->assertGreaterThan(0, strlen($modelConfig['label']));
 // 	}
 

@@ -12,6 +12,7 @@ class Garp_File {
 	 */
     const TYPE_IMAGES = 'image';
 	const TYPE_DOCUMENTS = 'document';
+<<<<<<< HEAD
 	
 	const SEPERATOR = '-';
 
@@ -19,6 +20,15 @@ class Garp_File {
 	
 	protected $_requiredConfigParams = array('type', 'domain', 'path', 'extensions');
 	
+=======
+
+	const SEPERATOR = '-';
+
+	protected $_storageTypes = array('local', 's3');
+
+	protected $_requiredConfigParams = array('type', 'domain', 'path', 'extensions');
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected $_requiredConfigPaths = array('upload', 'static');
 
 	protected $_allowedTypes = array('image', 'document');
@@ -29,7 +39,11 @@ class Garp_File {
 	protected $_storage;
 
 	protected $_uploadOrStatic = 'upload';
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected $_path;
 
 	/**
@@ -61,7 +75,11 @@ class Garp_File {
 		$this->_path = $this->_getPath($ini, $uploadType);
 		$this->_initStorage($ini);
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 	/** Make public methods of the Garp_File_Storage object available. */
 	public function __call($method, $args) {
@@ -128,7 +146,11 @@ class Garp_File {
 
 	public function validateUploadType($uploadType) {
 		if (!is_null($uploadType) && !in_array($uploadType, $this->_allowedTypes)) {
+<<<<<<< HEAD
 			throw new Garp_File_Exception_InvalidType("'{$uploadType}' is not a valid " . 
+=======
+			throw new Garp_File_Exception_InvalidType("'{$uploadType}' is not a valid " .
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 				"upload type. Try: '".implode("' or '", $this->_allowedTypes)."'.");
 		}
 	}
@@ -139,7 +161,11 @@ class Garp_File {
 	 * @return Array List of uploadable extensions
 	 */
 	public function getAllowedExtensions() {
+<<<<<<< HEAD
 		$ini = $this->_getIni();		
+=======
+		$ini = $this->_getIni();
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$extensions = explode(',', $ini->cdn->extensions);
 
 		$imageFile = new Garp_Image_File($this->_uploadOrStatic);
@@ -282,8 +308,13 @@ class Garp_File {
 			}
 		} else throw new Exception("The filename was empty.");
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _getIni() {
 		if (!self::$_config) {
 			self::$_config = Zend_Registry::get('config');
@@ -291,8 +322,13 @@ class Garp_File {
 		}
 		return self::$_config;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * @param Array $list Numeric Array of String elements,
 	 * @param String $decorator Element decorator, f.i. a quote.

@@ -2,7 +2,11 @@
 /**
  * Garp_Auth_Adapter_Twitter
  * Authenticate using Twitter. Uses Zend_OAuth
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  * @author Harmen Janssen | grrr.nl
  * @modifiedby $LastChangedBy: $
  * @version $Revision: $
@@ -17,7 +21,11 @@ class Garp_Auth_Adapter_Twitter extends Garp_Auth_Adapter_Abstract {
 	 */
 	protected $_configKey = 'twitter';
 
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Authenticate a user.
 	 * @param Zend_Controller_Request_Abstract $request The current request
@@ -43,6 +51,7 @@ class Garp_Auth_Adapter_Twitter extends Garp_Auth_Adapter_Abstract {
 				$cookie->token = serialize($token);
 				$cookie->writeCookie();
 				$consumer->redirect();
+<<<<<<< HEAD
 				exit;
 			} elseif ($request->getParam('oauth_token')) {
 				$cookie = new Garp_Store_Cookie('Twitter_request_token');
@@ -64,11 +73,42 @@ class Garp_Auth_Adapter_Twitter extends Garp_Auth_Adapter_Abstract {
 	}
 	
 	
+=======
+				return true;
+			}
+			$cookie = new Garp_Store_Cookie('Twitter_request_token');
+			if ($request->getParam('oauth_token') && isset($cookie->token)) {
+				$accesstoken = $consumer->getAccessToken($_GET, unserialize($cookie->token));
+				// Discard request token
+				$cookie->destroy();
+				return $this->_getUserData(
+					$this->_getTwitterService($accesstoken, $authVars->consumerKey, $authVars->consumerSecret),
+					$accesstoken->getParam('user_id')
+				);
+			}
+
+			$this->_addError('App was not authorized. Please try again.');
+			return false;
+		} catch (Exception $e) {
+			if (strpos($e->getMessage(), 'Duplicate entry') !== false &&
+				strpos($e->getMessage(), 'email_unique') !== false) {
+				$this->_addError(__('this email address already exists'));
+				return false;
+			}
+			// Provide generic error message
+			$this->_addError(__('login error'));
+		}
+		return false;
+	}
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Store the user's profile data in the database, if it doesn't exist yet.
 	 * @param Zend_Oauth_Token_Access $accesstoken
 	 * @return Void
 	 */
+<<<<<<< HEAD
 	protected function _getUserData(Zend_Oauth_Token_Access $accesstoken) {
 		$username = $accesstoken->getParam('screen_name');
 		$twitterService = new Zend_Service_Twitter(array(
@@ -92,19 +132,49 @@ class Garp_Auth_Adapter_Twitter extends Garp_Auth_Adapter_Abstract {
 		}
 		$userModel = new Model_User();
 		$userConditions = $userModel->select()->from($userModel->getName(), $sessionColumns);
+=======
+	protected function _getUserData(Zend_Service_Twitter $twitterService, $twitterUserId) {
+		$twitterUserData = $twitterService->users->show($twitterUserId);
+		$userColumns = $this->_mapProperties((array)$twitterUserData->toValue());
+
+		$userModel = new Model_User();
+		$userConditions = $userModel->select()->from(
+			$userModel->getName(), $this->_getSessionColumns());
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 		$model = new G_Model_AuthTwitter();
 		$model->bindModel('Model_User', array('conditions' => $userConditions));
 		$userData = $model->fetchRow(
 			$model->select()
+<<<<<<< HEAD
 				  ->where('twitter_uid = ?', $id)
 		);
 		if (!$userData || !$userData->Model_User) {
 			$userData = $model->createNew($id, $userDataFromTwitter);
+=======
+				  ->where('twitter_uid = ?', $twitterUserId)
+		);
+		if (!$userData || !$userData->Model_User) {
+			$userData = $model->createNew($twitterUserId, $userColumns);
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		} else {
 			$model->updateLoginStats($userData->user_id);
 			$userData = $userData->Model_User;
 		}
 		return $userData;
 	}
+<<<<<<< HEAD
+=======
+
+	protected function _getTwitterService(Zend_Oauth_Token_Access $accesstoken, $consumerKey, $consumerSecret) {
+		return new Zend_Service_Twitter(array(
+			'accessToken' => $accesstoken,
+			'oauthOptions' => array(
+				'username' => $accesstoken->getParam('screen_name'),
+				'consumerKey' => $consumerKey,
+				'consumerSecret' => $consumerSecret
+			)
+		));
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }

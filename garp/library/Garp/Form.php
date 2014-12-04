@@ -7,7 +7,11 @@
  * @package Garp
  * @subpackage Form
  *
+<<<<<<< HEAD
  * @todo Add setters and getters for _addHoneypotValidation and 
+=======
+ * @todo Add setters and getters for _addHoneypotValidation and
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  * _addTimestampValidation
  */
 class Garp_Form extends Zend_Form {
@@ -17,48 +21,70 @@ class Garp_Form extends Zend_Form {
  	 */
 	const TIMESTAMP_FIELD_KEY = 'ts';
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Name used for honeypot
  	 * @var String
  	 */
 	const HONEYPOT_FIELD_KEY = 'hp';
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Parent form.
  	 * @var Garp_Form
  	 */
 	protected $_parent;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Wether to set a default suffix on labels of required elements
  	 * @var Boolean
  	 */
 	protected $_defaultRequiredLabelSuffix = ' <i>*</i>';
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Wether to add a honeypot
  	 * @var Boolean
  	 */
 	protected $_addHoneypotValidation = true;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Wether to add timestamp validation
  	 * @var Boolean
  	 */
 	protected $_addTimestampValidation = true;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Wether to hijack this form using ajax
  	 * @var Boolean
  	 */
+<<<<<<< HEAD
 	protected $_ajax = false; 
 
+=======
+	protected $_ajax = false;
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
     /**
      * Initalize!
@@ -84,6 +110,18 @@ class Garp_Form extends Zend_Form {
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	/**
+ 	 * Override to unset automatically added security fields
+ 	 */
+    public function getValues($suppressArrayNotation = false) {
+		$values = parent::getValues($suppressArrayNotation);
+		unset($values[self::HONEYPOT_FIELD_KEY]);
+		unset($values[self::TIMESTAMP_FIELD_KEY]);
+		return $values;
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 	/**
      * Create an element
@@ -124,7 +162,11 @@ class Garp_Form extends Zend_Form {
 
 		$element = parent::createElement($type, $name, $options);
 
+<<<<<<< HEAD
 		// If the Identical validator is given, set a data-attribute so 
+=======
+		// If the Identical validator is given, set a data-attribute so
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		// Javascript can validate the two fields as well
 		if ($identicalValidator = $element->getValidator('Identical')) {
 			$element->setAttrib('data-identical-to', $identicalValidator->getToken());
@@ -138,7 +180,10 @@ class Garp_Form extends Zend_Form {
 		return $element;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Check if an element needs required attribute
  	 * @param Zend_Form_Element $element
@@ -172,11 +217,18 @@ class Garp_Form extends Zend_Form {
 				'FormElements',
 				'Fieldset',
 			);
+<<<<<<< HEAD
 		}			
 		return parent::addDisplayGroup($elements, $name, $options);
 	}
 
 
+=======
+		}
+		return parent::addDisplayGroup($elements, $name, $options);
+	}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
      * Add a form group/subform
      *
@@ -193,7 +245,10 @@ class Garp_Form extends Zend_Form {
 		return parent::addSubForm($form, $name, $order);
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Set required label suffix
  	 * @param String $suffix
@@ -204,7 +259,10 @@ class Garp_Form extends Zend_Form {
 		return $this;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Get required label suffix
  	 * @return String
@@ -213,7 +271,10 @@ class Garp_Form extends Zend_Form {
 		return $this->_defaultRequiredLabelSuffix;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Set wether to hijack the form using AJAX
  	 * @param Boolean $flag
@@ -231,7 +292,10 @@ class Garp_Form extends Zend_Form {
 		return $this;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * @return Boolean
  	 */
@@ -239,10 +303,16 @@ class Garp_Form extends Zend_Form {
 		return $this->_ajax;
 	}
 
+<<<<<<< HEAD
 
 	/**
  	 * Add field that records how long it took to submit the form.
  	 * This should be longer than 1 second, otherwise we suspect spammy 
+=======
+	/**
+ 	 * Add field that records how long it took to submit the form.
+ 	 * This should be longer than 1 second, otherwise we suspect spammy
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  	 * behavior.
  	 * @return Void
  	 */
@@ -258,10 +328,16 @@ class Garp_Form extends Zend_Form {
 		}
 	}
 
+<<<<<<< HEAD
 
 	/**
  	 * Add field that acts as a honeypot for spambots. It should be left blank 
  	 * in order to be valid. 
+=======
+	/**
+ 	 * Add field that acts as a honeypot for spambots. It should be left blank
+ 	 * in order to be valid.
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  	 * Use CSS to visually hide this field from humans.
  	 * @return Void
  	 */
@@ -269,7 +345,10 @@ class Garp_Form extends Zend_Form {
 		$this->addElement('honeypot', self::HONEYPOT_FIELD_KEY);
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Register a parent.
  	 * @param Garp_Form $parent
@@ -280,7 +359,10 @@ class Garp_Form extends Zend_Form {
 		return $this;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Get parent
  	 * @return Garp_Form
@@ -289,7 +371,10 @@ class Garp_Form extends Zend_Form {
 		return $this->_parent;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Add id attribute to the options array.
  	 * Called from Garp_Form::createElement()
@@ -315,7 +400,10 @@ class Garp_Form extends Zend_Form {
 		$options['id'] = strtolower($name).'-field';
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Retrieve default decorators
  	 * @param String $type Type of element
@@ -353,7 +441,10 @@ class Garp_Form extends Zend_Form {
 		}
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Extend __clone to also clone attached validators, decorators and filters.
  	 * @return Void

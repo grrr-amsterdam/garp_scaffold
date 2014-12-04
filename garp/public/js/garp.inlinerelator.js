@@ -8,7 +8,11 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 	rule2: null,
 	unrelateExisting: true,
 	localId: null,
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	border: false,
 	bodyBorder: false,
 	autoHeight: true,
@@ -17,15 +21,36 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 	getEmptyRecord: function(){
 		return new this.relationStore.recordType();
 	},
+<<<<<<< HEAD
 	
 	setupStore: function(){
 		var fields = Garp.dataTypes[this.model].getStoreFieldsFromColumnModel();
+=======
+
+	setupStore: function(){
+		var fields = Garp.dataTypes[this.model].getStoreFieldsFromColumnModel();
+		/**
+		 * For regular relationPanels we only fetch listFields. For this thingie we need 'em all,
+		 * so grab 'em here to pass into the query.
+		 */
+		var fieldsForQuery = (function() {
+			var out = [];
+			for (var i = 0; i < fields.length; ++i) {
+				out.push(fields[i].name);
+			}
+			return out;
+		})();
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 		this.writer = new Ext.data.JsonWriter({
 			paramsAsHash: false,
 			encode: false
 		});
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		this.relationStore = new Ext.data.DirectStore({
 			fields: fields,
 			autoLoad: false,
@@ -40,6 +65,10 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 			baseParams: {
 				start: 0,
 				limit: Garp.pageSize,
+<<<<<<< HEAD
+=======
+				fields: fieldsForQuery,
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 				query: ''
 			},
 			api: {
@@ -71,7 +100,11 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 			}
 		});
 	},
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	addAddBtn: function(){
 		this.add({
 			xtype: 'button',
@@ -86,7 +119,11 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 		});
 		this.doLayout();
 	},
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	addInlineForms: function(){
 		this.relationStore.each(function(rec){
 			this.add({
@@ -96,9 +133,15 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 				inlineRelator: this
 			});
 		}, this);
+<<<<<<< HEAD
 		this.doLayout();		
 	},
 	
+=======
+		this.doLayout();
+	},
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	addForm: function(prevForm){
 		var idx = 0;
 		if (prevForm) {
@@ -111,10 +154,17 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 		} else {
 			idx = this.relationStore.getCount();
 		}
+<<<<<<< HEAD
 		
 		var newRec = this.getEmptyRecord();
 		this.relationStore.insert(idx, newRec);
 		
+=======
+
+		var newRec = this.getEmptyRecord();
+		this.relationStore.insert(idx, newRec);
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		this.insert(idx, {
 			xtype: 'inlineform',
 			rec: newRec,
@@ -129,7 +179,11 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 			}
 		});
 	},
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Relates the owning form ID with our records
 	 */
@@ -156,7 +210,11 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 		if (this.rule2) {
 			data.rule2 = this.rule2;
 		}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		var scope = this;
 		Garp[Garp.currentModel].relate(data, function(res){
 			if (res) {
@@ -167,9 +225,15 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 				scope.relationStore.reload();
 			}
 		});
+<<<<<<< HEAD
 		
 	},
 	
+=======
+
+	},
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	saveAll: function(){
 		this.relationStore.on({
 			save: {
@@ -179,36 +243,60 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 		});
 		this.relationStore.save();
 	},
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	removeForm: function(form){
 		this.relationStore.remove(form.rec);
 		this.remove(form);
 		this.doLayout();
 		this.relate();
 	},
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	initComponent: function(ct){
 		Garp.InlineRelator.superclass.initComponent.call(this, ct);
 
 		this.ownerForm = this.ownerCt.ownerCt;
 		this.setupStore();
+<<<<<<< HEAD
 		
 		this.ownerForm.on('loaddata', function(rec,fp){
 			
 			this.localId = rec.get('id');
 			
+=======
+
+		this.ownerForm.on('loaddata', function(rec,fp){
+
+			this.localId = rec.get('id');
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			// first remove all "previous" items:
 			this.items.each(function(item){
 				this.remove(item);
 			}, this);
 			this.relationStore.removeAll(true);
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			var q = {};
 			q[Garp.currentModel + '.id'] = this.localId;
 			this.relationStore.setBaseParam('query', q);
 			this.relationStore.reload();
 		}, this);
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		Garp.eventManager.on('save-all', function(){
 			this.items.each(function(){
 				if (this.updateRecord) {
@@ -217,9 +305,15 @@ Garp.InlineRelator = Ext.extend(Ext.Panel, {
 			});
 			this.saveAll();
 		}, this);
+<<<<<<< HEAD
 		
 	}
 	
+=======
+
+	}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 });
 Ext.reg('inlinerelator',Garp.InlineRelator);
 
@@ -230,26 +324,44 @@ Garp.InlineForm = Ext.extend(Ext.Panel, {
 
 	rec: null,
 	inlineRelator: '',
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	border: false,
 	bodyBorder: false,
 	hideBorders: true,
 	style:'padding-bottom: 2px;',
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	border: false,
 	bodyBorder: false,
 	layout:'hbox',
 	hideLabel: true,
 	xtype:'inlineform',
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Converts standard formConfig fieldset to a panel with fields
 	 * @param {Object} items
 	 */
 	morphFields: function(items){
+<<<<<<< HEAD
 		
 		var copy = items.items.slice(0);
 		
+=======
+
+		var copy = items.items.slice(0);
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		copy.push({
 				iconCls: 'icon-new',
 				xtype: 'button',
@@ -271,12 +383,20 @@ Garp.InlineForm = Ext.extend(Ext.Panel, {
 				},
 				scope: this
 			});
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		Ext.each(copy, function(item){
 			if (!item.hasOwnProperty('flex')) {
 				item.flex = 1;
 			}
+<<<<<<< HEAD
 			// Uitgecomment door Harmen @ 4 maart 2014, omdat 
+=======
+			// Uitgecomment door Harmen @ 4 maart 2014, omdat
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			// we textarea's nodig hadden voor Filmhuis Den Haag!
 			//if (item.xtype == 'textarea') {
 				//item.xtype = 'textfield';
@@ -293,7 +413,11 @@ Garp.InlineForm = Ext.extend(Ext.Panel, {
 			}
 		});
 	},
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	updateRecord: function(){
 		this.items.each(function(i){
 			if (i.name && i.getValue()) {
@@ -319,7 +443,11 @@ Ext.reg('inlineform', Garp.InlineForm);
 Garp.InlineRelatorLabels = Ext.extend(Ext.Panel, {
 
 	model: null,
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	layout: 'hbox',
 	border: false,
 	hideLabel: true,
@@ -328,7 +456,11 @@ Garp.InlineRelatorLabels = Ext.extend(Ext.Panel, {
 		flex: 1,
 		xtype: 'label'
 	},
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	initComponent: function(ct){
 		var fields = Garp.dataTypes[this.model].formConfig[0].items[0].items.slice(0);
 		var labels = [];
@@ -347,6 +479,10 @@ Garp.InlineRelatorLabels = Ext.extend(Ext.Panel, {
 		this.items = labels;
 		Garp.InlineRelatorLabels.superclass.initComponent.call(this, ct);
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 });
 Ext.reg('inlinerelatorlabels', Garp.InlineRelatorLabels);

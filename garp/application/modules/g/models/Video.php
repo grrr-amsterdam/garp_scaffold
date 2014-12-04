@@ -9,7 +9,11 @@
  * @lastmodified $Date: $
  */
 class G_Model_Video extends Model_Base_Video {
+<<<<<<< HEAD
 	public function insert(array $data) {	
+=======
+	public function insert(array $data) {
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		try {
 			return parent::insert($data);
 		} catch (Exception $e) {
@@ -22,9 +26,18 @@ class G_Model_Video extends Model_Base_Video {
 			}
 
 			$videoUrl = trim($data['url']);
+<<<<<<< HEAD
 
 			if ($this->_isVimeoUrl($videoUrl)) {
 				$select = $this->select()->where('url LIKE ?', "%{$videoUrl}%");
+=======
+			$this->unregisterObserver('Translatable');
+
+			if ($this->_isVimeoUrl($videoUrl)) {
+				$queryUrl = parse_url($videoUrl);
+				$queryUrl = $queryUrl['host'] . $queryUrl['path'];
+				$select = $this->select()->where('url LIKE ?', "%{$queryUrl}%");
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			} elseif ($this->_isYouTuBeUrl($videoUrl) || $this->_isYouTubeComUrl($videoUrl)) {
 				$ytVideoId = $this->_getYouTubeIdFromURL($videoUrl);
 				$select = $this->select()->where('identifier = ?', $ytVideoId);
@@ -37,7 +50,10 @@ class G_Model_Video extends Model_Base_Video {
 				}
 			}
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		return null;
 	}
 

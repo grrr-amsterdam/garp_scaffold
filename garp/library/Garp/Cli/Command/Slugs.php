@@ -31,7 +31,11 @@ class Garp_Cli_Command_Slugs extends Garp_Cli_Command {
 		$model->setCacheQueries(false);
 
 		// Fetch Sluggable thru the model as to use the right slug-configuration
+<<<<<<< HEAD
 		$sluggable = $model->getObserver('Sluggable');
+=======
+		list($sluggable, $model) = $this->_resolveSluggableBehavior($model);
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		if (is_null($sluggable)) {
 			Garp_Cli::errorOut('This model is not sluggable.');
 			return false;
@@ -80,4 +84,21 @@ class Garp_Cli_Command_Slugs extends Garp_Cli_Command {
 		Garp_Cli::lineOut('  g Slugs generate <model name> <overwrite>');
 		Garp_Cli::lineOut('');
 	}
+<<<<<<< HEAD
+=======
+
+	protected function _resolveSluggableBehavior(Garp_Model_Db $model) {
+		$sluggable = $model->getObserver('Sluggable');
+		if (!is_null($sluggable)) {
+			return array($sluggable, $model);
+		}
+		// Try on a derived model
+		$translatable = $model->getObserver('Translatable');
+		if (!is_null($translatable)) {
+			$model = $translatable->getI18nModel($model->getUnilingualModel());
+			return $this->_resolveSluggableBehavior($model);
+		}
+		return array(null, null);
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }

@@ -4,10 +4,26 @@
  * Create snippets from the commandline
  *
  * @author       Harmen Janssen | grrr.nl
+<<<<<<< HEAD
  * @version      1.2
  * @package      Garp_Cli_Command
  */
 class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
+=======
+ * @version      1.3
+ * @package      Garp_Cli_Command
+ */
+class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
+	const DEFAULT_SNIPPET_CONFIG_FILE = 'snippets.ini';
+
+	/** Wether to overwrite snippets */
+	protected $_overwrite = false;
+
+	protected $_allowedArguments = array(
+		'create' => array('i', 'interactive', 'file', 'overwrite')
+	);
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Wether the Snippet model can be autoloaded
  	 */
@@ -17,6 +33,7 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
  	 * Create new snippet
  	 */
 	public function create(array $args = array()) {
+<<<<<<< HEAD
 		if (empty($args)) {
 			$this->_createInteractive();
 		} else {
@@ -44,6 +61,15 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
 			$file = APPLICATION_PATH.'/configs/'.$file;
 			$this->_createFromFile($file);
 		}
+=======
+		$this->_overwrite = isset($args['overwrite']) && $args['overwrite'];
+		if (isset($args['i']) || isset($args['interactive'])) {
+			return $this->_createInteractive();
+		}
+		$file = $this->_parseFileFromArguments($args);
+		$file = APPLICATION_PATH . '/configs/' . $file;
+		$this->_createFromFile($file);
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 	/**
@@ -53,7 +79,11 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
 		// @todo Adapt for multiple languages
 		$nl = $this->_loadI18nStrings('nl');
 		$en = $this->_loadI18nStrings('en');
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		foreach ($nl as $key => $value) {
 			$snippet = array(
 				'has_text' => 1,
@@ -71,20 +101,32 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
 				Garp_Cli::lineOut('Created snippet ' . $snippet->identifier);
 			}
 		}
+<<<<<<< HEAD
 	}	
+=======
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 	/**
  	 * Create a bunch of snippets from a file
  	 */
 	protected function _createFromFile($file) {
 		if (!file_exists($file)) {
+<<<<<<< HEAD
 			Garp_Cli::lineOut('File not found: '.$file.'. Adding no snippets.');
+=======
+			Garp_Cli::errorOut("File not found: {$file}. Adding no snippets.");
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			return false;
 		}
 		$config = new Garp_Config_Ini($file, APPLICATION_ENV);
 		if (!isset($config->snippets)) {
 			Garp_Cli::lineOut('Could not find any snippets. I\'m stopping now... This is awkward.');
+<<<<<<< HEAD
 			return false;
+=======
+			return true;
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		}
 
 		$snippetNoun = 'snippets';
@@ -92,6 +134,7 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
 		if ($snippetCount === 1) {
 			$snippetNoun = 'snippet';
 		}
+<<<<<<< HEAD
 		Garp_Cli::lineOut('About to add '.$snippetCount.' '.$snippetNoun.' from '.$file);
 		Garp_Cli::lineOut('');
 		foreach ($config->snippets as $identifier => $data) {
@@ -107,6 +150,37 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
 		}
 		Garp_Cli::lineOut('Done.');
 		Garp_Cli::lineOut('');
+=======
+		Garp_Cli::lineOut("About to add {$snippetCount} {$snippetNoun} from {$file}");
+		Garp_Cli::lineOut('');
+		$this->_createSnippets($config->snippets);
+		Garp_Cli::lineOut('Done.');
+		Garp_Cli::lineOut('');
+	}
+
+	protected function _createSnippets($snippets) {
+		foreach ($snippets as $identifier => $data) {
+			$identifier = $this->_normalizeIdentifier($identifier);
+			$snippetData = $data->toArray();
+			$snippetData['identifier'] = $identifier;
+			$existing = $this->_fetchExisting($identifier);
+			if (!$this->_overwrite && $existing) {
+				Garp_Cli::lineOut('Skipping "' . $identifier . '". Snippet already exists.');
+				continue;
+			}
+			$this->_insertOrUpdate($snippetData, $existing);
+		}
+	}
+
+	protected function _insertOrUpdate(array $snippetData, $existing) {
+		if ($existing) {
+			$snippet = $this->_update($snippetData, $existing->id);
+			Garp_Cli::lineOut('Overwriting existing snippet "' . $snippet->identifier . '"');
+			return;
+		}
+		$snippet = $this->_create($snippetData);
+		Garp_Cli::lineOut('New snippet inserted. Id: #'.$snippet->id.', Identifier: "'.$snippet->identifier.'"');
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 	/**
@@ -167,7 +241,23 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
 		} catch (Garp_Model_Validator_Exception $e) {
 			Garp_Cli::errorOut($e->getMessage());
 		}
+<<<<<<< HEAD
 	}		
+=======
+	}
+
+	protected function _update($snippetData, $snippetID) {
+		$this->_validateLoadable();
+		$snippetModel = new Model_Snippet();
+		try {
+			$snippetModel->update($snippetData, "id = {$snippetID}");
+			$snippet = $snippetModel->fetchRow($snippetModel->select()->where('id = ?', $snippetID));
+			return $snippet;
+		} catch (Garp_Model_Validator_Exception $e) {
+			Garp_Cli::errorOut($e->getMessage());
+		}
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 	/**
  	 * Fetch existing snippet by identifier
@@ -200,7 +290,11 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
  	 * Load i18n strings
  	 * @param String $locale
  	 * @return Array
+<<<<<<< HEAD
  	 */	
+=======
+ 	 */
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _loadI18nStrings($locale) {
 		$file = APPLICATION_PATH . '/data/i18n/' . $locale . '.php';
 		if (!file_exists($file)) {
@@ -212,6 +306,7 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
 		return $data;
 	}
 
+<<<<<<< HEAD
 	/**
  	 * Help
  	 */
@@ -227,4 +322,32 @@ class Garp_Cli_Command_Snippet extends Garp_Cli_Command {
 		Garp_Cli::lineOut('  g snippet create from file myfile.ini', Garp_Cli::BLUE);
 		Garp_Cli::lineOut('');
 	}
+=======
+	public function help() {
+		Garp_Cli::lineOut('Usage:');
+		Garp_Cli::lineOut('To create snippets from /application/configs/snippets.ini:');
+		Garp_Cli::lineOut('  g snippet create', Garp_Cli::BLUE);
+		Garp_Cli::lineOut('');
+		Garp_Cli::lineOut('Or to create snippets from a custom file:');
+		Garp_Cli::lineOut('  g snippet create --file=myfile.ini', Garp_Cli::BLUE);
+		Garp_Cli::lineOut('');
+		Garp_Cli::lineOut('Overwrite existing snippets:');
+		Garp_Cli::lineOut('  g snippet create --overwrite');
+		Garp_Cli::lineOut('');
+		Garp_Cli::lineOut('To create a snippet interactively:');
+ 	    Garp_Cli::lineOut('  g snippet create -i', Garp_Cli::BLUE);
+		Garp_Cli::lineOut('');
+	}
+
+	protected function _parseFileFromArguments(array $args = array()) {
+		if (array_key_exists('file', $args)) {
+			return $args['file'];
+		}
+		return self::DEFAULT_SNIPPET_CONFIG_FILE;
+	}
+
+	protected function _normalizeIdentifier($identifier) {
+		return str_replace('_', ' ', $identifier);
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }

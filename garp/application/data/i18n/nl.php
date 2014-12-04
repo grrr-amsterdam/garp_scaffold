@@ -324,11 +324,23 @@ $translationTable = array(
 	'register error' => 'Er is iets misgegaan bij het registreren. Probeer het later nog eens',
 	'login page title' => 'Inloggen',
 	'login page description' => 'Log hier in om toegang te krijgen tot persoonlijke pagina\'s.',
+<<<<<<< HEAD
 	'the passwords do not match' => 'De wachtwoorden komen niet overeen',
 	'this email address already exists' => 'Dit e-mailadres is al in gebruik',
 	'forgot password page title' => 'Wachtwoord vergeten',
 	'honeypot error' => 'Je hebt een veld ingevuld dat leeg moest blijven.',
 	'email addr not found' => 'Dit e-mailadres is bij ons niet bekend.',
+=======
+	'login error' => 'Er is iets misgegaan bij het inloggen. Probeer het later nog eens',
+	'the passwords do not match' => 'De wachtwoorden komen niet overeen',
+	'this email address already exists' => 'Dit e-mailadres is al in gebruik',
+	'forgot password page title' => 'Wachtwoord vergeten',
+	'forgot password failure message' => 'Er is iets misgegaan bij het versturen van een nieuw wachtwoord. Probeer het later opnieuw.',
+	'forgot password success message' => 'Gelukt! We hebben je een wachtwoord reset link gestuurd.',
+	'honeypot error' => 'Je hebt een veld ingevuld dat leeg moest blijven.',
+	'email addr not found' => 'Dit e-mailadres is bij ons niet bekend.',
+	'reset password success message' => 'Je wachtwoord is gewijzigd. Je kunt er direct mee inloggen.',
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	'reset password page title' => 'Stel je wachtwoord opnieuw in',
 	'reset password user not found' => 'Er is geen gebruiker gevonden met de opgegeven gegevens.',
 	'reset password link expired' => 'Deze link is verlopen.',
@@ -342,4 +354,12 @@ $translationTable = array(
 	'author' => 'Auteur',
 	'modifier' => 'Bewerker',
 	'no results found' => 'geen resultaten gevonden',
+<<<<<<< HEAD
+=======
+	'auth login successmessage' => 'Welkom %s, je bent ingelogd',
+	'auth logout successmessage' => 'Je bent uitgelogd',
+	'auth register successmessage' => 'Welkom! Je registratie is voltooid',
+	'not logged in flash message' => 'Om deze pagina te bekijken moet je ingelogd zijn',
+	'no permission flash message' => 'Je hebt niet de juiste rechten om deze pagina te bekijken',
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 );

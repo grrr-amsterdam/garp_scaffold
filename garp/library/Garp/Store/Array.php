@@ -43,7 +43,11 @@ class Garp_Store_Array implements Garp_Store_Interface {
  	 */
 	public function get($key) {
 		return array_key_exists($key, $this->_data[$this->_namespace]) ?
+<<<<<<< HEAD
 			$this->_data[$this->_namespace] :
+=======
+			$this->_data[$this->_namespace][$key] :
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			null
 		;
 	}
@@ -56,7 +60,11 @@ class Garp_Store_Array implements Garp_Store_Interface {
  	 * @return $this
  	 */
 	public function set($key, $value) {
+<<<<<<< HEAD
 		$this->_data[$this->_namespace][$key] = $key;
+=======
+		$this->_data[$this->_namespace][$key] = $value;
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		return $this;
 	}		
 
@@ -115,4 +123,11 @@ class Garp_Store_Array implements Garp_Store_Interface {
 		}
 		return $this;
 	}
+<<<<<<< HEAD
+=======
+
+	public function toArray() {
+		return $this->_data[$this->_namespace];
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }

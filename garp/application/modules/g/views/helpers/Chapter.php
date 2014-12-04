@@ -17,7 +17,10 @@ class G_View_Helper_Chapter extends Zend_View_Helper_Abstract {
 		return $this;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Render the chapter
  	 * @param Array $chapter
@@ -30,7 +33,10 @@ class G_View_Helper_Chapter extends Zend_View_Helper_Abstract {
 		return $this->view->partial($partial, 'default', $params);
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
  	 * Render a content node
  	 * @param Array $contentNode
@@ -38,6 +44,12 @@ class G_View_Helper_Chapter extends Zend_View_Helper_Abstract {
  	 * @return String
  	 */
 	public function renderContentNode(array $contentNode, array $params = array()) {
+<<<<<<< HEAD
+=======
+		if (empty($contentNode)) {
+			return '';
+		}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$model = strtolower($contentNode['model']);
 		$type  = $contentNode['type'] ?: 'default';
 		$partial = "partials/chapters/$model/$type.phtml";

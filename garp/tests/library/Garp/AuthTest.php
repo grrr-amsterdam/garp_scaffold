@@ -12,6 +12,7 @@
  * @group        Auth
  */
 class Garp_AuthTest extends Garp_Test_PHPUnit_TestCase {
+<<<<<<< HEAD
 	/**
  	 * @var Garp_Auth
  	 */
@@ -25,4 +26,16 @@ class Garp_AuthTest extends Garp_Test_PHPUnit_TestCase {
 	public function testIsLoggedIn() {
 		$this->assertEquals(false, $this->_auth->isLoggedIn());
 	}
+=======
+
+	public function testIsNotLoggedIn() {
+		$this->assertEquals(false, Garp_Auth::getInstance()->isLoggedIn());
+	}
+
+	public function testIsLoggedIn() {
+		$this->_helper->login(array('id' => 1, 'email' => 'harmen@grrr.nl'));
+		$this->assertEquals(true, Garp_Auth::getInstance()->isLoggedIn());
+	}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }

@@ -113,6 +113,12 @@ class Garp_I18n_ModelFactory {
 
 	protected function _modelIsLocalized($model) {
 		$languages = Garp_I18n::getLocales();
+<<<<<<< HEAD
+=======
+		if (!is_array($languages)) {
+			return false;
+		}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		foreach ($languages as $lang) {
 			$langSuffix = ucfirst($lang);
 			if (preg_match("/[a-z0-9]+$langSuffix$/", $model)) {

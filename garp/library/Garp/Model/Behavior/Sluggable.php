@@ -224,7 +224,11 @@ class Garp_Model_Behavior_Sluggable extends Garp_Model_Behavior_Abstract {
 	 * @return String $slug The generated slug
 	 */
 	public function generateSlug($base) {
+<<<<<<< HEAD
 		return Garp_Util_String::toDashed(strtolower($base));
+=======
+		return strtolower(Garp_Util_String::toDashed($base));
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 	/**

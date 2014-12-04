@@ -397,6 +397,13 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 						cmClone = Garp.dataTypes[this.model].columnModel;
 						var shown = 0;
 						for (c = 0, l = cmClone.length; c < l; c++) {
+<<<<<<< HEAD
+=======
+							// Skip hidden columns to keep it simple in the relationPanel
+							if (typeof cmClone[c].hidden === 'boolean' && cmClone[c].hidden) {
+								continue;
+							}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 							col = Ext.apply({}, cmClone[c]);
 							col.hidden = this.columns.indexOf(col.dataIndex) == -1;
 							cols.push(col);
@@ -405,6 +412,13 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 					} else {
 						cmClone = Garp.dataTypes[this.model].columnModel;
 						for (c = 0, l = cmClone.length; c < l; c++) {
+<<<<<<< HEAD
+=======
+							// Skip hidden columns to keep it simple in the relationPanel
+							if (typeof cmClone[c].hidden === 'boolean' && cmClone[c].hidden) {
+								continue;
+							}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 							col = Ext.apply({}, cmClone[c]);
 							cols.push(col);
 						}
@@ -679,10 +693,16 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 		baseParams.bidirectional = this.bidirectional;
 		this.relateeStore.setBaseParam(baseParams);
 		this.searchbar.setBaseParams();
+<<<<<<< HEAD
 		
 		if(!this.hidden && this.rendered) {
 			this.relateePanel.getSelectionModel().clearSelections(true);
 			if (this.metaPanel) {
+=======
+		if(!this.hidden && this.rendered) {
+			this.relateePanel.getSelectionModel().clearSelections(true);
+			if (this.metaDataPanel) {
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 				this.metaDataPanel.hide();
 				this.metaDataPanel.ownerCt.doLayout();
 			}

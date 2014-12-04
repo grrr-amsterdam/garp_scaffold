@@ -3,7 +3,12 @@
 	
 	"inputs":  {
 		"facebook_uid": {
+<<<<<<< HEAD
 			"maxLength": 100
+=======
+			"maxLength": 100,
+			"type": "text"
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		},
 		"ip_address": {
 			"maxLength": 15
@@ -23,4 +28,8 @@
 			"type": "belongsTo"
 		}
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94

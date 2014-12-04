@@ -6,7 +6,11 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 		'Unknown key type.';
 	const QUESTION_MAKE_COLUMN_UNIQUE =
 		"Make %s.%s unique?";
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/** @var Array $droppedForeignKeyNamesDuringColumnSync When a relation column's nullable property is changed
 	* 														during column syncing, the accompanying foreign key needs
 	* 														to be dropped from there. Since MySql doesn't support
@@ -17,12 +21,20 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 
 	protected $_types = array('foreign', 'unique', 'index');
 
+<<<<<<< HEAD
 	/**	
+=======
+	/**
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	 * @var Garp_Spawn_MySql_Key_Set
  	 */
 	protected $_source;
 
+<<<<<<< HEAD
 	/**	
+=======
+	/**
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	 * @var Garp_Spawn_MySql_Key_Set
  	 */
 	protected $_target;
@@ -32,13 +44,25 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
  	 */
 	protected $_feedback;
 
+<<<<<<< HEAD
 
 
 	
+=======
+	/** @var Garp_Spawn_Model_Abstract $_model */
+	protected $_model;
+
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	public function __construct(Garp_Spawn_MySql_Key_Set $source, Garp_Spawn_MySql_Key_Set $target, Garp_Cli_Ui_Protocol $feedback) {
 		$this->setSource($source);
 		$this->setTarget($target);
 		$this->setFeedback($feedback);
+<<<<<<< HEAD
+=======
+		$this->_model = $source->getModel();
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 
@@ -50,8 +74,13 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 			$this->_addKeysPerType($type);
 		}
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Modify keys in the live database, if the configuration differs.
 	 */
@@ -60,17 +89,29 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 			$this->_modifyKeysPerType($type);
 		}
 	}
+<<<<<<< HEAD
 	
 
 	/**
 	 * Remove existing keys in the live database, if these are removed in the configuration.
 	 */	
+=======
+
+
+	/**
+	 * Remove existing keys in the live database, if these are removed in the configuration.
+	 */
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	public function removeKeys() {
 		foreach ($this->_types as $type) {
 			$this->_removeKeysPerType($type);
 		}
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	public function setSource(Garp_Spawn_MySql_Key_Set $configKeys) {
 		$this->_source = $configKeys;
 	}
@@ -94,7 +135,11 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 	public function getFeedback() {
 		return $this->_feedback;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _addUniqueKeys(array $keysToAdd) {
 		$progress 	= $this->getFeedback();
 		$tableName 	= $this->getSource()->getTableName();
@@ -177,14 +222,22 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 
 		return $inSync;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 	protected function _modifyKeysPerType($keyType) {
 		$progress 	= $this->getFeedback();
 		$inSync 	= true;
 		$tableName	= $this->getSource()->getTableName();
 		$liveKeys	= $this->getTarget();
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		if ($keysToModify = $this->_getKeysToModify($keyType, $liveKeys)) {
 			switch ($keyType) {
 				case 'foreign':
@@ -212,7 +265,11 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 
 		return $inSync;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _removeUniqueKeys(array $keysToRemove) {
 		$progress 	= $this->getFeedback();
 		$tableName	= $this->getSource()->getTableName();
@@ -227,7 +284,11 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 					continue;
 				}
 			}
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			if (!Garp_Spawn_MySql_UniqueKey::delete($tableName, $key)) {
 				throw new Exception("Could not set column '{$key->column}' to non-unique.");
 			}
@@ -260,7 +321,11 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 	protected function _removeKeysPerType($keyType) {
 		$inSync 	= true;
 		$liveKeys	= $this->getTarget();
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		if ($keysToRemove = $this->_getKeysToRemove($keyType, $liveKeys)) {
 			switch ($keyType) {
 				case 'unique':
@@ -286,25 +351,43 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 			}
 		}
 
+<<<<<<< HEAD
 		return $inSync;	
 	}
 	
+=======
+		return $inSync;
+	}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _setPrimaryKey() {
 		$tableName = $this->getSource()->getTableName();
 		$liveKeys = $this->getTarget();
 
+<<<<<<< HEAD
 		$livePkPresent = 
+=======
+		$livePkPresent =
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			property_exists($liveKeys, 'primaryKey') &&
 			$liveKeys->primaryKey &&
 			property_exists($liveKeys->primaryKey, 'columns')
 		;
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		sort($this->primaryKey->columns);
 
 		if ($livePkPresent) {
 			sort($liveKeys->primaryKey->columns);
 		}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		if (
 			!$livePkPresent ||
 			$this->primaryKey->columns != $liveKeys->primaryKey->columns
@@ -354,8 +437,13 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 
 		return $keysToAdd;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _getKeysToModify($keyType) {
 		$keyTypeVarName = $keyType === 'index' ?
 			'indices' :
@@ -392,8 +480,13 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 
 		return $keysToModify;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _getKeysToRemove($keyType) {
 		$keyTypeVarName = $keyType === 'index' ?
 			'indices' :
@@ -431,7 +524,11 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 			}
 		}
 
+<<<<<<< HEAD
 		return $keysToRemove;		
+=======
+		return $keysToRemove;
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 
@@ -441,11 +538,19 @@ class Garp_Spawn_MySql_Key_Set_Synchronizer {
 				return true;
 			}
 		}
+<<<<<<< HEAD
 		
 		return false;
 	}
 	
 	
+=======
+
+		return false;
+	}
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _addIndexForForeignKey(Garp_Spawn_MySql_ForeignKey $key) {
 		$indexKeySql 	= Garp_Spawn_MySql_IndexKey::renderSqlDefinition($key->localColumn);
 		$indexKey 		= new Garp_Spawn_MySql_IndexKey($indexKeySql);

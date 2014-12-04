@@ -44,8 +44,13 @@ class Garp_Social_Facebook {
  	 * Get URL to login page
  	 * @return String
  	 */
+<<<<<<< HEAD
 	public function getLoginUrl() {
 		return $this->_client->getLoginUrl();
+=======
+	public function getLoginUrl($params=array()) {
+		return $this->_client->getLoginUrl($params);
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 
@@ -63,12 +68,25 @@ class Garp_Social_Facebook {
  	 * @return Array Userdata
  	 * @throws FacebookApiException
  	 */
+<<<<<<< HEAD
 	public function login() {
 		$uid = $this->_client->getUser();		
+=======
+	public function login($grabUserImage = false) {
+		$uid = $this->_client->getUser();
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$accessToken = $this->_client->getAccessToken();
 
 		// If a user is authenticated, $userData will be filled with user data
 		$userData = $this->_client->api('/me');
+<<<<<<< HEAD
+=======
+		if ($grabUserImage) {
+			$apiUrl = '/' . $this->_client->getUser() . '/picture?redirect=0&type=large';
+			$picture = $this->_client->api($apiUrl);
+			$userData['imageUrl'] = $picture['data']['url'];
+		}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$userData['access_token'] = $accessToken;
 		return $userData;
 	}

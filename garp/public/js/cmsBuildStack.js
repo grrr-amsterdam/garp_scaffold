@@ -4,7 +4,12 @@ var paths = {
 };
 module.exports = {
 	stack: [
+<<<<<<< HEAD
 		paths.js_garp + 'ckeditor/ckeditor.js',
+=======
+		// @note: this is now lazy-loaded in ext.ux.form.ckeditor.js
+		//paths.js_garp + 'ckeditor/ckeditor.js',
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		paths.js_garp + 'overrides.js',
 		paths.js_garp + 'garp.config.js',
 		paths.js_garp + 'garp.renderers.js',

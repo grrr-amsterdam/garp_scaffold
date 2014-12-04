@@ -5,7 +5,11 @@
  * @author Harmen Janssen | grrr.nl
  * @see Facebook (/library/Garp/3rdParty/facebook/src/facebook.php)
  */
+<<<<<<< HEAD
 require_once APPLICATION_PATH.'/../library/Garp/3rdParty/facebook/src/base_facebook.php';
+=======
+require_once GARP_APPLICATION_PATH.'/../library/Garp/3rdParty/facebook/src/base_facebook.php';
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 class Garp_Social_Facebook_Client extends BaseFacebook {
 	/**
  	 * @var Garp_Store_Cookie

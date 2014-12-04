@@ -27,7 +27,12 @@ class Garp_Auth_Factory {
 			throw new Garp_Auth_Exception('auth.adapters not found in application.ini,'.
 											' or it is not an array');
 		}
+<<<<<<< HEAD
 		
+=======
+
+		$key = strtolower($key);
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		if (!$config->auth->adapters->{$key}) {
 			throw new Garp_Auth_Exception("Adapter with key $key not found in auth.adapters".
 											" in application.ini");

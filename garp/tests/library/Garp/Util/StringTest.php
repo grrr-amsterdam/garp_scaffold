@@ -5,6 +5,7 @@
 class Garp_Util_StringTest extends Garp_Test_PHPUnit_TestCase {
 
 	public function testCamelcasedToUnderscored(){
+<<<<<<< HEAD
 		$this->assertEquals(Garp_Util_String::camelcasedToUnderscored('SnoopDoggyDog'), 'snoop_doggy_dog');
 	}
 
@@ -47,6 +48,51 @@ class Garp_Util_StringTest extends Garp_Test_PHPUnit_TestCase {
 	public function testUnderscoredToReadable() {
 		$this->assertEquals(Garp_Util_String::underscoredToReadable('this_is_underscored'), 		'This is underscored');
 		$this->assertEquals(Garp_Util_String::underscoredToReadable('this_is_underscored', false), 	'this is underscored');
+=======
+		$this->assertEquals('snoop_doggy_dog', Garp_Util_String::camelcasedToUnderscored('SnoopDoggyDog'));
+	}
+
+	public function testCamelcasedToDashed(){
+		$this->assertEquals('snoop-doggy-dog', Garp_Util_String::camelcasedToDashed('SnoopDoggyDog'));
+	}
+
+	public function testAcronymsToLowercase() {
+		$this->assertEquals('SslBreak and HtmlRequest', Garp_Util_String::acronymsToLowercase('SSLBreak and HTMLRequest'));
+		$this->assertEquals('DhcpRouter', Garp_Util_String::acronymsToLowercase('DHCPRouter'));
+	}
+
+	public function testToDashed() {
+		$this->assertEquals('orienteren', Garp_Util_String::toDashed('Oriënteren'));
+
+		//word starts with uppercase letters
+		$this->assertEquals('snoop-doggy-dog', Garp_Util_String::toDashed('Snoop Doggy Dog!'));
+		$this->assertEquals('zlutoucky-kun', Garp_Util_String::toDashed('Žluťoučký kůň'));
+
+		//word starts with lowercase letters
+		$this->assertEquals('snoop-doggy-dog', Garp_Util_String::toDashed('snoop doggy dog!'));
+
+		//punctuation characters
+		$this->assertEquals('snoop-the-doggy-dog', Garp_Util_String::toDashed('Snoop! [the: (doggy, \dog.'));
+
+		//word contains special caracters
+		$this->assertEquals('snoop-doggy-dog', Garp_Util_String::toDashed('Snoop Döggy Døg!'));
+
+		//word contains special caracters and they are disregarded
+		$this->assertEquals('snoop-d-ggy-d-g', Garp_Util_String::toDashed('Snoop Döggy Døg!', false));
+
+		//word contains with decimals
+		$this->assertEquals('th1s-1s-m0r3', Garp_Util_String::toDashed('th1s 1s m0r3'));
+
+		//handling acronyms
+		$this->assertEquals('ssl-break', Garp_Util_String::toDashed('SSLBreak'));
+		$this->assertEquals('http-request', Garp_Util_String::toDashed('HTTPRequest'));
+		$this->assertEquals('a-dhcp-router-handles-http-requests', Garp_Util_String::toDashed('aDHCPRouterHandlesHTTPRequests'));
+	}
+
+	public function testUnderscoredToReadable() {
+		$this->assertEquals('This is underscored', Garp_Util_String::underscoredToReadable('this_is_underscored'));
+		$this->assertEquals('this is underscored', Garp_Util_String::underscoredToReadable('this_is_underscored', false));
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 	public function testUnderscoredToCamelcased() {
@@ -59,6 +105,7 @@ class Garp_Util_StringTest extends Garp_Test_PHPUnit_TestCase {
 		$this->assertEquals(Garp_Util_String::dashedToCamelcased('this-is-dashed', true), 	'ThisIsDashed');
 	}
 
+<<<<<<< HEAD
 	public function testUtf8ToAscii() {
 		$this->assertEquals(Garp_Util_String::utf8ToAscii('Snoop Döggy Døg'), 'Snoop Doggy Dog');
 		$this->assertEquals(Garp_Util_String::utf8ToAscii('Snøøp Düggy Døg'), 'Snoop Duggy Dog');
@@ -92,12 +139,55 @@ class Garp_Util_StringTest extends Garp_Test_PHPUnit_TestCase {
 		$this->assertFalse( is_null($reverted->weirdChar) );
 		$this->assertFalse( is_null($reverted->diacritics) );
 		$this->assertFalse( is_null($reverted->czech) );
+=======
+	public function testJa() {
+		$this->assertEquals('L', strtr(chr(163), chr(163), 'L'));
+		$this->assertEquals('Hallo David', strtr('Welkom Harmen', array(
+			'Harmen' => 'David',
+			'Welkom' => 'Hallo'
+		)));
+	}
+
+	public function testUtf8ToAscii() {
+		$this->assertEquals('Snoop Doggy Dog', Garp_Util_String::utf8ToAscii('Snoop Döggy Døg'));
+		$this->assertEquals('Snoop Duggy Dog', Garp_Util_String::utf8ToAscii('Snøøp Düggy Døg'));
+		$this->assertEquals('Zlutoucky kun', Garp_Util_String::utf8ToAscii('Žluťoučký kůň'));
+		$this->assertEquals('Weiss, Gobel, Gothe, Gotz', Garp_Util_String::utf8ToAscii('Weiß, Göbel, Göthe, Götz'));
+		$this->assertEquals('Abu Jafar al-Khazin', Garp_Util_String::utf8ToAscii('Abū Ja\'far al-Khāzin')); //the apostrophy is escaped
+		$this->assertEquals('In fiecare zi Dumnezeu ne saruta pe gura', Garp_Util_String::utf8ToAscii('În fiecare zi Dumnezeu ne sarută pe gură'));
+
+		$this->assertEquals('oe', Garp_Util_String::utf8ToAscii(chr(156)));
+
+		//testing the json output
+		$this->assertTrue((bool) json_encode(Garp_Util_String::utf8ToAscii('Snoop Döggy Døg')));
+		$this->assertTrue((bool) json_encode(Garp_Util_String::utf8ToAscii('Snøøp Düggy Døg')));
+		$this->assertTrue((bool) json_encode(Garp_Util_String::utf8ToAscii('Žluťoučký kůň')));
+
+		$arrayToTest = array(
+			'something' =>  'Weiß, Göbel, Göthe, Götz',
+			'weirdChar' => 'ॐ✡❀✿☃',
+			'diacritics' => 'ÁáÀàÂâǍǎĂăÃãẢảẠạÄäÅåĀāĄąẤấẦầẪẫẨẩẬậẮắẰằẴẵẲẳẶặǺǻĆćĈĉČčĊċÇçĎďĐđÐÉéÈèÊêĚěĔĕẼẽẺẻĖėËëĒēĘęẾếỀềỄễỂểẸẹỆệĞğĜĝĠġĢģĤĥĦħÍíÌìĬĭÎîǏǐÏïĨĩĮįĪīỈỉỊịĴĵĶķĹĺĽľĻļŁłĿŀŃńŇňÑñŅņÓóÒòŎŏÔôỐốỒồỖỗỔổǑǒÖöŐőÕõØøǾǿŌōỎỏƠơỚớỜờỠỡỞởỢợỌọỘộṔṕṖṗŔŕŘřŖŗŚśŜŝŠšŞşŤťŢţŦŧÚúÙùŬŭÛûǓǔŮůÜüǗǘǛǜǙǚǕǖŰűŨũŲųŪūỦủƯưỨứỪừỮữỬửỰựỤụẂẃẀẁŴŵẄẅÝýỲỳŶŷŸÿỸỹỶỷỴỵŹźŽžŻż',
+			'czech' => 'Žluťoučký kůň'
+		);
+		$arrayAscii = array();
+		foreach ($arrayToTest as $key => $value){
+			$arrayAscii[$key] = Garp_Util_String::utf8ToAscii($value);
+		}
+		$json = json_encode($arrayAscii);
+		$reverted = json_decode($json);
+
+		$this->assertFalse(is_null($reverted->something));
+		$this->assertFalse(is_null($reverted->weirdChar));
+		$this->assertFalse(is_null($reverted->diacritics));
+		$this->assertFalse(is_null($reverted->czech));
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 	public function testEndsIn() {
 		$this->assertTrue(Garp_Util_String::endsIn('e', 'Bad to the bone'));
 		$this->assertFalse(Garp_Util_String::endsIn('I', 'I drink alone'));
 	}
+<<<<<<< HEAD
 	
 	public function testHumanList() {
 		$array = array('apples', 'pears', 'carrots');
@@ -106,6 +196,16 @@ class Garp_Util_StringTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	
+=======
+
+	public function testHumanList() {
+		$array = array('apples', 'pears', 'carrots');
+		$this->assertEquals('apples, pears and carrots', Garp_Util_String::humanList($array));
+		$this->assertEquals('|apples|, |pears| >> |carrots|', Garp_Util_String::humanList($array,'|', '>>'));
+	}
+
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	public function testExcerpt() {
 		$this->assertEquals(Garp_Util_String::excerpt("<p><strong>This</strong> is some content.</p>"), 'This is some content.');
 		$this->assertEquals(Garp_Util_String::excerpt(
@@ -130,15 +230,26 @@ class Garp_Util_StringTest extends Garp_Test_PHPUnit_TestCase {
 
 	public function testLinkify() {
 		$this->assertEquals(Garp_Util_String::linkify(
+<<<<<<< HEAD
 			'Our contact email is contact@grrr.nl, but it can be found at http://www.grrr.nl'), 
 			'Our contact email is <a href="mailto:contact@grrr.nl">contact@grrr.nl</a>, but it can be found at <a href="http://www.grrr.nl">http://www.grrr.nl</a>');	
 		$this->assertEquals(Garp_Util_String::linkify(
 			'This also works for secure connections like https://www.grrr.nl'), 
+=======
+			'Our contact email is contact@grrr.nl, but it can be found at http://www.grrr.nl'),
+			'Our contact email is <a href="mailto:contact@grrr.nl">contact@grrr.nl</a>, but it can be found at <a href="http://www.grrr.nl">http://www.grrr.nl</a>');
+		$this->assertEquals(Garp_Util_String::linkify(
+			'This also works for secure connections like https://www.grrr.nl'),
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			'This also works for secure connections like <a href="https://www.grrr.nl">https://www.grrr.nl</a>');
 	}
 
 	public function testScrambleEmail() {
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 	public function testStrReplaceOnce() {
@@ -149,7 +260,11 @@ class Garp_Util_StringTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testInterpolate() {
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 	public function testToArray() {
@@ -158,9 +273,15 @@ class Garp_Util_StringTest extends Garp_Test_PHPUnit_TestCase {
 
 	public function testUrlProtocol() {
 		$this->assertEquals('//google.com', Garp_Util_String::ensureUrlProtocol('google.com'));
+<<<<<<< HEAD
 		$this->assertEquals('http://google.com', 
 			Garp_Util_String::ensureUrlProtocol('http://google.com'));
 		$this->assertEquals('https://google.com', 
+=======
+		$this->assertEquals('http://google.com',
+			Garp_Util_String::ensureUrlProtocol('http://google.com'));
+		$this->assertEquals('https://google.com',
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			Garp_Util_String::ensureUrlProtocol('https://google.com'));
 		$this->assertEquals('ftp://google.com',
 			Garp_Util_String::ensureUrlProtocol('ftp://google.com'));

@@ -18,14 +18,20 @@ abstract class Garp_Auth_Adapter_Abstract {
 	 */
 	protected $_configKey = '';
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Collection of errors
 	 * @var Array
 	 */
 	protected $_errors = array();
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Authenticate a user.
 	 * @param Zend_Controller_Request_Abstract $request The current request
@@ -33,7 +39,10 @@ abstract class Garp_Auth_Adapter_Abstract {
 	 */
 	abstract public function authenticate(Zend_Controller_Request_Abstract $request);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Fetch user data. We never store all the user data in the session, just 
 	 * to be safe, and also to ensure that user data is not stale (because the
@@ -49,7 +58,10 @@ abstract class Garp_Auth_Adapter_Abstract {
 		return $userData->current();
 	}
 
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Get auth values related to this adapter
 	 * @return Zend_Config
@@ -65,7 +77,10 @@ abstract class Garp_Auth_Adapter_Abstract {
 		return null;
 	}
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Map properties coming from the 3rd party to columns used in our database
 	 * @param Array $props
@@ -73,7 +88,11 @@ abstract class Garp_Auth_Adapter_Abstract {
 	 */
 	protected function _mapProperties(array $props) {
 		$authVars = $this->_getAuthVars();
+<<<<<<< HEAD
 		if ($authVars->mapping && !empty($authVars->mapping)) {			
+=======
+		if ($authVars->mapping && !empty($authVars->mapping)) {
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			$cols = array();
 			foreach ($authVars->mapping as $mappedProp => $col) {
 				if ($col) {
@@ -86,8 +105,20 @@ abstract class Garp_Auth_Adapter_Abstract {
 								' a mapping of columns in application.ini.');
 		}
 	}
+<<<<<<< HEAD
 		
 	
+=======
+
+	/**
+ 	 * Return array of columns that are stored in the session cookie
+ 	 * @return Array|String (can also be Zend_Db_Select::SQL_WILDCARD)
+ 	 */
+	protected function _getSessionColumns() {
+		return Garp_Auth::getInstance()->getSessionColumns();
+	}
+		
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Return all errors
 	 * @return Array
@@ -96,7 +127,10 @@ abstract class Garp_Auth_Adapter_Abstract {
 		return $this->_errors;
 	}
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Return most recent error
 	 * @return String
@@ -105,7 +139,10 @@ abstract class Garp_Auth_Adapter_Abstract {
 		return end($this->_errors);
 	}
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Add an error to the stack.
 	 * @param String $error
@@ -116,7 +153,10 @@ abstract class Garp_Auth_Adapter_Abstract {
 		return $this;
 	}
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Clear all errors
 	 * @return $this

@@ -11,7 +11,11 @@ Ext.form.CKEditor = function(config) {
     config.CKEditor = {
         // Allow only these tags (=true for all of them)
         allowedContent: true,
+<<<<<<< HEAD
 
+=======
+		customConfig: '',
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
         format_tags: 'p;h2;h3',
 
         // Available buttons
@@ -62,6 +66,7 @@ Ext.extend(Ext.form.CKEditor, Ext.form.TextArea, {
     onRender: function(ct, position) {
         Ext.form.CKEditor.superclass.onRender.call(this, ct, position);
 
+<<<<<<< HEAD
         this.editor = CKEDITOR.replace(this.id, this.config.CKEditor);
 
         // Closure for quick access in the event listener
@@ -71,6 +76,24 @@ Ext.extend(Ext.form.CKEditor, Ext.form.TextArea, {
             that.waitingForSetData = false;
         });
         this.setValue(this.orgValue);
+=======
+		var ckLoaded = function() {
+        	this.editor = CKEDITOR.replace(this.id, this.config.CKEditor);
+
+        	// Closure for quick access in the event listener
+        	var that = this;
+        	this.editor.on('dataReady', function() {
+            	this.resetDirty();
+            	that.waitingForSetData = false;
+        	});
+        	this.setValue(this.orgValue);
+        };
+		if (typeof CKEDITOR === 'undefined') {
+			Ext.Loader.load([ASSET_URL + 'js/garp/ckeditor/ckeditor.js'], ckLoaded, this);
+			return;
+		}
+		ckLoaded.call(this);
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
     },
 
 	isValid: function(value) {
@@ -82,10 +105,18 @@ Ext.extend(Ext.form.CKEditor, Ext.form.TextArea, {
 
 	// Get char count, stripped of HTML tags
 	getCharCount: function() {
+<<<<<<< HEAD
 		if (this.editor && this.editor.document) {
 			return this.editor.document.getBody().getText().length;
 		}
 		return this.getValue().replace(/(<([^>]+)>)/ig,"").length;
+=======
+		try {
+			return this.editor.document.getBody().getText().length;
+		} catch(e) {
+			return this.getValue().replace(/(<([^>]+)>)/ig,"").length;
+		}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	},
 
     setValue: function(value) {

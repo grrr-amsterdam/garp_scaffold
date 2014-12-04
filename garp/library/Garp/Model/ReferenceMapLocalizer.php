@@ -26,6 +26,7 @@ class Garp_Model_ReferenceMapLocalizer {
 	/**
  	 * Populate the subject model's referenceMap with
  	 * localized versions of the given model.
+<<<<<<< HEAD
  	 * @param String|Garp_Model_Db $relatedModel 
  	 * @return Void
  	 */
@@ -35,6 +36,18 @@ class Garp_Model_ReferenceMapLocalizer {
 		// This will throw an exception if not.
 		$relatedModel = (substr($relatedModel, 0, 6) !== 'Model_' ? 'Model_' : '') . $relatedModel;
 		$ref = $this->_model->getReference($relatedModel);
+=======
+ 	 * @param String|Garp_Model_Db $relatedModel
+ 	 * @return Void
+ 	 */
+	public function populate($relatedModel, $ruleKey = null) {
+		// Sanity check: does the model have a reference to the
+		// given model in the first place?
+		// This will throw an exception if not.
+		$relatedModel = $relatedModel instanceof Garp_Model_Db ? get_class($relatedModel) : $relatedModel;
+		$relatedModel = (substr($relatedModel, 0, 6) !== 'Model_' ? 'Model_' : '') . $relatedModel;
+		$ref = $this->_model->getReference($relatedModel, $ruleKey);
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$locales = Garp_I18n::getLocales();
 		foreach ($locales as $locale) {
 			$factory = new Garp_I18n_ModelFactory($locale);
@@ -48,6 +61,10 @@ class Garp_Model_ReferenceMapLocalizer {
 				$ref[Zend_Db_Table_Abstract::REF_COLUMNS]
 			);
 		}
+<<<<<<< HEAD
+=======
+		return $this;
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	}
 
 	/**

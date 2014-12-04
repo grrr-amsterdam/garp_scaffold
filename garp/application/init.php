@@ -1,6 +1,7 @@
 <?php
 /**
 * 	Before inclusion of this file:
+<<<<<<< HEAD
 *	
 * 	APPLICATION_ENV needs to be defined.
 * 	
@@ -8,6 +9,15 @@
 * 	bool READ_FROM_CACHE, default true
 * 	string MEMCACHE_HOST, default '127.0.0.1'
 * 	
+=======
+*
+* 	APPLICATION_ENV needs to be defined.
+*
+* 	optional:
+* 	bool READ_FROM_CACHE, default true
+* 	string MEMCACHE_HOST, default '127.0.0.1'
+*
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 */
 
 if (!defined('BASE_PATH')) {
@@ -66,7 +76,11 @@ require GARP_APPLICATION_PATH . '/../library/Garp/Loader.php';
 
 /**
  * Set up class loading.
+<<<<<<< HEAD
  */ 
+=======
+ */
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 $classLoader = Garp_Loader::getInstance(array(
 	'paths' => array(
 		array(
@@ -121,7 +135,11 @@ if (!$memcacheAvailable) {
 	$cacheStoreEnabled = false;
 } else {
 	$backendName = 'Memcached';
+<<<<<<< HEAD
 	$cacheStoreEnabled = true;	
+=======
+	$cacheStoreEnabled = true;
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }
 
 $frontendOptions = array(
@@ -156,7 +174,11 @@ Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
 /**
  * Use this control for toggling cache on and off. Do not use
  * the 'caching' option in the Zend_Cache configuration, because
+<<<<<<< HEAD
  * that also disables cleaning the cache. In the case of the 
+=======
+ * that also disables cleaning the cache. In the case of the
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  * admin pages this is unwanted behavior.
  */
 Zend_Registry::set('readFromCache', READ_FROM_CACHE);
@@ -166,14 +188,22 @@ Zend_Registry::set('CacheFrontend', $cache);
 
 /**
  * Developer convenience methods.
+<<<<<<< HEAD
  * NOTE: this area should be used for adding easy shortcut methods a developer 
+=======
+ * NOTE: this area should be used for adding easy shortcut methods a developer
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  * may use. Real implementation code is probably best fitted in its own class,
  * such as controllers, models, behaviors, or helpers.
  */
 
 /**
  * Shortcut to logging messages.
+<<<<<<< HEAD
  * @param String $file Basename of a log file. Extension may be omitted. 
+=======
+ * @param String $file Basename of a log file. Extension may be omitted.
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  * 					   File will end up in /application/data/logs
  * @param String $message Your log message. Arrays will be print_r'd.
  * @param Int $priority A Zend_Log priority (e.g. INFO, NOTICE, WARN etc.)
@@ -215,6 +245,25 @@ function __($str) {
 	return $str;
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * Make the PHP language a little more expressive.
+ * PHP 5.4 allows chaining of new instances like so;
+ * (new Instance())->doSomething();
+ * This method sort of brings this to earlier versions of PHP:
+ * instance(new Instance())->doSomething();
+ * @param Object $obj
+ * @return Object
+ */
+function instance($obj) {
+	if (is_string($obj)) {
+		$obj = new $obj;
+	}
+	return $obj;
+}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 if (!function_exists('gzdecode')) {
 	/**
  	 * @see http://nl1.php.net/gzdecode#82930

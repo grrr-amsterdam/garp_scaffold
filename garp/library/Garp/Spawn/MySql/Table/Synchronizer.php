@@ -38,7 +38,11 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 		$this->setModel($model);
 		$this->setFeedback($feedback);
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Syncs source and target tables with one another, trying to resolve any conflicts.
 	 * @param	Bool	Whether to remove no longer configured columns. This can be triggered
@@ -51,6 +55,7 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 
 		$configuredKeys = $this->_getConfiguredKeys();
 		$keySyncer		= new Garp_Spawn_MySql_Key_Set_Synchronizer($configuredKeys, $target->keys, $this->getFeedback());
+<<<<<<< HEAD
 		
 		if (!$keySyncer->removeKeys()) {
 			$keysInSync = false;
@@ -58,68 +63,119 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 		
 		$colsInSync = $this->_syncColumns($target);
 		
+=======
+
+		if (!$keySyncer->removeKeys()) {
+			$keysInSync = false;
+		}
+
+		$colsInSync = $this->_syncColumns($target);
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$i18nTableFork = $this->_detectI18nTableFork();
 		if ($i18nTableFork) {
 			$dbManager = Garp_Spawn_MySql_Manager::getInstance();
 			$dbManager->onI18nTableFork($this->getModel());
 		}
+<<<<<<< HEAD
 		
 		if ($removeRedundantColumns) {
 			$this->_deleteRedundantColumns();
 		}
 		
+=======
+
+		if ($removeRedundantColumns) {
+			$this->_deleteRedundantColumns();
+		}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		if (
 			!$keySyncer->addKeys() ||
 			!$keySyncer->modifyKeys()
 		) {
 			$keysInSync = false;
 		}
+<<<<<<< HEAD
 		
 		return $colsInSync && $keysInSync;
 	}
 	
 	/**
 	 * 
+=======
+
+		return $colsInSync && $keysInSync;
+	}
+
+	/**
+	 *
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	 */
 	public function cleanUp() {
 		$this->_deleteRedundantColumns();
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * @return Garp_Spawn_MySql_Table_Abstract
 	 */
 	public function getSource() {
 		return $this->_source;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * @param Garp_Spawn_MySql_Table_Abstract $source
 	 */
 	public function setSource($source) {
 		$this->_source = $source;
+<<<<<<< HEAD
 	}	
 	
+=======
+	}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * @return Garp_Spawn_MySql_Table_Abstract
 	 */
 	public function getTarget() {
 		return $this->_target;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * @param Garp_Spawn_MySql_Table_Abstract $target
 	 */
 	public function setTarget($target) {
 		$this->_target = $target;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * @return Garp_Spawn_Model_Abstract
 	 */
 	public function getModel() {
 		return $this->_model;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * @param Garp_Spawn_Model_Abstract $model
 	 */
@@ -140,33 +196,56 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 	public function setFeedback(Garp_Cli_Ui_Protocol $feedback) {
 		$this->_feedback = $feedback;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _detectI18nTableFork() {
 		$source 	= $this->getSource();
 		$target 	= $this->getTarget();
 		$model 		= $this->getModel();
+<<<<<<< HEAD
 		
 		if (!$model->isMultilingual()) {
 			return false;
 		}
 		
+=======
+
+		if (!$model->isMultilingual()) {
+			return false;
+		}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$multilingualFields = $this->_getMultilingualFields();
 		foreach ($multilingualFields as $field) {
 			if ($target->columnExists($field->name)) {
 				return true;
 			}
 		}
+<<<<<<< HEAD
 		
 		return false;
 	}
 	
+=======
+
+		return false;
+	}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _getMultilingualFields() {
 		$model 					= $this->getModel();
 		$multilingualFields 	= $model->fields->getFields('multilingual', true);
 
 		return $multilingualFields;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _syncColumns() {
 		$source 	= $this->getSource();
 		$target 	= $this->getTarget();
@@ -185,7 +264,11 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 	protected function _resolveColumnConflicts() {
 		$source	= $this->getSource();
 		$target = $this->getTarget();
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		foreach ($source->columns as $sourceColumn) {
 			$target->columnExists($sourceColumn) ?
 				$this->_alterColumn($sourceColumn, $target):
@@ -193,6 +276,7 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 			;
 		}
 	}
+<<<<<<< HEAD
 	
 	protected function _alterColumn(Garp_Spawn_MySql_Column $sourceColumn) {
 		$diffProperties = $this->_getDiffProperties($sourceColumn);
@@ -202,12 +286,27 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 			return;
 		}
 		
+=======
+
+	protected function _alterColumn(Garp_Spawn_MySql_Column $sourceColumn) {
+		$diffProperties = $this->_getDiffProperties($sourceColumn);
+		$target 		= $this->getTarget();
+
+		if (!$diffProperties) {
+			return;
+		}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		$target->disableFkChecks();
 		$this->_ifNullableChangesThenDeleteForeignKeys($sourceColumn, $diffProperties);
 		$target->alterColumn($sourceColumn);
 		$target->enableFkChecks();
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _deleteRedundantColumns() {
 		$target		= $this->getTarget();
 
@@ -215,7 +314,11 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 			$this->_deleteNoLongerConfiguredColumn($targetColumn);
 		}
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _deleteNoLongerConfiguredColumn(Garp_Spawn_MySql_Column $targetColumn) {
 		$source		= $this->getSource();
 		$target		= $this->getTarget();
@@ -224,7 +327,11 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 		if ($source->columnExists($targetColumn->name)) {
 			return;
 		}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		if ($this->getFeedback()->isInteractive()) {
 			$progress->display("Delete column {$target->name}.{$targetColumn->name}? ");
 			if (!Garp_Spawn_Util::confirm()) {
@@ -234,7 +341,11 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 
 		$target->deleteColumn($targetColumn);
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _ifNullableChangesThenDeleteForeignKeys(Garp_Spawn_MySql_Column $sourceColumn, array $diffProperties) {
 		$source = $this->getSource();
 
@@ -248,7 +359,11 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 			}
 		}
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	protected function _getDiffProperties(Garp_Spawn_MySql_Column $sourceColumn) {
 		$target 		= $this->getTarget();
 		$targetColumn 	= $target->getColumn($sourceColumn->name);
@@ -257,7 +372,11 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 		return $diffProperties;
 	}
 
+<<<<<<< HEAD
 	/** 
+=======
+	/**
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
  	 * @return Garp_Spawn_MySql_Key_Set
  	 */
 	protected function _getConfiguredKeys() {
@@ -276,9 +395,17 @@ class Garp_Spawn_MySql_Table_Synchronizer {
 
 		return $keys;
 	}
+<<<<<<< HEAD
 	
 	protected function _isBindingModel(Garp_Spawn_Model_Abstract $model) {
 		return get_class($model) === 'Garp_Spawn_Model_Binding';
 	}
 	
+=======
+
+	protected function _isBindingModel(Garp_Spawn_Model_Abstract $model) {
+		return get_class($model) === 'Garp_Spawn_Model_Binding';
+	}
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }

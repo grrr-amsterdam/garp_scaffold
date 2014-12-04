@@ -72,7 +72,11 @@ class Garp_Util_FullUrl {
 			$this->_validateRouteArray($route);
 			$router = Zend_Controller_Front::getInstance()->getRouter();
 			return $router->assemble($route[0], $route[1]);
+<<<<<<< HEAD
 		} 
+=======
+		}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		if (!$this->_omitBaseUrl) {
 			$baseUrlHelper = new Zend_View_Helper_BaseUrl();
 			return $baseUrlHelper->baseUrl($route);
@@ -98,7 +102,11 @@ class Garp_Util_FullUrl {
 			$httpHost = $config->cdn->domain;
 			return $httpHost;
 		}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 		throw new Garp_Exception(CANNOT_RESOLVE_HTTP_HOST);
 	}
 
@@ -118,7 +126,11 @@ class Garp_Util_FullUrl {
 		if (!array_key_exists(0, $route) || !array_key_exists(1, $route)) {
 			throw new Garp_Exception(self::INVALID_ROUTE);
 		}
+<<<<<<< HEAD
 	}		
+=======
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 
 	/**
 	 * Get omitBaseUrl
@@ -135,5 +147,9 @@ class Garp_Util_FullUrl {
 	public function getOmitProtocol() {
 		return $this->_omitProtocol;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 }

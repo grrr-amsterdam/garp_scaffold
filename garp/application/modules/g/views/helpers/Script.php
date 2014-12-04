@@ -9,7 +9,11 @@
  * @subpackage Db
  * @lastmodified $Date: $
  */
+<<<<<<< HEAD
 class G_View_Helper_Script extends Zend_View_Helper_HTMLElement {
+=======
+class G_View_Helper_Script extends Zend_View_Helper_HtmlElement {
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 	/**
 	 * Collection of scripts
 	 * @var Array

@@ -45,9 +45,17 @@
 		return <?php echo $printFieldGetter('name') ?> || __('New');
 	<?php else: ?>
 		var out = [<?php echo $printListFieldGetters() ?>].join(" ").replace("  ", " "); 
+<<<<<<< HEAD
 		if (out === ' ') {
+=======
+		if (!out || out === ' ') {
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
 			out = __("New");
 		}
 		return  out;
 	<?php endif; ?>
+<<<<<<< HEAD
 	}
+=======
+	}
+>>>>>>> 2003f3421883bf4e997378d8d830e797926e2f94
