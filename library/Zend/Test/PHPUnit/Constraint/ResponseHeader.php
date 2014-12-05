@@ -17,7 +17,7 @@
  * @subpackage PHPUnit
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: ResponseHeader.php 25204 2013-01-10 11:21:03Z frosch $
+ * @version    $Id$
  */
 
 /** @see PHPUnit_Framework_Constraint */
@@ -65,7 +65,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
      * @var int Response code
      */
     protected $_code              = 200;
-    
+
     /**
      * @var int Actual response code
      */
@@ -110,13 +110,21 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
     /**
      * Evaluate an object to see if it fits the constraints
      *
-     * @param  Zend_Controller_Response_Abstract $other String to examine
-     * @param  null|string Assertion type
+     * @param  object       of Zend_Controller_Response_Abstract to be evaluated
+     * @param  null|string  Assertion type
+     * @param  int|string   HTTP response code to evaluate against | header string (haystack)
+     * @param  string       (optional) match (needle), may be required depending on assertion type
      * @return bool
+     * NOTE:
+     * Drastic changes up to PHPUnit 3.5.15 this was:
+     *     public function evaluate($other, $assertType = null)
+     * In PHPUnit 3.6.0 they changed the interface into this:
+     *     public function evaluate($other, $description = '', $returnResult = FALSE)
+     * We use the new interface for PHP-strict checking, but emulate the old one
      */
-    public function evaluate($other, $assertType = null)
+    public function evaluate($response, $assertType = '', $variable = FALSE)
     {
-        if (!$other instanceof Zend_Controller_Response_Abstract) {
+        if (!$response instanceof Zend_Controller_Response_Abstract) {
             require_once 'Zend/Test/PHPUnit/Constraint/Exception.php';
             throw new Zend_Test_PHPUnit_Constraint_Exception('Header constraint assertions require a response object');
         }
@@ -133,7 +141,6 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
 
         $this->_assertType = $assertType;
 
-        $response = $other;
         $argv     = func_get_args();
         $argc     = func_num_args();
 
@@ -159,7 +166,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
             case self::ASSERT_HEADER_CONTAINS:
                 if (4 > $argc) {
                     require_once 'Zend/Test/PHPUnit/Constraint/Exception.php';
-                    throw new Zend_Test_PHPUnit_Constraint_Exception('Both a header name and content to match are required for ' . __FUNCTION__);
+                    throw new Zend_Test_PHPUnit_Constraint_Exception('Both a header name and content to match are required for ' . $assertType);
                 }
                 $this->_header = $header = $argv[2];
                 $this->_match  = $match  = $argv[3];
@@ -169,7 +176,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
             case self::ASSERT_HEADER_REGEX:
                 if (4 > $argc) {
                     require_once 'Zend/Test/PHPUnit/Constraint/Exception.php';
-                    throw new Zend_Test_PHPUnit_Constraint_Exception('Both a header name and content to match are required for ' . __FUNCTION__);
+                    throw new Zend_Test_PHPUnit_Constraint_Exception('Both a header name and content to match are required for ' . $assertType);
                 }
                 $this->_header = $header = $argv[2];
                 $this->_match  = $match  = $argv[3];
@@ -178,7 +185,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
                     : $this->_headerRegex($response, $header, $match);
             default:
                 require_once 'Zend/Test/PHPUnit/Constraint/Exception.php';
-                throw new Zend_Test_PHPUnit_Constraint_Exception('Invalid assertion type ' . __FUNCTION__);
+                throw new Zend_Test_PHPUnit_Constraint_Exception('Invalid assertion type ' . $assertType);
         }
     }
 
@@ -186,13 +193,19 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
      * Report Failure
      *
      * @see    PHPUnit_Framework_Constraint for implementation details
-     * @param  mixed $other
-     * @param  string $description Additional message to display
-     * @param  bool $not
+     * @param  mixed    CSS selector path
+     * @param  string   Failure description
+     * @param  object   Cannot be used, null
      * @return void
      * @throws PHPUnit_Framework_ExpectationFailedException
+     * NOTE:
+     * Drastic changes up to PHPUnit 3.5.15 this was:
+     *     public function fail($other, $description, $not = false)
+     * In PHPUnit 3.6.0 they changed the interface into this:
+     *     protected function fail($other, $description, PHPUnit_Framework_ComparisonFailure $comparisonFailure = NULL)
+     * We use the new interface for PHP-strict checking
      */
-    public function fail($other, $description, $not = false)
+    public function fail($other, $description, PHPUnit_Framework_ComparisonFailure $cannot_be_used = NULL)
     {
         require_once 'Zend/Test/PHPUnit/Constraint/Exception.php';
         switch ($this->_assertType) {
