@@ -212,6 +212,7 @@ gulp.task('images', ['init', 'tinypng'], function () {
 	if (argv.skipImages) {
 		return;
 	}
+	gutil.log(gutil.colors.green('Building images to ' + paths.imgBuild));
     return gulp.src(paths.imgSrc + '/*.{gif,jpg,svg}')
         .pipe(imagemin({
             progressive: true,
