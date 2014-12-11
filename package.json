@@ -1,6 +1,5 @@
 {
   "name": "garpscaffold",
-  "version": "0.0.1",
   "description": "Garp scaffold",
   "private": true,
   "devDependencies": {
