@@ -67,8 +67,8 @@ app.init();
 
 disableHoverStylesOnScroll();
 
-//var cookie_msg = Garp.FlashMessage.parseCookie();
+var cookie_msg = Garp.FlashMessage.parseCookie();
 if (cookie_msg) {
-	//var fm = new Garp.FlashMessage(cookie_msg);
+	var fm = new Garp.FlashMessage(cookie_msg);
 	fm.show();
 }
