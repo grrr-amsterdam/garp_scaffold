@@ -163,7 +163,12 @@ gulp.task('scss-lint', ['init'], function() {
 
 gulp.task('javascript', ['jshint', 'bower-concat'], function() {
     gutil.log(gutil.colors.green('Building js to ' + paths.jsBuild));
-    return gulp.src(paths.jsSrc + '/**/*.js')
+    return gulp.src([
+		paths.jsSrc + '/../garp/front/styling.js',
+		paths.jsSrc + '/../garp/front/flashmessage.js',
+		paths.jsSrc + '/../garp/front/cookies.js',
+		paths.jsSrc + '/**/*.js',
+	])
 	.pipe(gulpif(ENV == 'development', sourcemaps.init()))
 		.pipe(concat('main.js'))
 		.pipe(gulpif(ENV == 'development', uglify(), uglify({ 'compress': 'drop_console' }))).on('error', handleError)

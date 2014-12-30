@@ -7,38 +7,57 @@ var app = {
 /**
  * Responsive breakpoint registry
  */
-app.responsive = {
-	BREAKPOINT_SMALL: 680,
-	BREAKPOINT_MEDIUM: 960,
-	BREAKPOINT_LARGE: 1200,
+app.responsive = (function() {
+	var docWidth,
+		docWidthSetter = function() {
+			docWidth = document.documentElement.clientWidth;
+		};
 
-	/**
-	 * Read state of various breakpoints
-	 */
-	getCurrentBreakpoint: function() {
-		var tries = ['small', 'medium', 'large'];
-		var i = 0;
-		var bp = 'small';
+	window.addEventListener('resize', docWidthSetter);
+	window.addEventListener('orientationchange', docWidthSetter);
 
-		do {
-			bp = tries[i];
-		} while (app.responsive.matchesBreakpoint(tries[++i]));
-		return bp;
-	},
-	/**
-	 * Read state of various breakpoints
-	 */
-	matchesBreakpoint: function(breakpoint) {
-		switch (breakpoint) {
-			case 'small':
-				return document.documentElement.clientWidth >= this.BREAKPOINT_SMALL;
-			case 'medium':
-				return document.documentElement.clientWidth >= this.BREAKPOINT_MEDIUM;
-			case 'large':
-				return document.documentElement.clientWidth >= this.BREAKPOINT_LARGE;
+	return {
+		BREAKPOINT_SMALL: 680,
+		BREAKPOINT_MEDIUM: 960,
+		BREAKPOINT_LARGE: 1200,
+
+		/**
+	 	* Returned (cached) document width
+	 	*/
+		getDocWidth: function() {
+			if (!docWidth) {
+				docWidth = document.documentElement.clientWidth;
+			}
+			return docWidth;
+		},
+		/**
+	 	* Read state of various breakpoints
+	 	*/
+		getCurrentBreakpoint: function() {
+			var tries = ['small', 'medium', 'large'];
+			var i = 0;
+			var bp = 'small';
+
+			do {
+				bp = tries[i];
+			} while (this.matchesBreakpoint(tries[++i]));
+			return bp;
+		},
+		/**
+	 	* Read state of various breakpoints
+	 	*/
+		matchesBreakpoint: function(breakpoint) {
+			switch (breakpoint) {
+				case 'small':
+					return this.getDocWidth() >= this.BREAKPOINT_SMALL;
+				case 'medium':
+					return this.getDocWidth() >= this.BREAKPOINT_MEDIUM;
+				case 'large':
+					return this.getDocWidth() >= this.BREAKPOINT_LARGE;
+			}
 		}
-	}
-};
+	};
+})();
 
 /**
  * Add class to the body when scrolling.
