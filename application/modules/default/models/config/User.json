@@ -5,7 +5,8 @@
 
 	"inputs": {
 		"first_name": {
-			"maxLength": 100
+			"maxLength": 100,
+			"required": false
 		},
 		"last_name_prefix": {
 			"maxLength": 20,
@@ -22,6 +23,7 @@
 		"role": {
 			"type": "enum",
 			"options": ["user", "admin", "developer"],
+			"required": false,
 			"default": "user"
 		},
 		"password_reset_code_expiration_date": {
