@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="phpDox" default="build" basedir=".">
+    <property name="source" value="src"/>
+
+    <target name="clean" description="Clean up and create artifact directories">
+        <delete dir="${basedir}/build/api"/>
+        <delete dir="${basedir}/build/code-browser"/>
+        <delete dir="${basedir}/build/coverage"/>
+        <delete dir="${basedir}/build/logs"/>
+        <delete dir="${basedir}/build/pdepend"/>
+
+        <mkdir dir="${basedir}/build/api"/>
+        <mkdir dir="${basedir}/build/code-browser"/>
+        <mkdir dir="${basedir}/build/coverage"/>
+        <mkdir dir="${basedir}/build/logs"/>
+        <mkdir dir="${basedir}/build/pdepend"/>
+    </target>
+
+    <target name="phpab">
+        <exec executable="phpab">
+            <arg line='--cache ${basedir}/build/autoload.cache -o src/autoload.php src'/>
+        </exec>
+    </target>
+
+    <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
+        <exec executable="phpunit" failonerror="true"/>
+    </target>
+
+    <target name="parallelTasks"
+            description="Run the pdepend, phpmd, phpcpd, phpcs and phploc tasks in parallel using a maximum of 2 threads.">
+        <parallel threadCount="2">
+            <sequential>
+                <antcall target="pdepend"/>
+                <antcall target="phpmd"/>
+            </sequential>
+            <antcall target="phpcpd"/>
+            <antcall target="phpcs"/>
+            <antcall target="phploc"/>
+        </parallel>
+    </target>
+
+    <target name="pdepend" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
+        <exec executable="pdepend">
+            <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
+              --jdepend-chart=${basedir}/build/pdepend/dependencies.svg
+              --overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg
+              ${source}"/>
+        </exec>
+    </target>
+
+    <target name="phpmd" description="Generate pmd.xml using PHPMD">
+        <exec executable="phpmd">
+            <arg line="${source}
+              xml
+              codesize,design,naming,unusedcode
+              --reportfile ${basedir}/build/logs/pmd.xml"/>
+        </exec>
+    </target>
+
+    <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
+        <exec executable="phpcpd">
+            <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml ${source}"/>
+        </exec>
+    </target>
+
+    <target name="phploc" description="Generate phploc.xml">
+        <exec executable="phploc">
+            <arg line="--count-tests --log-xml ${basedir}/build/logs/phploc.xml ${source} tests"/>
+        </exec>
+    </target>
+
+    <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
+        <exec executable="phpcs" output="/dev/null">
+            <arg line="--report=checkstyle
+              --report-file=${basedir}/build/logs/checkstyle.xml
+              --standard=phpcs.xml
+              ${source}"/>
+        </exec>
+    </target>
+
+    <target name="pear" depends="phar" description="Create a PEAR archive of phpDox">
+        <delete dir="${basedir}/build/pear/_tmp"/>
+        <mkdir dir="${basedir}/build/pear/_tmp"/>
+
+        <exec executable="bash" outputproperty="version">
+            <arg value="-c"/>
+            <arg value="${basedir}/phpdox.php --version | awk 'BEGIN { ORS = &quot;&quot;; } {print $2}'"/>
+        </exec>
+
+        <move file="${basedir}/build/phar/phpdox-${version}.phar" tofile="${basedir}/build/pear/_tmp/phpdox.phar" />
+
+        <copy todir="${basedir}/build/pear/_tmp">
+            <fileset dir="${basedir}">
+                <include name="phpdox.bat"/>
+                <include name="package.xml" />
+            </fileset>
+        </copy>
+
+        <replace file="${basedir}/build/pear/_tmp/package.xml" token="%release%" value="${version}" />
+
+        <exec executable="bash" dir="${basedir}/build/pear/_tmp">
+            <arg value="-c" />
+            <arg value="pear package" />
+        </exec>
+
+        <move file="${basedir}/build/pear/_tmp/phpDox-${version}.tgz" todir="${basedir}/build/pear" />
+
+        <delete dir="${basedir}/build/pear/_tmp"/>
+
+    </target>
+
+    <target name="api">
+        <delete dir="${basedir}/build/api" />
+        <exec executable="${basedir}/phpdox.php" />
+    </target>
+
+    <target name="phar" description="Create PHAR archive of phpDox and its dependencies">
+
+        <delete dir="${basedir}/build/phar/_tmp"/>
+        <mkdir dir="${basedir}/build/phar/_tmp"/>
+
+        <delete>
+            <fileset dir="${basedir}/build/phar">
+                <include name="**/*.phar"/>
+            </fileset>
+        </delete>
+
+        <exec executable="bash" outputproperty="version">
+            <arg value="-c"/>
+            <arg value="${basedir}/phpdox.php --version | awk 'BEGIN { ORS = &quot;&quot;; } {print $2}'"/>
+        </exec>
+
+        <untar dest="${basedir}/build/phar/_tmp" compression="gzip">
+            <fileset dir="${basedir}/build/phar/dependencies">
+                <include name="**/*.tgz"/>
+            </fileset>
+        </untar>
+
+        <copy todir="${basedir}/build/phar/_tmp/phpdox">
+            <fileset dir="${basedir}/src"/>
+        </copy>
+        <copy todir="${basedir}/build/phar/_tmp/bootstrap">
+            <fileset dir="${basedir}/bootstrap"/>
+        </copy>
+        <copy todir="${basedir}/build/phar/_tmp/templates">
+            <fileset dir="${basedir}/templates"/>
+        </copy>
+        <copy todir="${basedir}/build/phar/_tmp/dependencies">
+            <fileset dir="${basedir}/dependencies"/>
+        </copy>
+
+        <delete>
+            <fileset dir="${basedir}/build/phar/_tmp">
+                <include name="**/autoload.php"/>
+                <include name="**/Autoload.php"/>
+                <include name="**/Autoload.php.in"/>
+                <include name="**/package.sig"/>
+                <include name="**/package.xml"/>
+                <include name="**/composer.json"/>
+                <include name="**/*.md"/>
+                <include name="**/docs/**"/>
+                <include name="**/design/**"/>
+                <include name="**/grammar/**"/>
+                <include name="**/tests/**"/>
+                <include name="**/tests_old/**"/>
+            </fileset>
+        </delete>
+
+        <exec executable="phpab" failonerror="true">
+            <arg value="--var"/>
+            <arg value="VERSION=${version}"/>
+            <arg value="--all"/>
+            <arg value="--phar"/>
+            <arg value="--alias" />
+            <arg value="phpdox.phar" />
+            <arg value="--gzip"/>
+            <arg value="--output"/>
+            <arg path="${basedir}/build/phar/phpdox-${version}.phar"/>
+            <arg value="--template"/>
+            <arg path="${basedir}/build/phar/autoload.php.in"/>
+            <arg path="${basedir}/build/phar/_tmp"/>
+        </exec>
+
+        <chmod file="${basedir}/build/phar/phpdox-${version}.phar" perm="ugo+rx"/>
+        <delete dir="${basedir}/build/phar/_tmp"/>
+    </target>
+
+    <target name="build" depends="clean,parallelTasks,phpunit"/>
+</project>
