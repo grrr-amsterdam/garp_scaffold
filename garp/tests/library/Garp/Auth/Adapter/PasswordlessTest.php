@@ -24,6 +24,18 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 		$this->assertEquals('harmen@grrr.nl', $theUser->email);
 	}
 
+	public function testShouldNotInsertDuplicateRecord() {
+		$userModel = new Model_User();
+		$userId = $userModel->insert(array('email' => 'harmen@grrr.nl'));
+
+		$pwless = new Garp_Auth_Adapter_Passwordless();
+		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
+
+		$users = $userModel->fetchAll();
+		$this->assertEquals(1, count($users));
+		$this->assertEquals($userId, $users[0]->id);
+	}
+
 	public function testShouldCreateAuthRecord() {
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
@@ -52,7 +64,7 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 		$authModel = new Model_AuthPasswordless();
 		$authRecord = $authModel->fetchRow();
 
-		$tokenUrl = new Garp_Util_FullUrl(array(array('method' => 'passwordless'), 'auth_login')) .
+		$tokenUrl = new Garp_Util_FullUrl(array(array('method' => 'passwordless'), 'auth_submit')) .
 			'?uid=' . $theUser->id . '&token=' . $authRecord->token;
 
 		$storedMessage = file_get_contents(GARP_APPLICATION_PATH .

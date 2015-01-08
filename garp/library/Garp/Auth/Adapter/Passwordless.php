@@ -41,7 +41,7 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 				__('Email')));
 			return false;
 		}
-		$userId = $this->_createUserRecord($userData);
+		$userId = $this->_createOrFetchUserRecord($userData);
 		$token  = $this->_createAuthRecord($userId);
 
 		$this->_sendTokenEmail($userData['email'], $userId, $token);
@@ -55,9 +55,13 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 	public function acceptToken($token, $uid) {
 	}
 
-	protected function _createUserRecord(array $userData) {
+	protected function _createOrFetchUserRecord(array $userData) {
 		$userModel = new Model_User();
 		$userData = $userModel->filterColumns($userData);
+		$select = $userModel->select()->where('email = ?', $userData['email']);
+		if ($userRecord = $userModel->fetchRow($select)) {
+			return $userRecord->id;
+		}
 		return $userModel->insert($userData);
 	}
 
@@ -91,7 +95,6 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		$mail->setBodyText($this->_getEmailBody($userId, $token));
 		$mail->setFrom($this->_getEmailFromAddress());
 		$mail->addTo($email);
-
 		$transport = $this->_getTransportMethod();
 		return $mail->send($transport);
 	}
@@ -101,7 +104,7 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		if (!empty($authVars->email_body_snippet_identifier) &&
 			$authVars->email_body_snippet_identifier) {
 			return $this->_interpolateEmailBody(
-				$this->_getSnippet($authVars->email_body_snippet_identifier, $userId, $token));
+				$this->_getSnippet($authVars->email_body_snippet_identifier), $userId, $token);
 		}
 		if (!empty($authVars->email_body)) {
 			return $this->_interpolateEmailBody($authVars->email_body, $userId, $token);
@@ -132,10 +135,14 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		));
 	}
 
+	/**
+ 	 * @todo In the future when a global Zend_Mail config is present in config, this can all be
+ 	 * refactored and just use Zend_Mail using the default app settings for this environment.
+ 	 */
 	protected function _getEmailFromAddress() {
 		$authVars = $this->_getAuthVars();
 		// Check some sensible default locations for email addresses
-		if (isset($authVars->email_transport_method) === 'AmazonSes') {
+		if ($authVars->email_transport_method === 'Garp_Mail_Transport_AmazonSes') {
 			return Zend_Registry::get('config')->amazon->ses->fromAddress;
 		}
 		if (isset($authVars->email_from_address)) {
@@ -158,7 +165,7 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 	}
 
 	protected function _getLoginUrl($userId, $token) {
-		return new Garp_Util_FullUrl(array(array('method' => 'passwordless'), 'auth_login')) .
+		return new Garp_Util_FullUrl(array(array('method' => 'passwordless'), 'auth_submit')) .
 			'?uid=' . $userId . '&token=' . $token;
 	}
 

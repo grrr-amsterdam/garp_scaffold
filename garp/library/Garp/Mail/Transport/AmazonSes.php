@@ -57,8 +57,11 @@ class Garp_Mail_Transport_AmazonSes extends Zend_Mail_Transport_Abstract
      * @throws Zend_Mail_Transport_Exception if accessKey is not present in the config
      * @throws Zend_Mail_Transport_Exception if privateKey is not present in the config
      */
-    public function __construct(Array $config = array())
+    public function __construct($config = array())
     {
+		if ($config instanceof Zend_Config) {
+			$config = $config->toArray();
+		}
         if(!array_key_exists('accessKey', $config)){
             throw new Zend_Mail_Transport_Exception('This transport requires the Amazon access key');
         }
@@ -73,7 +76,7 @@ class Garp_Mail_Transport_AmazonSes extends Zend_Mail_Transport_Abstract
 
         $this->_accessKey = $config['accessKey'];
         $this->_privateKey = $config['privateKey'];
-        $this->_host = Zend_Uri::factory($host);
+        $this->_host = Zend_Uri::factory($config['host']);
     }
 
 
