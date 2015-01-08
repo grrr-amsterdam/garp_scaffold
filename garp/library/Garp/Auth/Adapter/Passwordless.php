@@ -42,7 +42,7 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 			return false;
 		}
 		$userId = $this->_createOrFetchUserRecord($userData);
-		$token  = $this->_createAuthRecord($userId);
+		$token  = $this->_createOrUpdateAuthRecord($userId);
 
 		$this->_sendTokenEmail($userData['email'], $userId, $token);
 	}
@@ -81,6 +81,8 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 			return false;
 		}
 
+		$authPwlessModel->updateLoginStats($row->Model_User->id);
+
 		return $row->Model_User;
 	}
 
@@ -94,14 +96,23 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		return $userModel->insert($userData);
 	}
 
-	protected function _createAuthRecord($userId) {
+	protected function _createOrUpdateAuthRecord($userId) {
 		$token = $this->_getToken();
 		$authPwlessModel = new Model_AuthPasswordless();
+		$select = $authPwlessModel->select()->where('user_id = ?', $userId);
+		if ($authRecord = $authPwlessModel->fetchRow($select)) {
+			$authPwlessModel->update(array(
+				'token' => $token,
+				'token_expiration_date' => $this->_getExpirationDate()
+			), 'id = ' . $authRecord->id);
+			return $token;
+		}
 		$authPwlessModel->insert(array(
 			'user_id' => $userId,
 			'token' => $token,
 			'token_expiration_date' => $this->_getExpirationDate()
 		));
+
 		return $token;
 	}
 
