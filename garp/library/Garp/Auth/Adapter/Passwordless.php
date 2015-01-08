@@ -20,20 +20,20 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 	/**
 	 * Authenticate a user.
 	 * @param Zend_Controller_Request_Abstract $request The current request
-	 * @return Array|Boolean User data, or FALSE
+	 * @return Array|Boolean User data, or FALSE when no user is logged in yet
 	 */
 	public function authenticate(Zend_Controller_Request_Abstract $request) {
 		if (!$request->isPost()) {
 			return $this->acceptToken($request->getParam('token'),
 				$request->getParam('uid'));
 		}
-		return $this->requestToken($request->getPost());
+		$this->requestToken($request->getPost());
+		return false;
 	}
 
 	/**
  	 * Request a new token
  	 * @todo Allow different delivery-methods, such as SMS?
- 	 * @todo Allow more
  	 */
 	public function requestToken(array $userData) {
 		if (empty($userData['email'])) {
@@ -44,7 +44,7 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		$userId = $this->_createOrFetchUserRecord($userData);
 		$token  = $this->_createAuthRecord($userId);
 
-		return $this->_sendTokenEmail($userData['email'], $userId, $token);
+		$this->_sendTokenEmail($userData['email'], $userId, $token);
 	}
 
 	/**
