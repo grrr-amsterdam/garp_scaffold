@@ -123,8 +123,8 @@ gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], functio
 		handleError('Could not get ' + ENV + ' domain from application/configs/app.ini');
 	}
 	browserSync({
-		proxy: domain
 		open: true,
+		proxy: domain
 	});
 });
 
