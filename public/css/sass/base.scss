@@ -72,6 +72,7 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 	.figure dd { @include font-size(14); }
 }
 
+.error { color: #f00; }
 
 /* ==========================================================================
 	LAYOUT
