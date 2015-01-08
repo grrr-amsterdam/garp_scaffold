@@ -83,7 +83,15 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 			return false;
 		}
 
-		$authPwlessModel->updateLoginStats($row->Model_User->id);
+		// Check wether it was already used to log in
+		if ((int)$row->claimed === 1) {
+			$this->_addError(__('passwordless token claimed'));
+			return false;
+		}
+
+		$authPwlessModel->updateLoginStats($row->Model_User->id, array(
+			'claimed' => 1
+		));
 
 		return $row->Model_User;
 	}

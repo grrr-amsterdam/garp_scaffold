@@ -143,6 +143,21 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 		$this->assertTrue($response instanceof Garp_Db_Table_Row);
 	}
 
+	public function testShouldRejectClaimedToken() {
+		$pwless = new Garp_Auth_Adapter_Passwordless();
+		$response = $pwless->requestToken(array('email' => 'harmen@grrr.nl'));
+
+		// manually claim token
+		instance(new Model_AuthPasswordless)->update(array('claimed' => 1), 'id > 0');
+
+		$userId = instance(new Model_User)->fetchRow()->id;
+		$token  = instance(new Model_AuthPasswordless)->fetchRow()->token;
+
+		$response = $pwless->acceptToken($token, $userId);
+		$this->assertFalse($response);
+		$this->assertEquals(array(__('passwordless token claimed')), $pwless->getErrors());
+	}
+
 	protected function _getMockEmailMessage() {
 		return "Hi, You can login with the following URL: %LOGIN_URL%. " .
 			"Have fun on the website! Kind regards, the team";
