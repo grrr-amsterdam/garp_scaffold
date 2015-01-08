@@ -35,4 +35,5 @@ $translationTable = array(
 	'no permission flash message' => 'You do not have permission to view this page',
 	'passwordless token not found' => 'The given token was not found.',
 	'passwordless token expired' => 'The token is expired. Please submit your email address again and we will send you a new login link',
+	'login token requested page title' => 'A login link was sent to your inbox',
 );

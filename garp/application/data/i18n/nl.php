@@ -356,4 +356,5 @@ $translationTable = array(
 	'%s is already in use, please provide a unique value.' => '%s is al gebruikt. Vul een unieke waarde in.',
 	'passwordless token not found' => 'Het opgegeven token is niet gevonden.',
 	'passwordless token expired' => 'Het opgegeven token is verlopen. Vul je e-mailadres opnieuw in om een nieuwe login link te ontvangen.',
+	'login token requested page title' => 'Je login link is onderweg',
 );

@@ -45,6 +45,8 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		$token  = $this->_createOrUpdateAuthRecord($userId);
 
 		$this->_sendTokenEmail($userData['email'], $userId, $token);
+
+		$this->setRedirect($this->_getRedirectUrl());
 	}
 
 	/**
@@ -207,6 +209,15 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 	protected function _getLoginUrl($userId, $token) {
 		return new Garp_Util_FullUrl(array(array('method' => 'passwordless'), 'auth_submit')) .
 			'?uid=' . $userId . '&token=' . $token;
+	}
+
+	protected function _getRedirectUrl() {
+		$authVars = $this->_getAuthVars();
+		$route = 'home';
+		if (isset($authVars->requesttoken_redirect_route)) {
+			$route = $authVars->requesttoken_redirect_route;
+		}
+		return new Garp_Util_FullUrl(array(array(), $route));
 	}
 
 	protected function _getSnippet($identifier) {
