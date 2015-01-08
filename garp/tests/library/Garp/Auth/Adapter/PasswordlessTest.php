@@ -3,18 +3,31 @@
  * @group Auth
  */
 class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
+
+	/**
+ 	* Wether to execute these tests, it only makes sense for projects where
+ 	* passwordless authentication is actually enabled.
+ 	*/
+	protected $_testsEnabled = false;
+
 	protected $_mockData = array(
 		'User' => array(),
 		'AuthPasswordless' => array(),
 	);
 
 	public function testShouldFailWithoutEmail() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$pwless->requestToken(array());
 		$this->assertTrue(count($pwless->getErrors()) > 0);
 	}
 
 	public function testShouldCreateUserRecord() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
 
@@ -25,6 +38,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldNotInsertDuplicateRecord() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$userModel = new Model_User();
 		$userId = $userModel->insert(array('email' => 'harmen@grrr.nl'));
 
@@ -37,6 +53,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldCreateAuthRecord() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
 
@@ -55,6 +74,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldSendEmail() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
 
@@ -87,6 +109,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldFailOnFalsyParams() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$response = $pwless->acceptToken(null, null);
 		$this->assertFalse($response);
@@ -94,6 +119,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldFailOnInvalidToken() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$response = $pwless->acceptToken('19398829849', 1);
 		$this->assertFalse($response);
@@ -101,6 +129,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldFailOnStrangersToken() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$userModel = new Model_User();
 		$userModel->insert(array('email' => 'henk@grrr.nl', 'id' => 1));
 		$userModel->insert(array('email' => 'jaap@grrr.nl', 'id' => 2));
@@ -114,6 +145,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldFailOnExpiredToken() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		instance(new Model_User())->insert(array(
 			'id' => 5,
 			'email' => 'henk@grrr.nl'
@@ -133,6 +167,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldAcceptValidToken() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$response = $pwless->requestToken(array('email' => 'harmen@grrr.nl'));
 
@@ -144,6 +181,9 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	}
 
 	public function testShouldRejectClaimedToken() {
+		if (!$this->_testsEnabled) {
+			return;
+		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
 		$response = $pwless->requestToken(array('email' => 'harmen@grrr.nl'));
 
@@ -167,12 +207,14 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 		return $transport->recipients . '.tmp';
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-
-		if (file_exists(GARP_APPLICATION_PATH . '/../tests/tmp/harmen@grrr.nl.tmp')) {
-			unlink(GARP_APPLICATION_PATH . '/../tests/tmp/harmen@grrr.nl.tmp');
+	public function setUp() {
+		// Only execute tests when passwordless is actually one of the configured adapters for
+		// this project.
+		$this->_testsEnabled = isset(Zend_Registry::get('config')->auth->adapters->passwordless);
+		if (!$this->_testsEnabled) {
+			return;
 		}
+		parent::setUp();
 
 		$this->_helper->injectConfigValues(array(
 			'app' => array(
@@ -197,5 +239,15 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 				)
 			)
 		));
+
+	}
+
+	public function tearDown() {
+		parent::tearDown();
+
+		if (file_exists(GARP_APPLICATION_PATH . '/../tests/tmp/harmen@grrr.nl.tmp')) {
+			unlink(GARP_APPLICATION_PATH . '/../tests/tmp/harmen@grrr.nl.tmp');
+		}
+
 	}
 }
