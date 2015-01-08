@@ -44,15 +44,44 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		$userId = $this->_createOrFetchUserRecord($userData);
 		$token  = $this->_createAuthRecord($userId);
 
-		$this->_sendTokenEmail($userData['email'], $userId, $token);
+		return $this->_sendTokenEmail($userData['email'], $userId, $token);
 	}
 
 	/**
  	 * Accept a user token
  	 * @param String $token
  	 * @param Int $uid User id
+ 	 * @return Garp_Model_Db Logged in user
  	 */
 	public function acceptToken($token, $uid) {
+		if (!$token || !$uid) {
+			$this->_addError(__('Insufficient data received'));
+			return false;
+		}
+		$authPwlessModel = new Model_AuthPasswordless();
+		$userModel = new Model_User();
+		$userConditions = $userModel->select()->from($userModel->getName(),
+			Garp_Auth::getInstance()->getSessionColumns());
+		$authPwlessModel->bindModel('Model_User', array(
+			'conditions' => $userConditions
+		));
+		$select = $authPwlessModel->select()
+			->where('`token` = ?', $token)
+			->where('user_id = ?', $uid);
+
+		$row = $authPwlessModel->fetchRow($select);
+		if (!$row || !$row->Model_User) {
+			$this->_addError(__('passwordless token not found'));
+			return false;
+		}
+
+		// Check expiration
+		if (time() > strtotime($row->token_expiration_date)) {
+			$this->_addError(__('passwordless token expired'));
+			return false;
+		}
+
+		return $row->Model_User;
 	}
 
 	protected function _createOrFetchUserRecord(array $userData) {
