@@ -1,0 +1,28 @@
+{
+	"module": "garp",
+
+	"visible": false,
+
+	"inputs": {
+		"twitter_uid": {
+			"maxLength": 20,
+			"type": "text"
+		},
+		"ip_address": {
+			"maxLength": 15,
+			"required": false
+		},
+		"last_login": {
+			"type": "datetime",
+			"required": false
+		}
+	},
+
+	"listFields": ["id", "twitter_uid", "ip_address"],
+
+	"relations": {
+		"User": {
+			"type": "belongsTo"
+		}
+	}
+}
