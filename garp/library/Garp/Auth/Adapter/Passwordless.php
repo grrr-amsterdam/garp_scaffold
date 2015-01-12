@@ -65,7 +65,8 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		$userConditions = $userModel->select()->from($userModel->getName(),
 			Garp_Auth::getInstance()->getSessionColumns());
 		$authPwlessModel->bindModel('Model_User', array(
-			'conditions' => $userConditions
+			'conditions' => $userConditions,
+			'rule' => 'User'
 		));
 		$select = $authPwlessModel->select()
 			->where('`token` = ?', $token)
@@ -79,7 +80,7 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 
 		// Check wether the user is already logged in. Let's not inconvenience them
 		// with security when it's not that important
-		$currentUserData = $this->_getCurrentUserData;
+		$currentUserData = $this->_getCurrentUserData();
 		if (isset($currentUserData['id']) &&
 			(int)$currentUserData['id'] === (int)$row->Model_User->id) {
 			return $row->Model_User;
@@ -97,7 +98,7 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 			return false;
 		}
 
-		$authPwlessModel->updateLoginStats($row->Model_User->id, array(
+		$authPwlessModel->getObserver('Authenticatable')->updateLoginStats($row->Model_User->id, array(
 			'claimed' => 1
 		));
 
