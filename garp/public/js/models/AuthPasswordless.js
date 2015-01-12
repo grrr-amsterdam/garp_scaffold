@@ -1,3 +1,8 @@
 /** EXTENDED MODEL **/
-Garp.dataTypes.AuthPasswordless.on('init', function() {
-});
+(function() {
+	if (!('AuthPasswordless' in Garp.dataTypes)) {
+		return;
+	}
+	Garp.dataTypes.AuthPasswordless.on('init', function() {
+	});
+})();
