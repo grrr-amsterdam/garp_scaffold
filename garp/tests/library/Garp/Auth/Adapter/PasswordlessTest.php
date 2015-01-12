@@ -4,6 +4,8 @@
  */
 class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 
+	const TEST_EMAIL = 'thedude@garp.com';
+
 	/**
  	* Wether to execute these tests, it only makes sense for projects where
  	* passwordless authentication is actually enabled.
@@ -29,12 +31,12 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 			return;
 		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
-		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
+		$pwless->requestToken(array('email' => self::TEST_EMAIL));
 
 		$userModel = new Model_User();
 		$theUser = $userModel->fetchRow();
 		$this->assertFalse(is_null($theUser));
-		$this->assertEquals('harmen@grrr.nl', $theUser->email);
+		$this->assertEquals(self::TEST_EMAIL, $theUser->email);
 	}
 
 	public function testShouldNotInsertDuplicateRecord() {
@@ -42,10 +44,10 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 			return;
 		}
 		$userModel = new Model_User();
-		$userId = $userModel->insert(array('email' => 'harmen@grrr.nl'));
+		$userId = $userModel->insert(array('email' => self::TEST_EMAIL));
 
 		$pwless = new Garp_Auth_Adapter_Passwordless();
-		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
+		$pwless->requestToken(array('email' => self::TEST_EMAIL));
 
 		$users = $userModel->fetchAll();
 		$this->assertEquals(1, count($users));
@@ -57,7 +59,7 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 			return;
 		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
-		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
+		$pwless->requestToken(array('email' => self::TEST_EMAIL));
 
 		$userModel = new Model_User();
 		$theUser = $userModel->fetchRow();
@@ -78,7 +80,7 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 			return;
 		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
-		$pwless->requestToken(array('email' => 'harmen@grrr.nl'));
+		$pwless->requestToken(array('email' => self::TEST_EMAIL));
 
 		$userModel = new Model_User();
 		$theUser = $userModel->fetchRow();
@@ -90,7 +92,7 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 			'?uid=' . $theUser->id . '&token=' . $authRecord->token;
 
 		$storedMessage = file_get_contents(GARP_APPLICATION_PATH .
-			'/../tests/tmp/harmen@grrr.nl.tmp');
+			'/../tests/tmp/' . self::TEST_EMAIL . '.tmp');
 
 		$expectedMessage = Garp_Util_String::interpolate($this->_getMockEmailMessage(), array(
 			'LOGIN_URL' => $tokenUrl
@@ -171,7 +173,7 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 			return;
 		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
-		$response = $pwless->requestToken(array('email' => 'harmen@grrr.nl'));
+		$response = $pwless->requestToken(array('email' => self::TEST_EMAIL));
 
 		$userId = instance(new Model_User)->fetchRow()->id;
 		$token  = instance(new Model_AuthPasswordless)->fetchRow()->token;
@@ -185,7 +187,7 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 			return;
 		}
 		$pwless = new Garp_Auth_Adapter_Passwordless();
-		$response = $pwless->requestToken(array('email' => 'harmen@grrr.nl'));
+		$response = $pwless->requestToken(array('email' => self::TEST_EMAIL));
 
 		// manually claim token
 		instance(new Model_AuthPasswordless)->update(array('claimed' => 1), 'id > 0');
@@ -221,7 +223,7 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 				'domain' => 'testing.example.com'
 			),
 			'organization' => array(
-				'email' => 'harmen@grrr.nl'
+				'email' => self::TEST_EMAIL
 			),
 			'auth' => array(
 				'adapters' => array(
@@ -245,8 +247,8 @@ class Garp_Auth_Adapter_PasswordlessTest extends Garp_Test_PHPUnit_TestCase {
 	public function tearDown() {
 		parent::tearDown();
 
-		if (file_exists(GARP_APPLICATION_PATH . '/../tests/tmp/harmen@grrr.nl.tmp')) {
-			unlink(GARP_APPLICATION_PATH . '/../tests/tmp/harmen@grrr.nl.tmp');
+		if (file_exists(GARP_APPLICATION_PATH . '/../tests/tmp/' . self::TEST_EMAIL . '.tmp')) {
+			unlink(GARP_APPLICATION_PATH . '/../tests/tmp/' . self::TEST_EMAIL . '.tmp');
 		}
 
 	}

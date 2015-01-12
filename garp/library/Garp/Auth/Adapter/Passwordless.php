@@ -127,7 +127,10 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 	}
 
 	protected function _getToken() {
-		return bin2hex(openssl_random_pseudo_bytes(32));
+		if (function_exists('openssl_random_pseudo_bytes')) {
+			return bin2hex(openssl_random_pseudo_bytes(32));
+		}
+		return mt_rand();
 	}
 
 	protected function _getExpirationDate() {
