@@ -77,6 +77,14 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 			return false;
 		}
 
+		// Check wether the user is already logged in. Let's not inconvenience them
+		// with security when it's not that important
+		$currentUserData = $this->_getCurrentUserData;
+		if (isset($currentUserData['id']) &&
+			(int)$currentUserData['id'] === (int)$row->Model_User->id) {
+			return $row->Model_User;
+		}
+
 		// Check expiration
 		if (time() > strtotime($row->token_expiration_date)) {
 			$this->_addError(__('passwordless token expired'));
@@ -237,4 +245,11 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		return $snippetModel->fetchByIdentifier($identifier)->text;
 	}
 
+	protected function _getCurrentUserData() {
+		$auth = Garp_Auth::getInstance();
+		if ($auth->isLoggedIn()) {
+			return $auth->getUserData();
+		}
+		return null;
+	}
 }
