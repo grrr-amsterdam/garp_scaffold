@@ -113,7 +113,8 @@ class Garp_Auth_Adapter_Passwordless extends Garp_Auth_Adapter_Abstract {
 		if ($authRecord = $authPwlessModel->fetchRow($select)) {
 			$authPwlessModel->update(array(
 				'token' => $token,
-				'token_expiration_date' => $this->_getExpirationDate()
+				'token_expiration_date' => $this->_getExpirationDate(),
+				'claimed' => 0
 			), 'id = ' . $authRecord->id);
 			return $token;
 		}
