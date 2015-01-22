@@ -20,7 +20,6 @@ public/css/build/dev/**/*.css.map
 npm-debug.log
 .sass-cache
 .DS_Store
-.project
 .vagrant
 .gulp
 cache.properties
