@@ -1,9 +1,12 @@
 // Main app namespace
-var app = {
-	init: function() {
-		// Initialize all modules.
-	}
+var app = app || {};
+app.init = function() {
+
+	// Initialize modules
+
 };
+
+
 /**
  * Responsive breakpoint registry
  */
@@ -80,10 +83,7 @@ function disableHoverStylesOnScroll() {
 	}, false);
 }
 
-app.init();
-
-//FastClick.attach(document.body);
-
+FastClick.attach(document.body);
 disableHoverStylesOnScroll();
 
 var cookie_msg = Garp.FlashMessage.parseCookie();
