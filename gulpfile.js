@@ -46,10 +46,10 @@ var gulp           = require('gulp'),
 	gutil          = require('gulp-util'),
 	concat         = require('gulp-concat'),
 	jshint         = require('gulp-jshint'),
-    jshintStylish  = require('jshint-stylish'),
-    imagemin       = require('gulp-imagemin'),
-    minifycss      = require('gulp-minify-css'),
-    urlAdjuster    = require('gulp-css-url-adjuster'),
+	jshintStylish  = require('jshint-stylish'),
+	imagemin       = require('gulp-imagemin'),
+	minifycss      = require('gulp-minify-css'),
+	urlAdjuster    = require('gulp-css-url-adjuster'),
 	pxtorem        = require('gulp-pxtorem'),
 	modernizr      = require('gulp-modernizr'),
 	sass           = require('gulp-sass'),
@@ -68,12 +68,12 @@ var ENV = argv.e ? argv.e : 'development';
 
 function getShellOutput(command) {
 	result = sh.exec(command);
-    if (result.stderr) {
+	if (result.stderr) {
 		handleError('Error getting shell output: ' + result.stderr);
-        gutil.beep();
-    }
-    // Do a replace because of newline in shell output
-    return result.stdout.replace(/\s?$/, '');
+		gutil.beep();
+	}
+	// Do a replace because of newline in shell output
+	return result.stdout.replace(/\s?$/, '');
 };
 
 function getConfigValue(value) {
@@ -133,7 +133,7 @@ gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], functio
 		proxy: domain,
 		open: false,
 		notify: {
-		     styles: [
+			 styles: [
 				"display: none",
 				"padding: 15px",
 				"font-family: sans-serif",
@@ -147,8 +147,8 @@ gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], functio
 				"margin: 0",
 				"color: white",
 				"text-align: center"
-	        ]
-	    }
+			]
+		}
 	});
 });
 
@@ -168,8 +168,8 @@ gulp.task('sass', ['scss-lint'], function () {
 		map: true
 	};
 
-    gutil.log(gutil.colors.green('Building css to ' + paths.cssBuild));
-    return gulp.src([paths.cssSrc + '/base.scss'])
+	gutil.log(gutil.colors.green('Building css to ' + paths.cssBuild));
+	return gulp.src([paths.cssSrc + '/base.scss'])
 		.pipe(sass({
 			onError: browserSync.notify
 		})).on('error', handleError)
@@ -181,13 +181,13 @@ gulp.task('sass', ['scss-lint'], function () {
 			append: '?v=' + semver
 		})))
 		.pipe(gulpif(ENV != 'development', minifycss()))
-        .pipe(gulp.dest(paths.cssBuild))
+		.pipe(gulp.dest(paths.cssBuild))
 		.pipe(browserSync.reload({stream:true}))
 	;
 });
 
 gulp.task('sass-cms', function() {
-    return gulp.src(paths.cssSrc + '/cms.scss')
+	return gulp.src(paths.cssSrc + '/cms.scss')
 		.pipe(sass()).on('error', handleError)
 		.pipe(gulpif(ENV != 'development', minifycss()))
 		.pipe(gulp.dest(paths.cssBuild))
@@ -195,7 +195,7 @@ gulp.task('sass-cms', function() {
 });
 
 gulp.task('sass-ie', function() {
-    return gulp.src(paths.cssSrc + '/ie-old.scss')
+	return gulp.src(paths.cssSrc + '/ie-old.scss')
 		.pipe(sass()).on('error', handleError)
 		.pipe(gulpif(ENV != 'development', minifycss()))
 		.pipe(gulp.dest(paths.cssBuild))
@@ -209,8 +209,8 @@ gulp.task('scss-lint', function() {
 });
 
 gulp.task('javascript', ['jshint', 'bower-concat'], function() {
-    gutil.log(gutil.colors.green('Building js to ' + paths.jsBuild));
-    return gulp.src([
+	gutil.log(gutil.colors.green('Building js to ' + paths.jsBuild));
+	return gulp.src([
 		paths.jsSrc + '/../garp/front/styling.js',
 		paths.jsSrc + '/../garp/front/flashmessage.js',
 		paths.jsSrc + '/../garp/front/cookies.js',
@@ -222,26 +222,26 @@ gulp.task('javascript', ['jshint', 'bower-concat'], function() {
 		.pipe(gulpif(ENV == 'development', sourcemaps.write()))
 		.pipe(gulp.dest(paths.jsBuild))
 		.pipe(browserSync.reload({stream:true}))
-    ;
+	;
 });
 
 gulp.task('javascript-cms', function() {
-    return gulp.src(require('./garp/public/js/cmsBuildStack.js').stack)
+	return gulp.src(require('./garp/public/js/cmsBuildStack.js').stack)
 		.pipe(concat('cms.js'))
 		.pipe(gulpif(ENV != 'development', uglify())).on('error', handleError)
 		.pipe(gulp.dest(paths.jsBuild))
-    ;
+	;
 });
 
 gulp.task('javascript-models', function() {
-    return gulp.src([
+	return gulp.src([
 		paths.jsSrc + '/../garp/models/*.js',
 		paths.jsSrc + '/../models/*.js',
 	])
 		.pipe(concat('extended-models.js'))
 		.pipe(uglify()).on('error', handleError)
 		.pipe(gulp.dest(paths.jsBuild))
-    ;
+	;
 });
 
 gulp.task('bower-concat', function() {
@@ -249,17 +249,17 @@ gulp.task('bower-concat', function() {
 		gutil.log('No bower dependencies');
 		return;
 	}
-    return gulp.src(mainBowerFiles())
-	    .pipe(concat('libs.js'))
-	    .pipe(uglify())
-	    .pipe(gulp.dest(paths.jsBuild))
+	return gulp.src(mainBowerFiles())
+		.pipe(concat('libs.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest(paths.jsBuild))
 	;
 });
 
 gulp.task('jshint', function () {
-    return gulp.src(paths.jsSrc + '/**/*.js')
-        .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('jshint-stylish'));
+	return gulp.src(paths.jsSrc + '/**/*.js')
+		.pipe(jshint('.jshintrc'))
+		.pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('modernizr', ['sass', 'javascript'], function() {
@@ -267,7 +267,7 @@ gulp.task('modernizr', ['sass', 'javascript'], function() {
 		.pipe(modernizr('modernizr.js')).on('error', handleError)
 		.pipe(uglify())
 		.pipe(gulp.dest(paths.jsBuild))
-    ;
+	;
 });
 
 gulp.task('images', ['init'], function () {
@@ -275,14 +275,14 @@ gulp.task('images', ['init'], function () {
 		return;
 	}
 	gutil.log(gutil.colors.green('Building images to ' + paths.imgBuild));
-    return gulp.src(paths.imgSrc + '/*.{png,gif,jpg,svg}')
-        .pipe(imagemin({
-            progressive: true,
-            svgoPlugins: [{removeViewBox: false}]
-        }))
-        .on('error', handleError)
-        .pipe(gulp.dest(paths.imgBuild))
-    ;
+	return gulp.src(paths.imgSrc + '/*.{png,gif,jpg,svg}')
+		.pipe(imagemin({
+			progressive: true,
+			svgoPlugins: [{removeViewBox: false}]
+		}))
+		.on('error', handleError)
+		.pipe(gulp.dest(paths.imgBuild))
+	;
 });
 
 gulp.task('watch', ['default', 'browser-sync'], function() {
@@ -290,7 +290,7 @@ gulp.task('watch', ['default', 'browser-sync'], function() {
 	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
 	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
-    gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
+	gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
 });
 
 gulp.task('build', [
