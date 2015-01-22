@@ -17,9 +17,7 @@
  * -------------------------------------------------------------
  *
  * TODO:
- * - Integrate something to generate icons (probably gulp-svg-sprites)
  * - CSS sourcemaps are not rendering properly
- * - Implement gulp-css-url-adjuster to generate cdn img paths
  * - Either concat libs.js and main.js for production, or employ a module
  *   loader to generate various builds
  *
@@ -48,19 +46,18 @@ var gulp           = require('gulp'),
 	gutil          = require('gulp-util'),
 	concat         = require('gulp-concat'),
 	jshint         = require('gulp-jshint'),
-	imagemin       = require('gulp-imagemin'),
+    jshintStylish  = require('jshint-stylish'),
+    imagemin       = require('gulp-imagemin'),
     minifycss      = require('gulp-minify-css'),
+    urlAdjuster    = require('gulp-css-url-adjuster'),
+	pxtorem        = require('gulp-pxtorem'),
 	modernizr      = require('gulp-modernizr'),
 	sass           = require('gulp-sass'),
 	browserSync    = require('browser-sync'),
-	merge          = require('merge'),
-	jshintStylish  = require('jshint-stylish'),
 	mainBowerFiles = require('main-bower-files'),
 	uglify         = require('gulp-uglify'),
 	sourcemaps     = require('gulp-sourcemaps'),
 	scsslint       = require('gulp-scss-lint'),
-	cache          = require('gulp-cached'),
-	tinypng        = require('gulp-tinypng'),
 	gulpif         = require('gulp-if'),
 	argv           = require('yargs').argv,
 	sh             = require('execSync');
@@ -101,7 +98,9 @@ function constructPaths() {
 
 	paths.imgSrc      = paths.css      + '/img';
 	paths.imgBuild    = paths.cssBuild + '/img';
-	paths.cdn         = getConfigValue('assets.cdn.domain');
+	paths.cdn         = getConfigValue('cdn.domain');
+	paths.cdnCss      = getConfigValue('assets.css.root') + '/' + semver;
+
 	return paths;
 };
 
@@ -111,55 +110,97 @@ function handleError (error) {
 }
 
 gulp.task('init', function() {
+	// gulp-modernizr doesn't work without the dir set to 755, so do that
+	sh.run('chmod -R 755 ./node_modules/gulp-modernizr');
+
 	semver = getShellOutput('semver');
 	domain = getConfigValue('app.domain');
+	cdnType  = getConfigValue('cdn.type');
 	paths  = constructPaths();
+
+	gutil.log(gutil.colors.green('-----------------'));
 	gutil.log(gutil.colors.green('Semver: ' + semver));
 	gutil.log(gutil.colors.green('Environment: ' + ENV));
+	gutil.log(gutil.colors.green('CDN type: ' + cdnType));
+	gutil.log(gutil.colors.green('-----------------'));
 });
 
 gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], function() {
-	if(!domain) {
+	if (!domain) {
 		handleError('Could not get ' + ENV + ' domain from application/configs/app.ini');
 	}
 	browserSync({
-		open: true,
-		proxy: domain
+		proxy: domain,
+		open: false,
+		notify: {
+		     styles: [
+				"display: none",
+				"padding: 15px",
+				"font-family: sans-serif",
+				"position: fixed",
+				"font-size: 0.9em",
+				"z-index: 9999",
+				"right: 0px",
+				"bottom: 0px",
+				"border-top-left-radius: 5px",
+				"background-color: rgb(27, 32, 50)",
+				"margin: 0",
+				"color: white",
+				"text-align: center"
+	        ]
+	    }
 	});
 });
 
 gulp.task('sass', ['scss-lint'], function () {
+
+	var pxtoremOptions = {
+		root_value: 10,
+		unit_precision: 5,
+		prop_white_list: [
+			'font',
+			'font-size',
+		],
+		replace: false,
+		media_query: false
+	},
+	postcssOptions = {
+		map: true
+	};
+
     gutil.log(gutil.colors.green('Building css to ' + paths.cssBuild));
     return gulp.src([paths.cssSrc + '/base.scss'])
-		// .pipe(gulpif(ENV == 'development', sourcemaps.init()))
 		.pipe(sass({
 			onError: browserSync.notify
 		})).on('error', handleError)
-		.pipe(autoprefixer('last 3 versions', 'safari 5', 'ie 9', 'opera 12.1'))
-		.pipe(gulpif(ENV == 'development', minifycss()))
-		// .pipe(gulpif(ENV == 'development', sourcemaps.write()))
+		.pipe(pxtorem(pxtoremOptions, postcssOptions))
+		.pipe(autoprefixer('>5%', 'last 3 versions', 'safari 5', 'ie 9', 'opera 12.1'))
+		.pipe(gulpif(ENV != 'development' && cdnType != 'local', urlAdjuster({
+			// hacky slashes are necessary because one slash is stripped by urlAdjuster
+			prepend: 'http:///' + paths.cdn + paths.cdnCss + '/',
+			append: '?v=' + semver
+		})))
+		.pipe(gulpif(ENV != 'development', minifycss()))
         .pipe(gulp.dest(paths.cssBuild))
 		.pipe(browserSync.reload({stream:true}))
-		.pipe(gulp.dest(paths.cssBuild));
 });
 
 gulp.task('sass-cms', function() {
     return gulp.src(paths.cssSrc + '/cms.scss')
 		.pipe(sass()).on('error', handleError)
-		.pipe(gulpif(ENV == 'development', minifycss()))
+		.pipe(gulpif(ENV != 'development', minifycss()))
 		.pipe(gulp.dest(paths.cssBuild));
 });
 
 gulp.task('sass-ie', function() {
     return gulp.src(paths.cssSrc + '/ie-old.scss')
 		.pipe(sass()).on('error', handleError)
-		.pipe(gulpif(ENV == 'development', minifycss()))
+		.pipe(gulpif(ENV != 'development', minifycss()))
 		.pipe(gulp.dest(paths.cssBuild));
 });
 
-gulp.task('scss-lint', ['init'], function() {
+gulp.task('scss-lint', function() {
 	gulp.src(paths.cssSrc + '/**/*.scss')
-		// .pipe(cache('scsslint'))
 		.pipe(scsslint({'config': __dirname + '/.scss-lint.yml'})).on('error', handleError);
 });
 
@@ -216,10 +257,6 @@ gulp.task('jshint', function () {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-/**
- * NOTE: this task produces erros which are safe to ignore, this is due
- * to Modernizr not being tool agnostic and looking for grunt modules.
- */
 gulp.task('modernizr', ['sass', 'javascript'], function() {
   return gulp.src([paths.cssBuild + '/base.css', paths.jsBuild + '/main.js'])
     .pipe(modernizr('modernizr.js')).on('error', handleError)
@@ -227,21 +264,12 @@ gulp.task('modernizr', ['sass', 'javascript'], function() {
     .pipe(gulp.dest(paths.jsBuild))
 });
 
-gulp.task('tinypng', function () {
-	if (argv.skipImages) {
-		return;
-	}
-    return gulp.src(paths.imgSrc + '/*.png')
-        .pipe(tinypng('GpST4zD3uNuHeQbIw7zs3hiL-raKJGMF'))
-        .pipe(gulp.dest(paths.imgBuild));
-});
-
-gulp.task('images', ['init', 'tinypng'], function () {
+gulp.task('images', ['init'], function () {
 	if (argv.skipImages) {
 		return;
 	}
 	gutil.log(gutil.colors.green('Building images to ' + paths.imgBuild));
-    return gulp.src(paths.imgSrc + '/*.{gif,jpg,svg}')
+    return gulp.src(paths.imgSrc + '/*.{png,gif,jpg,svg}')
         .pipe(imagemin({
             progressive: true,
             svgoPlugins: [{removeViewBox: false}]
@@ -250,9 +278,10 @@ gulp.task('images', ['init', 'tinypng'], function () {
 });
 
 gulp.task('watch', ['default', 'browser-sync'], function() {
-	gulp.watch(paths.cssSrc + '/**/*.scss', ['sass']);
+	gulp.watch([paths.cssSrc + '/**/*.scss', '!**/cms.scss'], ['sass']);
+	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
-	gulp.watch(paths.imgSrc + '/*.{gif,jpg,svg,png}', ['images']);
+	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
     gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
 });
 

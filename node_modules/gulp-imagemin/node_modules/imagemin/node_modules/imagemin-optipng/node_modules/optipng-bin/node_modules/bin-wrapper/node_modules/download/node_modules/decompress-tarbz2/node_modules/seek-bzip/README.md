@@ -1,6 +1,6 @@
 # seek-bzip
 
-[![Build Status](https://travis-ci.org/cscott/seek-bzip.png)](https://travis-ci.org/cscott/seek-bzip)
+[![Build Status][1]][2] [![dependency status][3]][4] [![dev dependency status][5]][6]
 
 `seek-bzip` is a pure-javascript Node.JS module adapted from [node-bzip](https://github.com/skeggse/node-bzip) and before that [antimatter15's pure-javascript bzip2 decoder](https://github.com/antimatter15/bzip2.js).  Like these projects, `seek-bzip` only does decompression (see [compressjs](https://github.com/cscott/compressjs) if you need compression code).  Unlike those other projects, `seek-bzip` can seek to and decode single blocks from the bzip2 file.
 
@@ -171,3 +171,10 @@ Feel free to fork on github and submit pull requests!
 > You should have received a copy of the GNU Lesser General Public
 > License along with this library; if not, see
 > http://www.gnu.org/licenses/lgpl-2.1.html
+
+[1]: https://travis-ci.org/cscott/seek-bzip.png
+[2]: https://travis-ci.org/cscott/seek-bzip
+[3]: https://david-dm.org/cscott/seek-bzip.png
+[4]: https://david-dm.org/cscott/seek-bzip
+[5]: https://david-dm.org/cscott/seek-bzip/dev-status.png
+[6]: https://david-dm.org/cscott/seek-bzip#info=devDependencies
