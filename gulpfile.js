@@ -126,7 +126,7 @@ gulp.task('init', function() {
 	gutil.log(gutil.colors.green('-----------------'));
 });
 
-gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], function() {
+gulp.task('browser-sync', function() {
 	if (!domain) {
 		handleError('Could not get ' + ENV + ' domain from application/configs/app.ini');
 	}
@@ -153,8 +153,8 @@ gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], functio
 	});
 });
 
-gulp.task('sass', ['scss-lint'], function() {
-
+// gulp.task('sass', ['scss-lint'], function() {
+gulp.task('sass', function() {
 	var pxtoremOptions = {
 		root_value: 10,
 		unit_precision: 5,
@@ -263,7 +263,7 @@ gulp.task('jshint', function() {
 		.pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('modernizr', ['sass', 'javascript'], function() {
+gulp.task('modernizr', function() {
 	return gulp.src([paths.cssBuild + '/base.css', paths.jsBuild + '/main.js'])
 		.pipe(modernizr('modernizr.js')).on('error', handleError)
 		.pipe(uglify())
