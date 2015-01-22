@@ -114,8 +114,11 @@ gulp.task('init', function() {
 	domain = getConfigValue('app.domain');
 	cdnType  = getConfigValue('cdn.type');
 	paths  = constructPaths();
+
+	gutil.log(gutil.colors.green('-----------------'));
 	gutil.log(gutil.colors.green('Semver: ' + semver));
 	gutil.log(gutil.colors.green('Environment: ' + ENV));
+	gutil.log(gutil.colors.green('-----------------'));
 });
 
 gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], function() {
