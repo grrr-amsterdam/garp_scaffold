@@ -46,8 +46,8 @@ var gulp           = require('gulp'),
 	gutil          = require('gulp-util'),
 	concat         = require('gulp-concat'),
 	jshint         = require('gulp-jshint'),
-	jshintStylish  = require('jshint-stylish'),
-	imagemin       = require('gulp-imagemin'),
+    jshintStylish  = require('jshint-stylish'),
+    imagemin       = require('gulp-imagemin'),
     minifycss      = require('gulp-minify-css'),
     urlAdjuster    = require('gulp-css-url-adjuster'),
 	pxtorem        = require('gulp-pxtorem'),
@@ -118,6 +118,7 @@ gulp.task('init', function() {
 	gutil.log(gutil.colors.green('-----------------'));
 	gutil.log(gutil.colors.green('Semver: ' + semver));
 	gutil.log(gutil.colors.green('Environment: ' + ENV));
+	gutil.log(gutil.colors.green('CDN type: ' + cdnType));
 	gutil.log(gutil.colors.green('-----------------'));
 });
 
