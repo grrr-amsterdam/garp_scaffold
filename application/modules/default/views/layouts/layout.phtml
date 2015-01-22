@@ -82,6 +82,7 @@
 		JS_ROOT = "<?php echo $this->config()->assets->js->root ?>";
 	</script>
 	<?php
+		$this->script()->src('libs.js');
 		$this->script()->src('main.js');
 		echo $this->script()->render();
 		if ($browseboxConfig = $this->browsebox()->config()):
