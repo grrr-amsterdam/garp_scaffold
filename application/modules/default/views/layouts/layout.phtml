@@ -3,13 +3,16 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="nl"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
+	<?php if ($this->config()->cdn->type != 'local'): ?>
+	<link rel="dns-prefetch" href="//<?php echo $this->config()->cdn->domain ?>">
+	<?php endif ?>
 
 	<?php
 		$title = '';
 		if ($this->currentPage == 'home'):
 			$title = $this->escape($this->config()->app->name);
 			if ($this->title):
-				$title .= ' &mdash; '.$this->escape($this->title);
+				$title .= ' — '.$this->escape($this->title);
 			endif;
 		else:
 			if ($this->title):
@@ -79,6 +82,7 @@
 		JS_ROOT = "<?php echo $this->config()->assets->js->root ?>";
 	</script>
 	<?php
+		$this->script()->src('libs.js');
 		$this->script()->src('main.js');
 		echo $this->script()->render();
 		if ($browseboxConfig = $this->browsebox()->config()):
