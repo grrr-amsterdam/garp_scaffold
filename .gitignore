@@ -23,7 +23,6 @@ npm-debug.log
 .project
 .vagrant
 .gulp
-tags
 cache.properties
 vendor/.git
 composer.lock
