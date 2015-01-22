@@ -119,7 +119,7 @@ gulp.task('init', function() {
 });
 
 gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], function() {
-	if(!domain) {
+	if (!domain) {
 		handleError('Could not get ' + ENV + ' domain from application/configs/app.ini');
 	}
 	browserSync({
@@ -136,7 +136,7 @@ gulp.task('browser-sync', ['sass-ie', 'sass-cms', 'sass', 'javascript'], functio
 				"right: 0px",
 				"bottom: 0px",
 				"border-top-left-radius: 5px",
-				"background-color: #fab914",
+				"background-color: rgb(27, 32, 50)",
 				"margin: 0",
 				"color: white",
 				"text-align: center"
@@ -192,7 +192,7 @@ gulp.task('sass-ie', function() {
 		.pipe(gulp.dest(paths.cssBuild));
 });
 
-gulp.task('scss-lint', ['init'], function() {
+gulp.task('scss-lint', function() {
 	gulp.src(paths.cssSrc + '/**/*.scss')
 		.pipe(scsslint({'config': __dirname + '/.scss-lint.yml'})).on('error', handleError);
 });
@@ -271,7 +271,8 @@ gulp.task('images', ['init'], function () {
 });
 
 gulp.task('watch', ['default', 'browser-sync'], function() {
-	gulp.watch(paths.cssSrc + '/**/*.scss', ['sass-ie', 'sass-cms', 'sass']);
+	gulp.watch([paths.cssSrc + '/**/*.scss', '!**/cms.scss'], ['sass']);
+	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
 	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
     gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
