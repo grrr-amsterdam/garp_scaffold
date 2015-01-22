@@ -300,6 +300,7 @@ gulp.task('build', [
 	'sass-ie',
 	'sass-cms',
 	'sass',
+	'scss-lint',
 	'javascript-cms',
 	'javascript-models',
 	'javascript',
