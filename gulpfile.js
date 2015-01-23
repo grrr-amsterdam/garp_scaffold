@@ -288,7 +288,7 @@ gulp.task('images', ['init'], function() {
 
 gulp.task('watch', function(cb) {
 	runSequence('default', 'browser-sync', cb);
-	gulp.watch([paths.cssSrc + '/**/*.scss', '!**/cms.scss'], ['sass']);
+	gulp.watch([paths.cssSrc + '/**/*.scss', '!**/cms.scss'], ['sass', 'scss-lint']);
 	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
 	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
