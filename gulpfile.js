@@ -172,7 +172,9 @@ gulp.task('sass', function() {
 	gutil.log(gutil.colors.green('Building css to ' + paths.cssBuild));
 	return gulp.src([paths.cssSrc + '/base.scss'])
 		.pipe(sass({
-			onError: browserSync.notify
+			onError: function(err) {
+				return browserSync.notify('Error: ' + err.message + ' — ' + err.file + ':' + err.line);
+			}
 		})).on('error', handleError)
 		.pipe(pxtorem(pxtoremOptions, postcssOptions))
 		.pipe(autoprefixer('>5%', 'last 3 versions', 'safari 5', 'ie 9', 'opera 12.1'))
