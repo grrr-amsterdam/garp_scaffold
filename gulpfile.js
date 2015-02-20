@@ -92,16 +92,16 @@ function constructPaths() {
 
 	paths.js          = paths.public + '/js';
 	paths.jsSrc       = paths.js     + '/src';
-	paths.jsBuild     = paths.public + getConfigValue('assets.js.root') + '/' + semver;
+	paths.jsBuild     = paths.public + getConfigValue('assets.js.root');
 
 	paths.css         = paths.public + '/css';
 	paths.cssSrc      = paths.public + getConfigValue('assets.sass.root');
-	paths.cssBuild    = paths.public + getConfigValue('assets.css.root') + '/' + semver;
+	paths.cssBuild    = paths.public + getConfigValue('assets.css.root');
 
 	paths.imgSrc      = paths.css      + '/img';
 	paths.imgBuild    = paths.cssBuild + '/img';
 	paths.cdn         = getConfigValue('cdn.domain');
-	paths.cdnCss      = getConfigValue('assets.css.root') + '/' + semver;
+	paths.cdnCss      = getConfigValue('assets.css.root');
 
 	return paths;
 };
