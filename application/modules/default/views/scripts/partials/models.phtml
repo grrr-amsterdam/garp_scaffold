@@ -5,7 +5,7 @@ Ext.ns('Garp.dataTypes');
 <script src="<?php echo $this->assetUrl('/js/models/base/BaseModels.min.js') ?>"></script>
 <?php
 if (isset($this->config()->cms->minifiedAssets) && $this->config()->cms->minifiedAssets):
-	echo $this->script()->src('extended-models.js', true, array('crossorigin' => 'anonymous'));
+	echo $this->script()->src($this->config()->assets->js->root . '/extended-models.js', true, array('crossorigin' => 'anonymous'));
 else:
 ?>
 <!-- BEGIN SPAWNED CALLS -->
@@ -33,7 +33,12 @@ endif;
 Ext.onReady(function(){
 	Garp.modelMenu = new Garp.ModelMenu({
 		/** example: menuItems: ['User', 'BlogPost', '-', 'Image', 'Video'] */
-		menuItems: []
+		menuItems: [
+			'Snippet',
+			'Image',
+			'-',
+			'User'
+		]
 	});
 });
 </script>
