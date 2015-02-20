@@ -1,0 +1,22 @@
+@import 'utility/functions';
+@import 'utility/mixins';
+@import 'utility/variables';
+
+@import 'utility/fonts';
+
+body {
+
+	ul,
+	ol,
+	p {
+		font-family: $bodyFont; line-height: $defaultLineHeight;
+	}
+
+	a { color: $primaryColor; }
+
+	h1,
+	h2,
+	h3 {
+		font-family: $headingFont;
+	}
+}
