@@ -20,6 +20,7 @@
 .icon-snippet { @include cms-icon(page-edit); }
 .icon-user { @include cms-icon(user); }
 .icon-video { @include cms-icon(tv); }
+.icon-auth-passwordless { @include cms-icon(user); }
 
 /* allow textarea's to be resized! */
 textarea { resize: vertical !important; }
