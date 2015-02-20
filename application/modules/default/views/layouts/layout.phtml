@@ -61,8 +61,8 @@
 	<?php
 		// Inline Modernizr since it's such a wee script
 	?>
-	<script><?php require_once(APPLICATION_PATH . '/../public/' .
-			$this->assetUrl()->getVersionedBuildPath('modernizr.js')) ?></script>
+	<script><?php require_once(APPLICATION_PATH . '/../public' .
+			$this->assetUrl($this->config()->assets->js->root . '/modernizr.js', 'js', false)) ?></script>
 	<link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
 </head>
 <body>
