@@ -1,2 +1,5 @@
 <?php /** Note: keep cms.css on baseUrl, because that stylesheet is referenced from Javascript, this would result in a security error otherwise. **/ ?>
 <link id="icons" rel="stylesheet" href="<?php echo $this->assetUrl('cms.css') ?>">
+<script>
+	window.WYSIWYG_CSS_URL = "<?php echo $this->assetUrl('cms-wysiwyg.css') ?>";
+</script>

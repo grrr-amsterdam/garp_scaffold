@@ -53,10 +53,10 @@
 	<?php // echo $this->social()->facebookOgData($this->ogData ?: array()); ?>
 
 	<!--[if lte IE 8]>
-	<link rel="stylesheet" href="<?php echo $this->assetUrl('ie-old.css') ?>">
+	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/ie-old.css') ?>">
 	<![endif]-->
 	<!--[if gt IE 8]><!-->
-	<link rel="stylesheet" href="<?php echo $this->assetUrl('base.css') ?>">
+	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/base.css') ?>">
 	<!--<![endif]-->
 	<?php
 		// Inline Modernizr since it's such a wee script

@@ -56,6 +56,7 @@ var gulp           = require('gulp'),
 	browserSync    = require('browser-sync'),
 	mainBowerFiles = require('main-bower-files'),
 	uglify         = require('gulp-uglify'),
+	stripDebug     = require('gulp-strip-debug'),
 	sourcemaps     = require('gulp-sourcemaps'),
 	scsslint       = require('gulp-scss-lint'),
 	gulpif         = require('gulp-if'),
@@ -105,9 +106,13 @@ function constructPaths() {
 	return paths;
 };
 
-function handleError (error) {
-	gutil.log(gutil.colors.red(error.toString()));
-	this.emit('end');
+function handleError(error, emitEnd) {
+	if (typeof(emitEnd) === 'undefined') emitEnd = true;
+	gutil.beep();
+	gutil.log(gutil.colors.white.bgRed('Error!'), gutil.colors.red(error.toString()));
+	if (emitEnd) {
+		this.emit('end');
+	}
 }
 
 gulp.task('init', function() {
@@ -173,9 +178,10 @@ gulp.task('sass', function() {
 	return gulp.src([paths.cssSrc + '/base.scss'])
 		.pipe(sass({
 			onError: function(err) {
-				return browserSync.notify('Error: ' + err.message + ' — ' + err.file + ':' + err.line);
+				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
+				return browserSync.notify('Error: ' + err.message + ' => ' + err.file + ':' + err.line);
 			}
-		})).on('error', handleError)
+		}))
 		.pipe(pxtorem(pxtoremOptions, postcssOptions))
 		.pipe(autoprefixer('>5%', 'last 3 versions', 'safari 5', 'ie 9', 'opera 12.1'))
 		.pipe(gulpif(ENV != 'development' && cdnType != 'local', urlAdjuster({
@@ -190,8 +196,12 @@ gulp.task('sass', function() {
 });
 
 gulp.task('sass-cms', function() {
-	return gulp.src(paths.cssSrc + '/cms.scss')
-		.pipe(sass()).on('error', handleError)
+	return gulp.src([paths.cssSrc + '/cms.scss', paths.cssSrc + '/cms-wysiwyg.scss'])
+		.pipe(sass({
+			onError: function(err) {
+				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
+			}
+		}))
 		.pipe(gulpif(ENV != 'development', minifycss()))
 		.pipe(gulp.dest(paths.cssBuild))
 	;
@@ -199,15 +209,33 @@ gulp.task('sass-cms', function() {
 
 gulp.task('sass-ie', function() {
 	return gulp.src(paths.cssSrc + '/ie-old.scss')
-		.pipe(sass()).on('error', handleError)
+		.pipe(sass({
+			onError: function(err) {
+				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
+			}
+		}))
 		.pipe(gulpif(ENV != 'development', minifycss()))
 		.pipe(gulp.dest(paths.cssBuild))
 	;
 });
 
 gulp.task('scss-lint', function() {
+	var scssLintOutput = function(file, stream) {
+		if (!file.scsslint.success) {
+			gutil.log(gutil.colors.green('-----------------'));
+			gutil.log(gutil.colors.green(file.scsslint.issues.length) + ' scss-lint issue(s) found:');
+			file.scsslint.issues.forEach(function(issue) {
+				gutil.colors.underline(file.path);
+				gutil.log(gutil.colors.green(issue.reason) + ' => ' + gutil.colors.underline(file.path) + ':' + issue.line);
+			});
+			gutil.log(gutil.colors.green('-----------------'));
+		}
+	};
 	return gulp.src(paths.cssSrc + '/**/*.scss')
-		.pipe(scsslint({'config': __dirname + '/.scss-lint.yml'})).on('error', handleError)
+		.pipe(scsslint({
+			'config': __dirname + '/.scss-lint.yml',
+			'customReport': scssLintOutput
+		})).on('error', handleError)
 	;
 });
 
@@ -221,6 +249,7 @@ gulp.task('javascript', ['jshint', 'bower-concat'], function() {
 	])
 		.pipe(gulpif(ENV == 'development', sourcemaps.init()))
 		.pipe(concat('main.js'))
+		.pipe(gulpif(ENV != 'development', stripDebug()))
 		.pipe(gulpif(ENV != 'development', uglify())).on('error', handleError)
 		.pipe(gulpif(ENV == 'development', sourcemaps.write()))
 		.pipe(gulp.dest(paths.jsBuild))
@@ -289,8 +318,11 @@ gulp.task('images', ['init'], function() {
 });
 
 gulp.task('watch', function(cb) {
-	runSequence('default', 'browser-sync', cb);
-	gulp.watch([paths.cssSrc + '/**/*.scss', '!**/cms.scss'], ['sass', 'scss-lint']);
+	runSequence('default', 'browser-sync', cb);	gulp.watch([
+		paths.cssSrc + '/**/*.scss',
+		'!**/cms-wysiwyg.scss',
+		'!**/cms.scss'
+	], ['sass', 'sass-ie', 'scss-lint']);
 	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
 	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
