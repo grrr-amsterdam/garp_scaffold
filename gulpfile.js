@@ -222,13 +222,13 @@ gulp.task('sass-ie', function() {
 gulp.task('scss-lint', function() {
 	var scssLintOutput = function(file, stream) {
 		if (!file.scsslint.success) {
-			gutil.log(gutil.colors.green('-----------------'));
+			gutil.log(gutil.colors.gray('-----------------'));
 			gutil.log(gutil.colors.green(file.scsslint.issues.length) + ' scss-lint issue(s) found:');
 			file.scsslint.issues.forEach(function(issue) {
 				gutil.colors.underline(file.path);
 				gutil.log(gutil.colors.green(issue.reason) + ' => ' + gutil.colors.underline(file.path) + ':' + issue.line);
 			});
-			gutil.log(gutil.colors.green('-----------------'));
+			gutil.log(gutil.colors.gray('-----------------'));
 		}
 	};
 	return gulp.src(paths.cssSrc + '/**/*.scss')
