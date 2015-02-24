@@ -1,6 +1,4 @@
 # Readme for Garp Scaffold
 =======
-garp_scaffold
-=============
 
-This is a scaffold set to initiate Garp 3 projects.
+This is a scaffold set to initiate [Garp 3](https://github.com/grrr-amsterdam/garp3) projects.
