@@ -6,4 +6,4 @@ php:
 
 script: 
     - phpunit --verbose --colors --bootstrap garp/tests/TestHelper.php tests/
-    - phpunit --verbose --colors --bootstrap garp/tests/TestHelper.php garp/tests/
+    #- phpunit --verbose --colors --bootstrap garp/tests/TestHelper.php garp/tests/
