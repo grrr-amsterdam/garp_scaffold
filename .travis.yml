@@ -5,5 +5,5 @@ php:
   - "5.3"
 
 script: 
-    - phpunit --verbose --colors --bootstrap garp/tests/TestHelper.php tests/
-    #- phpunit --verbose --colors --bootstrap garp/tests/TestHelper.php garp/tests/
+    - phpunit --bootstrap garp/tests/TestHelper.php tests/
+    #- phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
