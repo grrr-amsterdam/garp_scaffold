@@ -12,7 +12,7 @@ before_install:
     - npm install
 before_script:
     - chmod -R +x vendor
-    - gulp
+    - gulp --dev
 notifications:
     email: false
     slack:
