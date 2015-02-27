@@ -6,8 +6,8 @@ script:
     #- phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
 before_install:
     - npm install -g gulp
-    - npm install -g node-sass
-    - npm install -g gulp-sass
+    - npm install node-sass
+    - npm install gulp-sass
     - npm install
 before_script:
     - chmod -R +x vendor
