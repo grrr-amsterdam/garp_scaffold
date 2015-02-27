@@ -4,8 +4,11 @@ php:
 script:
     - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
     #- phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
+before_install:
+    - npm install -g gulp
 before_script:
     - chmod -R +x vendor
+    - gulp
 notifications:
     slack:
         secure: h9R+NUBeVXZfJ37cbdX72/ICIYS8mXMS2WR8DGDsTCx+mT6cru+D1UvnorXpOcPkv8FdX6aDHfK8LjsAT1a3IgcImRwVW4kdC7hq4L/NNlNNnTTchE/5+N6JqNY9nxrNweivMu/yuG/UzMVPLu5F1pyP3D26WGBelS3Y4eV+SgU=
