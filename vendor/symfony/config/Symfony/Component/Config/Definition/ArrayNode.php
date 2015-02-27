@@ -269,6 +269,9 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
                 $this->getPath(),
                 gettype($value)
             ));
+            if ($hint = $this->getInfo()) {
+                $ex->addHint($hint);
+            }
             $ex->setPath($this->getPath());
 
             throw $ex;
@@ -302,7 +305,7 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
 
         // if extra fields are present, throw exception
         if (count($value) && !$this->ignoreExtraKeys) {
-            $msg = sprintf('Unrecognized options "%s" under "%s"', implode(', ', array_keys($value)), $this->getPath());
+            $msg = sprintf('Unrecognized option%s "%s" under "%s"', 1 === count($value) ? '' : 's', implode(', ', array_keys($value)), $this->getPath());
             $ex = new InvalidConfigurationException($msg);
             $ex->setPath($this->getPath());
 

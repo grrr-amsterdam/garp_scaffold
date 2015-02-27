@@ -9,7 +9,7 @@
     <!--
         Import common build targets
     -->
-	<import file="${basedir}/setup/src/main/xml/base.xml" />
+    <import file="${basedir}/setup/src/main/xml/base.xml" />
 
     <!--
         Hook that will be called after we have copied the project's library
@@ -55,35 +55,16 @@
         <echo message="  ${-package:phar:filename} PHPMD/Rule text ${phpmd.rulesets}" level="verbose" />
 
         <exec dir="${commons.srcdir.php}"
-              executable="${-package:phar:filename}" 
+              executable="${-package:phar:filename}"
               failonerror="true">
-              
+
             <arg value="PHPMD/Rule" />
             <arg value="text" />
             <arg value="${phpmd.rulesets}" />
         </exec>
     </target>
 
-    <!--
-        Executes the newly created and installed PEAR version of PHPMD.
-    -->
-    <target name="-phpmd:package:pear:after~hooked" extensionOf="-package:pear:after~hook">
-
-        <echo message="Executing:" level="verbose" />
-        <echo message="  phpmd PHPMD/Rule text ${phpmd.rulesets}" level="verbose" />
-
-        <exec dir="${commons.srcdir.php}" 
-              executable="${commons.executable.php}" 
-              failonerror="true">
-
-            <arg value="-d" />
-            <arg value="include_path=${common-pear-root-dir}" />
-            <arg value="${common-pear-bin-dir}/phpmd" />
-            <arg value="PHPMD/Rule" />
-            <arg value="text" />
-            <arg value="${phpmd.rulesets}" />
-        </exec>
-    </target>
+    <target name="phpmd:deploy" depends="-phpmd:deploy:after~hooked" />
 
     <target name="-phpmd:deploy:after~hooked" extensionOf="-deploy:after~hook" if="release">
 
@@ -102,7 +83,8 @@
             <arg line="cd '${project.web.release.dir}/..' ; rm latest ; ln -s '${project.version}' latest" />
         </exec>
 
-        <antcall target="site:deploy" />
+        <antcall target="site:deploy"
+                 inheritAll="false" />
     </target>
 
 </project>

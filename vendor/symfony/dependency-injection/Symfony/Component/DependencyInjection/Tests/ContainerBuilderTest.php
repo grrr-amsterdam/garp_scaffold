@@ -16,7 +16,6 @@ require_once __DIR__.'/Fixtures/includes/ProjectExtension.php';
 
 use Symfony\Component\Config\Resource\ResourceInterface;
 use Symfony\Component\DependencyInjection\Alias;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
@@ -319,26 +318,18 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Symfony\Component\DependencyInjection\ContainerBuilder::createService
      */
-    public function testCreateServiceFactoryMethod()
+    public function testCreateServiceFactory()
     {
         $builder = new ContainerBuilder();
-        $builder->register('bar', 'stdClass');
-        $builder->register('foo1', 'Bar\FooClass')->setFactoryClass('Bar\FooClass')->setFactoryMethod('getInstance')->addArgument(array('foo' => '%value%', '%value%' => 'foo', new Reference('bar')));
-        $builder->setParameter('value', 'bar');
-        $this->assertTrue($builder->get('foo1')->called, '->createService() calls the factory method to create the service instance');
-        $this->assertEquals(array('foo' => 'bar', 'bar' => 'foo', $builder->get('bar')), $builder->get('foo1')->arguments, '->createService() passes the arguments to the factory method');
-    }
+        $builder->register('foo', 'Bar\FooClass')->setFactory('Bar\FooClass::getInstance');
+        $builder->register('qux', 'Bar\FooClass')->setFactory(array('Bar\FooClass', 'getInstance'));
+        $builder->register('bar', 'Bar\FooClass')->setFactory(array(new Definition('Bar\FooClass'), 'getInstance'));
+        $builder->register('baz', 'Bar\FooClass')->setFactory(array(new Reference('bar'), 'getInstance'));
 
-    /**
-     * @covers Symfony\Component\DependencyInjection\ContainerBuilder::createService
-     */
-    public function testCreateServiceFactoryService()
-    {
-        $builder = new ContainerBuilder();
-        $builder->register('baz_service')->setFactoryService('baz_factory')->setFactoryMethod('getInstance');
-        $builder->register('baz_factory', 'BazClass');
-
-        $this->assertInstanceOf('BazClass', $builder->get('baz_service'));
+        $this->assertTrue($builder->get('foo')->called, '->createService() calls the factory method to create the service instance');
+        $this->assertTrue($builder->get('qux')->called, '->createService() calls the factory method to create the service instance');
+        $this->assertTrue($builder->get('bar')->called, '->createService() uses anonymous service as factory');
+        $this->assertTrue($builder->get('baz')->called, '->createService() uses another service as factory');
     }
 
     /**

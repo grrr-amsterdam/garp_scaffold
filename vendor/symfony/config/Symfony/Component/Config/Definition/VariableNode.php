@@ -49,7 +49,9 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
      */
     public function getDefaultValue()
     {
-        return $this->defaultValue instanceof \Closure ? call_user_func($this->defaultValue) : $this->defaultValue;
+        $v = $this->defaultValue;
+
+        return $v instanceof \Closure ? $v() : $v;
     }
 
     /**
@@ -88,6 +90,9 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
                 $this->getPath(),
                 json_encode($value)
             ));
+            if ($hint = $this->getInfo()) {
+                $ex->addHint($hint);
+            }
             $ex->setPath($this->getPath());
 
             throw $ex;

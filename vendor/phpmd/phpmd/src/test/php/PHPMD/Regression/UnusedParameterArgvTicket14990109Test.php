@@ -2,8 +2,6 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * PHP Version 5
- *
  * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
@@ -39,7 +37,6 @@
  * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2014 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   @project.version@
  * @link       https://www.pivotaltracker.com/story/show/14990109
  */
 
@@ -54,7 +51,6 @@ use PHPMD\RuleSet;
  * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2014 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   @project.version@
  * @link       https://www.pivotaltracker.com/story/show/14990109
  * @since      1.1.0
  *

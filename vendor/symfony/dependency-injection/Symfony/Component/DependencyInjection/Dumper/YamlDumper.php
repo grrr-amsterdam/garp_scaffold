@@ -61,7 +61,7 @@ class YamlDumper extends Dumper
     }
 
     /**
-     * Adds a service
+     * Adds a service.
      *
      * @param string     $id
      * @param Definition $definition
@@ -86,7 +86,7 @@ class YamlDumper extends Dumper
                 foreach ($attributes as $key => $value) {
                     $att[] = sprintf('%s: %s', $this->dumper->dump($key), $this->dumper->dump($value));
                 }
-                $att = $att ? ', '.implode(' ', $att) : '';
+                $att = $att ? ', '.implode(', ', $att) : '';
 
                 $tagsCode .= sprintf("            - { name: %s%s }\n", $this->dumper->dump($name), $att);
             }
@@ -140,30 +140,26 @@ class YamlDumper extends Dumper
         }
 
         if (null !== $decorated = $definition->getDecoratedService()) {
-            list ($decorated, $renamedId) = $decorated;
+            list($decorated, $renamedId) = $decorated;
             $code .= sprintf("        decorates: %s\n", $decorated);
             if (null !== $renamedId) {
                 $code .= sprintf("        decoration_inner_name: %s\n", $renamedId);
             }
         }
 
-        if ($callable = $definition->getConfigurator()) {
-            if (is_array($callable)) {
-                if ($callable[0] instanceof Reference) {
-                    $callable = array($this->getServiceCall((string) $callable[0], $callable[0]), $callable[1]);
-                } else {
-                    $callable = array($callable[0], $callable[1]);
-                }
-            }
+        if ($callable = $definition->getFactory()) {
+            $code .= sprintf("        factory: %s\n", $this->dumper->dump($this->dumpCallable($callable), 0));
+        }
 
-            $code .= sprintf("        configurator: %s\n", $this->dumper->dump($callable, 0));
+        if ($callable = $definition->getConfigurator()) {
+            $code .= sprintf("        configurator: %s\n", $this->dumper->dump($this->dumpCallable($callable), 0));
         }
 
         return $code;
     }
 
     /**
-     * Adds a service alias
+     * Adds a service alias.
      *
      * @param string $alias
      * @param Alias  $id
@@ -180,7 +176,7 @@ class YamlDumper extends Dumper
     }
 
     /**
-     * Adds services
+     * Adds services.
      *
      * @return string
      */
@@ -207,7 +203,7 @@ class YamlDumper extends Dumper
     }
 
     /**
-     * Adds parameters
+     * Adds parameters.
      *
      * @return string
      */
@@ -223,7 +219,27 @@ class YamlDumper extends Dumper
     }
 
     /**
-     * Dumps the value to YAML format
+     * Dumps callable to YAML format
+     *
+     * @param callable $callable
+     *
+     * @return callable
+     */
+    private function dumpCallable($callable)
+    {
+        if (is_array($callable)) {
+            if ($callable[0] instanceof Reference) {
+                $callable = array($this->getServiceCall((string) $callable[0], $callable[0]), $callable[1]);
+            } else {
+                $callable = array($callable[0], $callable[1]);
+            }
+        }
+
+        return $callable;
+    }
+
+    /**
+     * Dumps the value to YAML format.
      *
      * @param mixed $value
      *
@@ -312,7 +328,7 @@ class YamlDumper extends Dumper
     }
 
     /**
-     * Escapes arguments
+     * Escapes arguments.
      *
      * @param array $arguments
      *

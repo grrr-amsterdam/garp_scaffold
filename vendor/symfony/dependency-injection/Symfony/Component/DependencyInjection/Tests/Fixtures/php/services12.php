@@ -16,11 +16,18 @@ use Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
  */
 class ProjectServiceContainer extends Container
 {
+    private $parameters;
+    private $targetDirs = array();
+
     /**
      * Constructor.
      */
     public function __construct()
     {
+        $dir = __DIR__;
+        for ($i = 1; $i <= 5; ++$i) {
+            $this->targetDirs[$i] = $dir = dirname($dir);
+        }
         $this->parameters = $this->getDefaultParameters();
 
         $this->services =
@@ -39,6 +46,14 @@ class ProjectServiceContainer extends Container
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function compile()
+    {
+        throw new LogicException('You cannot compile a dumped frozen container.');
+    }
+
+    /**
      * Gets the 'test' service.
      *
      * This service is shared.
@@ -48,7 +63,7 @@ class ProjectServiceContainer extends Container
      */
     protected function getTestService()
     {
-        return $this->services['test'] = new \stdClass(('wiz'.dirname(__DIR__)), array(('wiz'.dirname(__DIR__)) => ('wiz'.dirname(__DIR__))));
+        return $this->services['test'] = new \stdClass(('wiz'.$this->targetDirs[1]), array(('wiz'.$this->targetDirs[1]) => ($this->targetDirs[2].'/')));
     }
 
     /**
@@ -94,6 +109,7 @@ class ProjectServiceContainer extends Container
 
         return $this->parameterBag;
     }
+
     /**
      * Gets the default parameters.
      *
@@ -102,9 +118,10 @@ class ProjectServiceContainer extends Container
     protected function getDefaultParameters()
     {
         return array(
-            'foo' => ('wiz'.dirname(__DIR__)),
+            'foo' => ('wiz'.$this->targetDirs[1]),
             'bar' => __DIR__,
             'baz' => (__DIR__.'/PhpDumperTest.php'),
+            'buz' => $this->targetDirs[2],
         );
     }
 }

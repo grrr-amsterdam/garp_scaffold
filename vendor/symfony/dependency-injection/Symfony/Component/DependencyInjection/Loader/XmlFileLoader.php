@@ -67,7 +67,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses parameters
+     * Parses parameters.
      *
      * @param \DOMDocument $xml
      * @param string       $file
@@ -80,7 +80,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses imports
+     * Parses imports.
      *
      * @param \DOMDocument $xml
      * @param string       $file
@@ -101,7 +101,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses multiple definitions
+     * Parses multiple definitions.
      *
      * @param \DOMDocument $xml
      * @param string       $file
@@ -121,7 +121,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses an individual Definition
+     * Parses an individual Definition.
      *
      * @param string      $id
      * @param \DOMElement $service
@@ -158,6 +158,21 @@ class XmlFileLoader extends FileLoader
 
         $definition->setArguments($this->getArgumentsAsPhp($service, 'argument'));
         $definition->setProperties($this->getArgumentsAsPhp($service, 'property'));
+
+        if ($factories = $this->getChildren($service, 'factory')) {
+            $factory = $factories[0];
+            if ($function = $factory->getAttribute('function')) {
+                $definition->setFactory($function);
+            } else {
+                if ($childService = $factory->getAttribute('service')) {
+                    $class = new Reference($childService, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, false);
+                } else {
+                    $class = $factory->getAttribute('class');
+                }
+
+                $definition->setFactory(array($class, $factory->getAttribute('method')));
+            }
+        }
 
         if ($configurators = $this->getChildren($service, 'configurator')) {
             $configurator = $configurators[0];
@@ -226,7 +241,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Processes anonymous services
+     * Processes anonymous services.
      *
      * @param \DOMDocument $xml
      * @param string       $file

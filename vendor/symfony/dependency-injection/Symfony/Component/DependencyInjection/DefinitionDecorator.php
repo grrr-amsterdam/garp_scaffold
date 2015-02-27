@@ -78,6 +78,16 @@ class DefinitionDecorator extends Definition
 
     /**
      * {@inheritdoc}
+     */
+    public function setFactory($callable)
+    {
+        $this->changes['factory'] = true;
+
+        return parent::setFactory($callable);
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @api
      */
@@ -200,7 +210,8 @@ class DefinitionDecorator extends Definition
      * @param int   $index
      * @param mixed $value
      *
-     * @return DefinitionDecorator      the current instance
+     * @return DefinitionDecorator the current instance
+     *
      * @throws InvalidArgumentException when $index isn't an integer
      *
      * @api

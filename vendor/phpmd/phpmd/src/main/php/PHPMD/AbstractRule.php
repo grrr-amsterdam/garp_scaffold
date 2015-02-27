@@ -2,8 +2,6 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * PHP Version 5
- *
  * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
@@ -39,7 +37,6 @@
  * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2014 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   @project.version@
  */
 
 namespace PHPMD;
@@ -50,7 +47,6 @@ namespace PHPMD;
  * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2014 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   @project.version@
  *
  * @SuppressWarnings(PHPMD)
  */
@@ -361,7 +357,7 @@ abstract class AbstractRule implements Rule
         if (isset($this->properties[$name])) {
             return in_array($this->properties[$name], array('true', 'on', 1));
         }
-        throw new \OutOfBoundsException('Property $' . $name . ' does not exist.');
+        throw new \OutOfBoundsException('Property "' . $name . '" does not exist.');
     }
 
     /**
@@ -377,12 +373,12 @@ abstract class AbstractRule implements Rule
         if (isset($this->properties[$name])) {
             return (int) $this->properties[$name];
         }
-        throw new \OutOfBoundsException('Property $' . $name . ' does not exist.');
+        throw new \OutOfBoundsException('Property "' . $name . '" does not exist.');
     }
 
 
     /**
-     * Returns the raw string value of a configured property or throws an 
+     * Returns the raw string value of a configured property or throws an
      * exception when no property with <b>$name</b> exists.
      *
      * @param string $name
@@ -394,7 +390,7 @@ abstract class AbstractRule implements Rule
         if (isset($this->properties[$name])) {
             return $this->properties[$name];
         }
-        throw new \OutOfBoundsException('Property $' . $name . ' does not exist.');
+        throw new \OutOfBoundsException('Property "' . $name . '" does not exist.');
 
     }
 
