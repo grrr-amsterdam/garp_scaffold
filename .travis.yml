@@ -5,9 +5,10 @@ script:
     - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
     #- phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
 before_install:
+    - rm -rf node_modules
     - npm install -g gulp
-    - npm install node-sass
-    - npm install gulp-sass
+    #- npm install node-sass
+    #- npm install gulp-sass
     - npm install
 before_script:
     - chmod -R +x vendor
