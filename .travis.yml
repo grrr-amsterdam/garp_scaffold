@@ -4,8 +4,6 @@ php:
 script:
     - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
     #- phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
-env: 
-    SKIP_SASS_BINARY_DOWNLOAD_FOR_CI=true
 before_install:
     - npm install -g gulp
     - npm install -g node-sass
