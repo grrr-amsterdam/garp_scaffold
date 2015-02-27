@@ -2,7 +2,7 @@ language: php
 php:
 - '5.3'
 script:
-- phpunit --bootstrap garp/tests/TestHelper.php tests/
+- vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
 #- phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
 notifications:
   slack:
