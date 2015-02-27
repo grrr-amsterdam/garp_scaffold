@@ -7,6 +7,7 @@ script:
 before_install:
     - npm install -g gulp
     - npm install -g node-sass
+    - npm install -g gulp-sass
     - npm install
 before_script:
     - chmod -R +x vendor
