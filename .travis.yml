@@ -9,6 +9,7 @@ before_install:
     - npm install -g gulp
     #- npm install node-sass
     #- npm install gulp-sass
+    - npm install semver
     - npm install
 before_script:
     - chmod -R +x vendor
