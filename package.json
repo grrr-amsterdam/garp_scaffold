@@ -3,7 +3,6 @@
   "description": "Garp scaffold",
   "private": true,
   "devDependencies": {
-	"semver": "^2.0.0",
     "browser-sync": "^2.2.1",
     "execSync": "^1.0.2",
     "gulp": "^3.8.11",
