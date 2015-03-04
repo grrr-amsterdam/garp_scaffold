@@ -3,7 +3,7 @@ php:
     - '5.3'
 script:
     - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
-    #- phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
+    - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
 before_install:
     - gem install semver
     - rm -rf node_modules
