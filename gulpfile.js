@@ -117,11 +117,16 @@ function handleError(error, emitEnd) {
 
 gulp.task('init', function() {
 	// gulp-modernizr doesn't work without the dir set to 755, so do that
-	//sh.run('chmod -R 755 ./node_modules/gulp-modernizr');
+gutil.log(gutil.colors.green('--start chmod--'));
+	sh.run('chmod -R 755 ./node_modules/gulp-modernizr');
 
+gutil.log(gutil.colors.green('--start semver--'));
 	semver = getShellOutput('semver');
+gutil.log(gutil.colors.green('--start config app.domain--'));
 	domain = getConfigValue('app.domain');
+gutil.log(gutil.colors.green('--start config cdn.type--'));
 	cdnType  = getConfigValue('cdn.type');
+gutil.log(gutil.colors.green('--start construct paths--'));
 	paths  = constructPaths();
 
 	gutil.log(gutil.colors.green('-----------------'));
