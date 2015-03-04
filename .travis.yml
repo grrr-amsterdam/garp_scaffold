@@ -3,6 +3,7 @@ php:
     - '5.3'
 script:
     - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
+    # @todo: Probably the memlimit param can be taken off - had to do with db error
     - php -d memory_limit=-1 vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
 before_install:
     #- gem install semver
@@ -14,6 +15,8 @@ before_install:
     #- git clone https://github.com/grrr-amsterdam/golem ../golem
     - mysql -e "create database IF NOT EXISTS garpscaffold_t;" -uroot
     - mysql -e "create user garp_development@localhost identified by 'welovegarp';" -uroot
+    - mysql -e "grant all privileges on *.* to garp_development@localhost;" -uroot
+    - php garp/spawn/garp.php spawn --e=testing
 before_script:
     - chmod -R +x vendor
     #- gulp --dev
