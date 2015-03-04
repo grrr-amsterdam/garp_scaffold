@@ -83,7 +83,7 @@ function getConfigValue(value) {
 		handleError('Can\'t get undefined config value');
 		return;
 	}
-	var command = 'php ' + __dirname + '/../golem/scripts/golem.php config get ' + value + ' --e=' + ENV;
+	var command = 'php ' + __dirname + '/garp/scripts/garp.php config get ' + value + ' --e=' + ENV;
 	return getShellOutput(command);
 }
 
@@ -117,16 +117,11 @@ function handleError(error, emitEnd) {
 
 gulp.task('init', function() {
 	// gulp-modernizr doesn't work without the dir set to 755, so do that
-gutil.log(gutil.colors.green('--start chmod--'));
 	sh.run('chmod -R 755 ./node_modules/gulp-modernizr');
 
-gutil.log(gutil.colors.green('--start semver--'));
 	semver = getShellOutput('semver');
-gutil.log(gutil.colors.green('--start config app.domain--'));
 	domain = getConfigValue('app.domain');
-gutil.log(gutil.colors.green('--start config cdn.type--'));
 	cdnType  = getConfigValue('cdn.type');
-gutil.log(gutil.colors.green('--start construct paths--'));
 	paths  = constructPaths();
 
 	gutil.log(gutil.colors.green('-----------------'));
