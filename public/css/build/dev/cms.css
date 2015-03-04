@@ -1,0 +1,146 @@
+/* ==========================================================================
+   functions
+   ========================================================================== */
+/**
+ * For converting pixels to ems
+ * Based on a 10px font-size on the html
+ * Usage:
+ * div { width: pxToEm(300); }
+ * Returns:
+ * div { width: 30em; }
+ */
+/**
+ * Color mixins (other than lighten or darken)
+ */
+/**
+ * z-index function
+ * For dynamically determining the stacking order of elements
+ *
+ * Usage:
+ * .module { z-index: z('module'); }
+ * .module__child { z-index: z('child'); }
+ *
+ * See $z-index variable in _variables.scss for stacking order
+ */
+/* ==========================================================================
+   mixins
+   ========================================================================== */
+/**
+ * Font smoothing
+ */
+/**
+ * Shortcut for :hover, :active, and :focus styles.
+ *
+ * Usage:
+ * a {
+ *   color: blue;
+ *   @include hover { color: red; }
+ * }
+ */
+/**
+ * Shortcut for :active styles.
+ * Used for specifiying a explicit active style (overwrites hover() for example).
+ *
+ * Usage:
+ * a {
+ *   color: blue;
+ *   @include active { color: red; }
+ * }
+ */
+/**
+ * Clearfix
+ * Actually an @extend, but we don't want to depend on inclusion order
+ *
+ * Usage:
+ * section { @include cleafix(); }
+ */
+/*
+ * Bare list
+ * Author: Mattijs Bliek
+ *
+ * Get rid of list-style and padding
+ */
+/**
+ * Sprite
+ * Author: Mattijs Bliek
+ *
+ * Use a background sprite for text-replacement or icons
+ *
+ * Usage:
+ * .icon { @include sprite(icons, 300px 200px): }
+ *
+ * It is recommended to replace the size of the sprite with a variable
+ */
+/**
+ * For image replacement
+ */
+/**
+ * For using breakpoints
+ * Usage:
+ * div { width: 60px;
+ *	@include breakpoint-min($small) { width: 80px; }
+ * }
+ *
+ * Pass true as a second parameter to toggle high dpi screens
+ */
+/**
+ * For targetting high dpi screens
+ * Usage:
+ * div {
+ *	width: 30px; height: 30px; background: url('img.jpg');
+ *	@include high-dpi() { background: url('image-2x.jpg'); @include background-size(30px 30px); }
+ * }
+ */
+/**
+ * For targeting old-IE
+ * Usage:
+ * div {
+ *  @include old-ie { zoom: 1; }
+ * }
+ */
+/**
+ * Calculate fluid ratio based on two dimensions (width/height)
+ * @see http://voormedia.com/blog/2012/11/responsive-background-images-with-fixed-or-fluid-aspect-ratios
+ * Usage:
+ * .header { @include fluid-ratio(800px 200px, 300px 150px); background-image: url('img/branding.png'); }
+ */
+/* ==========================================================================
+   variables
+   ========================================================================== */
+/*
+ * z-index
+ * for stacking stuff
+ *
+ * define the stacking order for modules here
+ * within a module you should define it via
+ * the $module-z-index variable
+ */
+.wysiwyg-body {
+  /* To make the WYSIWYG editor look like the real deal, do something like
+	@import 'base' here */ }
+
+/*
+ * Custom datatype icons
+ * Usage: .icon-article { @include cms-icon(newspaper); }
+ */
+.icon-document {
+  background-image: url(../../../media/images/garp/icons2/page.png); }
+
+.icon-img {
+  background-image: url(../../../media/images/garp/icons2/camera.png); }
+
+.icon-snippet {
+  background-image: url(../../../media/images/garp/icons2/page-edit.png); }
+
+.icon-user {
+  background-image: url(../../../media/images/garp/icons2/user.png); }
+
+.icon-video {
+  background-image: url(../../../media/images/garp/icons2/tv.png); }
+
+.icon-auth-passwordless {
+  background-image: url(../../../media/images/garp/icons2/user.png); }
+
+/* allow textarea's to be resized! */
+textarea {
+  resize: vertical !important; }
