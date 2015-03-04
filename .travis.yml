@@ -11,7 +11,8 @@ before_install:
     #- npm install node-sass
     #- npm install gulp-sass
     - npm install
-    - git clone git@github.com:grrr-amsterdam/golem ../golem
+    #- git clone git@github.com:grrr-amsterdam/golem ../golem
+    - git clone https://github.com/grrr-amsterdam/golem ../golem
 before_script:
     - chmod -R +x vendor
     - gulp --dev
