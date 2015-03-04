@@ -12,6 +12,7 @@ before_install:
     #- npm install gulp-sass
     - npm install
     #- git clone https://github.com/grrr-amsterdam/golem ../golem
+    - mysql -e "create database IF NOT EXISTS garpscaffold_t;" -uroot
 before_script:
     - chmod -R +x vendor
     - gulp --dev
