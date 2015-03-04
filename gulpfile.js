@@ -117,7 +117,7 @@ function handleError(error, emitEnd) {
 
 gulp.task('init', function() {
 	// gulp-modernizr doesn't work without the dir set to 755, so do that
-	sh.run('chmod -R 755 ./node_modules/gulp-modernizr');
+	//sh.run('chmod -R 755 ./node_modules/gulp-modernizr');
 
 	semver = getShellOutput('semver');
 	domain = getConfigValue('app.domain');
