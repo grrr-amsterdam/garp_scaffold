@@ -5,18 +5,18 @@ script:
     - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
     - php -d memory_limit=-1 vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
 before_install:
-    - gem install semver
-    - rm -rf node_modules
-    - npm install -g gulp
+    #- gem install semver
+    #- rm -rf node_modules
+    #- npm install -g gulp
     #- npm install node-sass
     #- npm install gulp-sass
-    - npm install
+    #- npm install
     #- git clone https://github.com/grrr-amsterdam/golem ../golem
     - mysql -e "create database IF NOT EXISTS garpscaffold_t;" -uroot
     - mysql -e "create user garp_development@localhost identified by 'welovegarp';" -uroot
 before_script:
     - chmod -R +x vendor
-    - gulp --dev
+    #- gulp --dev
 notifications:
     email: false
     slack:
