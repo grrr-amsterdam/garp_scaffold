@@ -13,7 +13,7 @@ before_install:
     - npm install
     #- git clone https://github.com/grrr-amsterdam/golem ../golem
     - mysql -e "create database IF NOT EXISTS garpscaffold_t;" -uroot
-    - mysql -e "create user garpscaffold_t@localhost identified by 'garpscaffold_t';" -uroot
+    - mysql -e "create user garp_development@localhost identified by 'welovegarp';" -uroot
 before_script:
     - chmod -R +x vendor
     - gulp --dev
