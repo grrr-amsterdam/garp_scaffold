@@ -1,3 +1,6 @@
+### Status
+[![Build Status](https://travis-ci.org/grrr-amsterdam/garp_scaffold.svg)](https://travis-ci.org/grrr-amsterdam/garp_scaffold)
+
 # Readme for Garp Scaffold
 =======
 
