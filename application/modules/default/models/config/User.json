@@ -6,7 +6,7 @@
 	"inputs": {
 		"first_name": {
 			"maxLength": 100,
-			"required": false
+			"required": true
 		},
 		"last_name_prefix": {
 			"maxLength": 20,
@@ -14,7 +14,7 @@
 		},
 		"last_name": {
 			"maxLength": 124,
-			"required": false
+			"required": true
 		},
 		"email": {
 			"required": true,
