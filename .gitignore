@@ -1,8 +1,8 @@
 application/data/cache/pluginLoaderCache.php
-application/data/cache/URI/
-application/data/cache/HTML/
-application/data/cache/CSS/
-application/data/cache/tags/
+application/data/cache/URI/*
+application/data/cache/HTML/*
+application/data/cache/CSS/*
+application/data/cache/tags/*
 !application/data/**/.gitdir
 application/configs/version.php
 application/data/logs/*.log
