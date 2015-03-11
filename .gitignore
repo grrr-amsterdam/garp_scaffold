@@ -25,3 +25,4 @@ build/api
 build/build
 build/logs
 build/phpdox
+vendor

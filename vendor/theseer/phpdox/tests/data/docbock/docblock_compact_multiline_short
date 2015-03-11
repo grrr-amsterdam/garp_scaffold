@@ -1,9 +1,0 @@
-/**
- * the heading
- * that spans multiple lines.
- * the body
- *
- * @param string $foo The foo parameter
- * @param int $bar Number of bars
- * @return null
- */
