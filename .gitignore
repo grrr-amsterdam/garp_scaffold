@@ -29,3 +29,4 @@ build/build
 build/logs
 build/phpdox
 vendor
+node_modules
