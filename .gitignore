@@ -11,7 +11,7 @@ application/configs/version.php
 application/data/logs/*.log
 application/data/sql/*.sql
 chromedriver.log
-public/cached/
+public/cached/**
 !public/cached/.gitdir
 public/uploads/private/
 public/uploads/shared/
