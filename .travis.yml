@@ -2,6 +2,7 @@ language: php
 php:
     - '5.3'
 script:
+    - npm test
     - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
     # @todo: Probably the memlimit param can be taken off - had to do with db error
     - php -d memory_limit=-1 vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php garp/tests/
