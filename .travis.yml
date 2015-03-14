@@ -18,6 +18,8 @@ before_install:
     - mysql -e "grant all privileges on *.* to garp_development@localhost;" -uroot
     - php garp/scripts/garp.php spawn -b --e=testing
     - composer install
+    - npm install -g casperjs
+    - phantomjs --version; casperjs --version
 before_script:
     #- chmod -R +x vendor
     #- gulp --dev
