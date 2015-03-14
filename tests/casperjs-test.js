@@ -1,6 +1,6 @@
 var casper = require('casper').create();
 
-casper.start('http://grrr.nl/', function() {
+casper.start('http://localhost:9000', function() {
 	    this.echo(this.getTitle(), 'INFO');
 });
 
