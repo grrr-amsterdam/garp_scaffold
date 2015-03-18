@@ -325,7 +325,9 @@ gulp.task('watch', function(cb) {
 	], ['sass', 'sass-ie', 'scss-lint']);
 	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
+	gulp.watch(paths.js + '/models/*.js', ['javascript-models']);
 	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
+	gulp.watch(paths.js +'/garp/*.js', ['javascript-cms']);
 	gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
 });
 
