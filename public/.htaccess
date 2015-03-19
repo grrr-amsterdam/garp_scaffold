@@ -127,6 +127,12 @@ php_value post_max_size 30M
 	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}\?%{QUERY_STRING}\.html -f
 	RewriteRule .* cached/%{REQUEST_URI}\%3F%{QUERY_STRING}\.html [L]
 
+	# Pages with query string and slash at the end /?foo=bar
+	RewriteCond %{QUERY_STRING} .+
+	RewriteCond %{REQUEST_METHOD} GET
+	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}/\?%{QUERY_STRING}\.html -f
+	RewriteRule .* cached/%{REQUEST_URI}/\%3F%{QUERY_STRING}\.html [L]
+
 	# Pages without query string
 	RewriteCond %{REQUEST_METHOD} GET
 	RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}\.html -f
