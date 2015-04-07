@@ -23,6 +23,7 @@ before_script:
     #- gulp --dev
 
     # Set MySQL timezone for Melkweg db unit tests
+    #- mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
     #- echo 'Europe/Amsterdam' | sudo tee /etc/timezone
     #- sudo dpkg-reconfigure --frontend noninteractive tzdata
     #- sudo service mysql restart
