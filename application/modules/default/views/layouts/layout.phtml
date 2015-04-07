@@ -76,7 +76,7 @@
 	<?php echo $this->partial('partials/cookie-announcement.phtml', 'default');?>
 
 	<script>
-		BASE = "<?php echo $this->baseUrl() ?>";
+		BASE = "<?php echo $this->baseUrl('/') ?>";
 		CDN_URL = "http://<?php echo $this->config()->cdn->domain ?>";
 		CDN_IMAGE_ROOT = CDN_URL + "<?php echo $this->config()->cdn->path->upload->image ?>";
 		JS_ROOT = "<?php echo $this->config()->assets->js->root ?>";
