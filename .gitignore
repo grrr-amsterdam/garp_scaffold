@@ -9,7 +9,6 @@ application/data/cache/tags/**
 !application/data/cache/tags/.gitdir
 application/configs/version.php
 application/data/logs/*.log
-application/data/sql/*.sql
 chromedriver.log
 public/cached/**
 !public/cached/.gitdir
@@ -30,3 +29,6 @@ build/logs
 build/phpdox
 vendor
 node_modules
+public/js/build/dev/*
+public/css/compiled/dev/*
+bower_components
