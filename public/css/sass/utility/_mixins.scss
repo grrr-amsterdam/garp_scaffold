@@ -56,7 +56,7 @@
  * Actually an @extend, but we don't want to depend on inclusion order
  *
  * Usage:
- * section { @include cleafix(); }
+ * section { @include clearfix(); }
  */
 @mixin clearfix() {
   zoom: 1;
@@ -72,23 +72,6 @@
 @mixin bare-list() {
 	margin: 0; padding: 0; list-style-type: none;
 }
-
-/**
- * Sprite
- * Author: Mattijs Bliek
- *
- * Use a background sprite for text-replacement or icons
- *
- * Usage:
- * .icon { @include sprite(icons, 300px 200px): }
- *
- * It is recommended to replace the size of the sprite with a variable
- */
-@mixin sprite($spritename, $size) {
-	background-image: url('../img/sprite-#{$spritename}.png'); background-repeat: no-repeat; text-indent: 100%; white-space: nowrap; overflow: hidden;
-	@include high-dpi { background-image: url('../img/sprite-#{$spritename}-2x.png'); background-size: $size; }
-}
-
 
 /**
  * For image replacement
@@ -117,7 +100,6 @@
 		@if $highDpi == true {
 			@media
             only screen and (min-width: pxToEm($point)) and (-webkit-min-device-pixel-ratio: 2),
-            only screen and (min-width: pxToEm($point)) and (   min--moz-device-pixel-ratio: 2),
             only screen and (min-width: pxToEm($point)) and (     -o-min-device-pixel-ratio: 2/1),
             only screen and (min-width: pxToEm($point)) and (        min-device-pixel-ratio: 2),
             only screen and (min-width: pxToEm($point)) and (                min-resolution: 192dpi),
@@ -132,7 +114,6 @@
 	@if($highDpi == true) {
 		@media
         only screen and (max-width: (pxToEm($point) - 0.0625em)) and (-webkit-min-device-pixel-ratio: 2),
-        only screen and (max-width: (pxToEm($point) - 0.0625em)) and (   min--moz-device-pixel-ratio: 2),
         only screen and (max-width: (pxToEm($point) - 0.0625em)) and (     -o-min-device-pixel-ratio: 2/1),
         only screen and (max-width: (pxToEm($point) - 0.0625em)) and (        min-device-pixel-ratio: 2),
         only screen and (max-width: (pxToEm($point) - 0.0625em)) and (                min-resolution: 192dpi),
@@ -147,7 +128,6 @@
 	@if($highDpi == true) {
 		@media
         only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (-webkit-min-device-pixel-ratio: 2),
-        only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (   min--moz-device-pixel-ratio: 2),
         only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (     -o-min-device-pixel-ratio: 2/1),
         only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (        min-device-pixel-ratio: 2),
         only screen and (min-width: pxToEm($minPoint)) and (max-width: (pxToEm($maxPoint) - 0.0625em)) and (                min-resolution: 192dpi),
@@ -168,7 +148,6 @@
 @mixin high-dpi() {
 	@media
     only screen and (-webkit-min-device-pixel-ratio: 2),
-    only screen and (   min--moz-device-pixel-ratio: 2),
     only screen and (     -o-min-device-pixel-ratio: 2/1),
     only screen and (        min-device-pixel-ratio: 2),
     only screen and (                min-resolution: 192dpi),

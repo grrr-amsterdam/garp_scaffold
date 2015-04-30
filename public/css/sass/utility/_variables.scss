@@ -5,40 +5,43 @@
 // COLORS (base)
 // The following is inspired by this article: http://sachagreif.com/sass-color-variables/
 
-$black: #000;
+$black: #222;
 $white: #ffffff;
 
-$red: #000;
-$blue: #000;
-$green: #000;
-$yellow: #000;
-$purple: #000;
+$red: #f00;
+$blue: #00f;
 
 $primaryColor: $red;
 $secondaryColor: $blue;
-$tertiaryColor: $green;
-$quarternaryColor: $yellow;
-$quinaryColor: $purple;
 
 $themes: (
 	$primaryColor,
 	$secondaryColor,
-	$tertiaryColor,
-	$quarternaryColor,
-	$quinaryColor,
 );
 
 $themesMap: (
 	primary: $primaryColor,
 	secondary: $secondaryColor,
-	tertiary: $tertiaryColor,
-	quarternary: $quarternaryColor,
-	quinary: $quinaryColor,
 );
 
 // FONTS
-$defaultFontSize: 16px;
-$defaultFontSizeMedium: 18px;
+$fontSizesSmall: (
+	h1: 38px,
+	h2: 32px,
+	h3: 20px,
+	body: 19px
+);
+
+$fontSizesMedium: (
+	h1: 57px,
+	h2: 42px,
+	h3: 32px,
+	body: 19px
+);
+
+$fontSizesLarge: (
+);
+
 $defaultLineHeight: 1.5;
 
 $bodyFont: sans-serif;
@@ -65,6 +68,4 @@ $small: 640;
 $medium: 1024;
 $large: 1400;
 
-
-$fix-mqs: false !default;
 $old-ie: false !default;

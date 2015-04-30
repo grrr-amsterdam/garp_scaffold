@@ -42,50 +42,60 @@ html {
 }
 *, *:before, *:after { box-sizing: inherit; }
 
-body, button, input, select, textarea {
-	font-family: $bodyFont; font-weight: normal; font-size: $defaultFontSize; color: #000;
-	@include bp-min($medium) {
-		font-size: $defaultFontSizeMedium;
-	}
-}
-body { background: #fff; margin: 0; }
-
-input {
-	@include bp-max($small) { font-size: 16px; }
-	/* Min font size of 16px disables focus zoom on iOS */
+body {
+	background: #fff; margin: 0;
+	font-family: $bodyFont; font-weight: normal; font-size: map-get($fontSizesSmall, body); color: $black;
 }
 
-a, a:hover, a:active {
-	outline: 0; vertical-align: baseline; text-decoration: none; transition: color .1s;
+
+/*
+ * Forms
+ */
+button, input, select, textarea {
+	font-family: $bodyFont; font-weight: normal; font-size: map-get($fontSizesSmall, body); color: $black;
+}
+
+
+/*
+ * Links
+ */
+a {
+
+}
+
+a:hover, a:focus {
+	outline: 0; vertical-align: baseline; transition: color .1s;
 	-webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove the blue tap-highlight on mobile */
-	@include hover {
-		text-decoration: underline;
-	}
 }
-.block-link { display: block; overflow: hidden; }
 
+
+/*
+ * Typography
+ */
 p { margin-top: 0; margin-bottom: $defaultLineHeight+em; &:last-child { margin-bottom: 0; }}
 
-h1, h2, h3, h4, h5, h6,
-.alpha, .beta, .gamma, .delta, .epsilon, .zeta {
-	margin: 0;
+h1 {
+	font-size: map-get($fontSizesSmall, h1);
 }
-h1, .alpha	 { }
-h2, .beta 	 { }
-h3, .gamma 	 { }
-h4, .delta   { }
-h5, .epsilon { }
-h6, .zeta    { }
 
+h2 {
+	font-size: map-get($fontSizesSmall, h2);
+}
+
+h3 {
+	font-size: map-get($fontSizesSmall, h3);
+}
+
+h4 { }
+h5 { }
+h6 { }
+
+
+/*
+ * Media
+ */
 img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 
-.rich {
-	.figure[style*="float:left"], .figure[style*="float:left"] { margin: 0 10px 10px 0; }
-	.figure[style*="float:right"], .figure[style*="float:right"] { margin: 0 0 10px 10px; }
-	.figure dd { font-size: 14px; }
-}
-
-.error { color: #f00; }
 
 /* ==========================================================================
 	LAYOUT
@@ -97,7 +107,6 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 	MODULES
 	========================================================================== */
 
-@import 'modules/csswizardry-grids';
 @import 'modules/cookie-info';
 @import 'modules/flash-message';
 
@@ -123,15 +132,12 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 }
 
 .is-hidden { display: none !important; visibility: hidden !important; }
-.offscreen { position: absolute !important; left: -999em !important; }
-.invisible { visibility: hidden !important; }
+.is-offscreen { position: absolute !important; left: -999em !important; }
+.is-invisible { visibility: hidden !important; }
 .clearfix {
 	zoom: 1;
 	&:after { height: 0; visibility: hidden; display: block; clear: both; content: ''; }
 }
-
-/* Make sure Like buttons do not suffer from cut-off comment-box syndrome */
-.fb_iframe_widget span { width: 450px !important; }
 
 /* Hide form field that should be left empty */
 form .hp { display: none;}
@@ -142,7 +148,6 @@ form .hp { display: none;}
 	========================================================================== */
 
 .disable-hover { pointer-events: none; }
-
 
 /* ==========================================================================
 	PRINT
