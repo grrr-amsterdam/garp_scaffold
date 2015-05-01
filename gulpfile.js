@@ -51,23 +51,6 @@ var gulp            = require('gulp'),
 	sh              = require('execSync'),
 	eventStream     = require('event-stream'),
 	runSequence     = require('run-sequence');
-	/*
-	 *
-	gutil           = require('gulp-util'),
-	$.concat          = require('gulp-$.concat'),
-	$.jshint          = require('gulp-$.jshint'),
-	$.imagemin        = require('gulp-$.imagemin'),
-	$.minifycss       = require('gulp-minify-css'),
-	$.urlAdjuster    = require('gulp-css-url-adjuster'),
-	$.modernizr      = require('gulp-$.modernizr'),
-	$.sass           = require('gulp-$.sass'),
-	$.postcss        = require('gulp-$.postcss'),
-	uglify         = require('gulp-uglify'),
-	sourcemaps     = require('gulp-sourcemaps'),
-	scsslint       = require('gulp-scss-lint'),
-	order          = require('gulp-order'),
-	if         = require('gulp-if'),
-	*/
 
 var semver;
 var paths = {};
