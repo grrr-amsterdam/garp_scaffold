@@ -52,24 +52,13 @@
  * Actually an @extend, but we don't want to depend on inclusion order
  *
  * Usage:
- * section { @include cleafix(); }
+ * section { @include clearfix(); }
  */
 /*
  * Bare list
  * Author: Mattijs Bliek
  *
  * Get rid of list-style and padding
- */
-/**
- * Sprite
- * Author: Mattijs Bliek
- *
- * Use a background sprite for text-replacement or icons
- *
- * Usage:
- * .icon { @include sprite(icons, 300px 200px): }
- *
- * It is recommended to replace the size of the sprite with a variable
  */
 /**
  * For image replacement
@@ -133,6 +122,6 @@ body ul, body ol, body p {
   font-family: sans-serif;
   line-height: 1.5; }
 body a {
-  color: #000; }
+  color: #f00; }
 body h1, body h2, body h3 {
   font-family: sans-serif; }

@@ -18,8 +18,6 @@
  *
  * TODO:
  * - CSS sourcemaps are not rendering properly
- * - Either concat libs.js and main.js for production, or employ a module
- *   loader to generate various builds
  *
  * -------------------------------------------------------------
  *
@@ -41,42 +39,60 @@
  * -------------------------------------------------------------
  */
 
-var gulp           = require('gulp'),
-	autoprefixer   = require('gulp-autoprefixer'),
-	gutil          = require('gulp-util'),
-	concat         = require('gulp-concat'),
-	jshint         = require('gulp-jshint'),
-	jshintStylish  = require('jshint-stylish'),
-	imagemin       = require('gulp-imagemin'),
-	minifycss      = require('gulp-minify-css'),
-	urlAdjuster    = require('gulp-css-url-adjuster'),
-	pxtorem        = require('gulp-pxtorem'),
-	modernizr      = require('gulp-modernizr'),
-	sass           = require('gulp-sass'),
-	browserSync    = require('browser-sync'),
-	mainBowerFiles = require('main-bower-files'),
+var gulp            = require('gulp'),
+	gulpLoadPlugins = require('gulp-load-plugins'),
+	$               = gulpLoadPlugins(),
+	jshintStylish   = require('jshint-stylish'),
+	pxtorem         = require('postcss-pxtorem'),
+	autoprefixer    = require('autoprefixer-core'),
+	browserSync     = require('browser-sync'),
+	mainBowerFiles  = require('main-bower-files'),
+	argv            = require('yargs').argv,
+	sh              = require('execSync'),
+	eventStream     = require('event-stream'),
+	runSequence     = require('run-sequence');
+	/*
+	 *
+	gutil           = require('gulp-util'),
+	$.concat          = require('gulp-$.concat'),
+	$.jshint          = require('gulp-$.jshint'),
+	$.imagemin        = require('gulp-$.imagemin'),
+	$.minifycss       = require('gulp-minify-css'),
+	$.urlAdjuster    = require('gulp-css-url-adjuster'),
+	$.modernizr      = require('gulp-$.modernizr'),
+	$.sass           = require('gulp-$.sass'),
+	$.postcss        = require('gulp-$.postcss'),
 	uglify         = require('gulp-uglify'),
-	stripDebug     = require('gulp-strip-debug'),
 	sourcemaps     = require('gulp-sourcemaps'),
 	scsslint       = require('gulp-scss-lint'),
-	gulpif         = require('gulp-if'),
-	argv           = require('yargs').argv,
-	sh             = require('execSync'),
-	runSequence    = require('run-sequence');
+	order          = require('gulp-order'),
+	if         = require('gulp-if'),
+	*/
 
 var semver;
 var paths = {};
 var ENV = argv.e ? argv.e : 'development';
 
+function handleError(error, emitEnd) {
+	if (typeof(emitEnd) === 'undefined') {
+		emitEnd = true;
+	}
+	$.util.beep();
+	$.util.log($.util.colors.white.bgRed('Error!'), $.util.colors.red(error.toString()));
+	if (emitEnd) {
+		this.emit('end');
+	}
+}
+
 function getShellOutput(command) {
 	result = sh.exec(command);
 	if (result.stderr) {
 		handleError('Error getting shell output: ' + result.stderr);
-		gutil.beep();
+		$.util.beep();
 	}
 	// Do a replace because of newline in shell output
 	return result.stdout.replace(/\s?$/, '');
-};
+}
 
 function getConfigValue(value) {
 	if (!value) {
@@ -104,19 +120,10 @@ function constructPaths() {
 	paths.cdnCss      = getConfigValue('assets.css.root');
 
 	return paths;
-};
-
-function handleError(error, emitEnd) {
-	if (typeof(emitEnd) === 'undefined') emitEnd = true;
-	gutil.beep();
-	gutil.log(gutil.colors.white.bgRed('Error!'), gutil.colors.red(error.toString()));
-	if (emitEnd) {
-		this.emit('end');
-	}
 }
 
 gulp.task('init', function() {
-	// gulp-modernizr doesn't work without the dir set to 755, so do that
+	// modernizr doesn't work without the dir set to 755, so do that
 	sh.run('chmod -R 755 ./node_modules/gulp-modernizr');
 
 	semver = getShellOutput('semver');
@@ -124,11 +131,11 @@ gulp.task('init', function() {
 	cdnType  = getConfigValue('cdn.type');
 	paths  = constructPaths();
 
-	gutil.log(gutil.colors.green('-----------------'));
-	gutil.log(gutil.colors.green('Semver: ' + semver));
-	gutil.log(gutil.colors.green('Environment: ' + ENV));
-	gutil.log(gutil.colors.green('CDN type: ' + cdnType));
-	gutil.log(gutil.colors.green('-----------------'));
+	$.util.log($.util.colors.green('-----------------'));
+	$.util.log($.util.colors.green('Semver: ' + semver));
+	$.util.log($.util.colors.green('Environment: ' + ENV));
+	$.util.log($.util.colors.green('CDN type: ' + cdnType));
+	$.util.log($.util.colors.green('-----------------'));
 });
 
 gulp.task('browser-sync', function() {
@@ -158,38 +165,41 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-// gulp.task('sass', ['scss-lint'], function() {
 gulp.task('sass', function() {
-	var pxtoremOptions = {
-		root_value: 10,
-		unit_precision: 5,
-		prop_white_list: [
-			'font',
-			'font-size',
-		],
-		replace: false,
-		media_query: false
-	},
-	postcssOptions = {
+	var postcssOptions = {
 		map: true
 	};
+	var processors = [
+        autoprefixer({
+            browsers: ['>5%', 'last 3 versions', 'safari 5', 'ie 9', 'opera 12.1']
+        }),
+        pxtorem({
+			root_value: 10,
+			unit_precision: 5,
+			prop_white_list: [
+				'font',
+				'font-size',
+			],
+			replace: false,
+			media_query: false
+        })
+    ];
 
-	gutil.log(gutil.colors.green('Building css to ' + paths.cssBuild));
+	$.util.log($.util.colors.green('Building css to ' + paths.cssBuild));
 	return gulp.src([paths.cssSrc + '/base.scss'])
-		.pipe(sass({
+		.pipe($.sass({
 			onError: function(err) {
 				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
 				return browserSync.notify('Error: ' + err.message + ' => ' + err.file + ':' + err.line);
 			}
 		}))
-		.pipe(pxtorem(pxtoremOptions, postcssOptions))
-		.pipe(autoprefixer('>5%', 'last 3 versions', 'safari 5', 'ie 9', 'opera 12.1'))
-		.pipe(gulpif(ENV != 'development' && cdnType != 'local', urlAdjuster({
-			// hacky slashes are necessary because one slash is stripped by urlAdjuster
+		.pipe($.postcss(processors))
+		.pipe($.if(ENV !== 'development' && cdnType !== 'local', $.cssUrlAdjuster({
+			// hacky slashes are necessary because one slash is stripped by $.cssUrlAdjuster
 			prepend: 'http:///' + paths.cdn + paths.cdnCss + '/',
 			append: '?v=' + semver
 		})))
-		.pipe(gulpif(ENV != 'development', minifycss()))
+		.pipe($.if(ENV !== 'development', $.minifyCss()))
 		.pipe(gulp.dest(paths.cssBuild))
 		.pipe(browserSync.reload({stream:true}))
 	;
@@ -197,24 +207,24 @@ gulp.task('sass', function() {
 
 gulp.task('sass-cms', function() {
 	return gulp.src([paths.cssSrc + '/cms.scss', paths.cssSrc + '/cms-wysiwyg.scss'])
-		.pipe(sass({
+		.pipe($.sass({
 			onError: function(err) {
 				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
 			}
 		}))
-		.pipe(gulpif(ENV != 'development', minifycss()))
+		.pipe($.if(ENV !== 'development', $.minifyCss()))
 		.pipe(gulp.dest(paths.cssBuild))
 	;
 });
 
 gulp.task('sass-ie', function() {
 	return gulp.src(paths.cssSrc + '/ie-old.scss')
-		.pipe(sass({
+		.pipe($.sass({
 			onError: function(err) {
 				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
 			}
 		}))
-		.pipe(gulpif(ENV != 'development', minifycss()))
+		.pipe($.if(ENV !== 'development', $.minifyCss()))
 		.pipe(gulp.dest(paths.cssBuild))
 	;
 });
@@ -222,36 +232,50 @@ gulp.task('sass-ie', function() {
 gulp.task('scss-lint', function() {
 	var scssLintOutput = function(file, stream) {
 		if (!file.scsslint.success) {
-			gutil.log(gutil.colors.gray('-----------------'));
-			gutil.log(gutil.colors.green(file.scsslint.issues.length) + ' scss-lint issue(s) found:');
+			$.util.log($.util.colors.gray('-----------------'));
+			$.util.log($.util.colors.green(file.scsslint.issues.length) + ' scss-lint issue(s) found:');
 			file.scsslint.issues.forEach(function(issue) {
-				gutil.colors.underline(file.path);
-				gutil.log(gutil.colors.green(issue.reason) + ' => ' + gutil.colors.underline(file.path) + ':' + issue.line);
+				$.util.colors.underline(file.path);
+				$.util.log($.util.colors.green(issue.reason) + ' => ' + $.util.colors.underline(file.path) + ':' + issue.line);
 			});
-			gutil.log(gutil.colors.gray('-----------------'));
+			$.util.log($.util.colors.gray('-----------------'));
 		}
 	};
 	return gulp.src(paths.cssSrc + '/**/*.scss')
-		.pipe(scsslint({
+		.pipe($.scssLint({
 			'config': __dirname + '/.scss-lint.yml',
 			'customReport': scssLintOutput
 		})).on('error', handleError)
 	;
 });
 
-gulp.task('javascript', ['jshint', 'bower-concat'], function() {
-	gutil.log(gutil.colors.green('Building js to ' + paths.jsBuild));
-	return gulp.src([
-		paths.jsSrc + '/../garp/front/styling.js',
-		paths.jsSrc + '/../garp/front/flashmessage.js',
-		paths.jsSrc + '/../garp/front/cookies.js',
-		paths.jsSrc + '/**/*.js',
-	])
-		.pipe(gulpif(ENV == 'development', sourcemaps.init()))
-		.pipe(concat('main.js'))
-		.pipe(gulpif(ENV != 'development', stripDebug()))
-		.pipe(gulpif(ENV != 'development', uglify())).on('error', handleError)
-		.pipe(gulpif(ENV == 'development', sourcemaps.write()))
+
+gulp.task('javascript', ['jshint'], function() {
+	$.util.log($.util.colors.green('Building js to ' + paths.jsBuild));
+
+	var vendorFiles = gulp.src(mainBowerFiles({ filter: '**/*.js' }))
+		.pipe($.concat('vendor.js'));
+
+	var appFiles = gulp.src([
+			paths.jsSrc + '/../garp/front/styling.js',
+			paths.jsSrc + '/../garp/front/cookies.js',
+			paths.jsSrc + '/../garp/front/flashmessage.js',
+			paths.jsSrc + '/**/!(main|loadJS|modernizr).js',
+			paths.jsSrc + '/main.js',
+			paths.jsSrc + '/modules/init.js'
+		])
+		.pipe($.concat('app.js'));
+
+    return eventStream.concat(vendorFiles, appFiles)
+        .pipe($.order([
+            "vendor.js",
+            "app.js"
+        ]))
+        .pipe($.concat('main.js'))
+		.pipe($.if(ENV === 'development', $.sourcemaps.init()))
+		.pipe($.if(ENV !== 'development', $.uglify())).on('error', handleError)
+		.pipe($.babel())
+		.pipe($.if(ENV === 'development', $.sourcemaps.write()))
 		.pipe(gulp.dest(paths.jsBuild))
 		.pipe(browserSync.reload({stream:true}))
 	;
@@ -259,8 +283,8 @@ gulp.task('javascript', ['jshint', 'bower-concat'], function() {
 
 gulp.task('javascript-cms', function() {
 	return gulp.src(require('./garp/public/js/cmsBuildStack.js').stack)
-		.pipe(concat('cms.js'))
-		.pipe(gulpif(ENV != 'development', uglify())).on('error', handleError)
+		.pipe($.concat('cms.js'))
+		.pipe($.if(ENV !== 'development', $.uglify())).on('error', handleError)
 		.pipe(gulp.dest(paths.jsBuild))
 	;
 });
@@ -270,34 +294,22 @@ gulp.task('javascript-models', function() {
 		paths.jsSrc + '/../garp/models/*.js',
 		paths.jsSrc + '/../models/*.js',
 	])
-		.pipe(concat('extended-models.js'))
-		.pipe(uglify()).on('error', handleError)
-		.pipe(gulp.dest(paths.jsBuild))
-	;
-});
-
-gulp.task('bower-concat', function() {
-	if (mainBowerFiles().length == 0) {
-		gutil.log('No bower dependencies');
-		return;
-	}
-	return gulp.src(mainBowerFiles())
-		.pipe(concat('libs.js'))
-		.pipe(uglify())
+		.pipe($.concat('extended-models.js'))
+		.pipe($.uglify()).on('error', handleError)
 		.pipe(gulp.dest(paths.jsBuild))
 	;
 });
 
 gulp.task('jshint', function() {
 	return gulp.src(paths.jsSrc + '/**/*.js')
-		.pipe(jshint('.jshintrc'))
-		.pipe(jshint.reporter('jshint-stylish'));
+		.pipe($.jshint('.jshintrc'))
+		.pipe($.jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('modernizr', function() {
 	return gulp.src([paths.cssBuild + '/base.css', paths.jsBuild + '/main.js'])
-		.pipe(modernizr('modernizr.js')).on('error', handleError)
-		.pipe(uglify())
+		.pipe($.modernizr('modernizr.js')).on('error', handleError)
+		.pipe($.uglify())
 		.pipe(gulp.dest(paths.jsBuild))
 	;
 });
@@ -306,9 +318,9 @@ gulp.task('images', ['init'], function() {
 	if (argv.skipImages) {
 		return;
 	}
-	gutil.log(gutil.colors.green('Building images to ' + paths.imgBuild));
+	$.util.log($.util.colors.green('Building images to ' + paths.imgBuild));
 	return gulp.src(paths.imgSrc + '/*.{png,gif,jpg,svg}')
-		.pipe(imagemin({
+		.pipe($.imagemin({
 			progressive: true,
 			svgoPlugins: [{removeViewBox: false}]
 		}))
