@@ -244,8 +244,7 @@ gulp.task('javascript', ['jshint'], function() {
 			paths.jsSrc + '/../garp/front/cookies.js',
 			paths.jsSrc + '/../garp/front/flashmessage.js',
 			paths.jsSrc + '/**/!(main|loadJS|modernizr).js',
-			paths.jsSrc + '/main.js',
-			paths.jsSrc + '/modules/init.js'
+			paths.jsSrc + '/main.js'
 		])
 		.pipe($.concat('app.js'));
 
