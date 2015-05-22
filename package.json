@@ -6,7 +6,7 @@
     "autoprefixer-core": "^5.1.11",
     "browser-sync": "^2.2.1",
     "event-stream": "^3.3.0",
-    "execSync": "^1.0.2",
+    "sync-exec": "^0.5.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",
     "gulp-cached": "^1.0.2",
