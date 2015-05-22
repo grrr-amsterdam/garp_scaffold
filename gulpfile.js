@@ -49,8 +49,7 @@ var gulp            = require('gulp'),
 	mainBowerFiles  = require('main-bower-files'),
 	argv            = require('yargs').argv,
 	sh              = require('sync-exec'),
-	eventStream     = require('event-stream'),
-	runSequence     = require('run-sequence');
+	eventStream     = require('event-stream');
 
 var semver;
 var paths = {};
@@ -311,8 +310,8 @@ gulp.task('images', ['init'], function() {
 	;
 });
 
-gulp.task('watch', function(cb) {
-	runSequence('default', 'browser-sync', cb);	gulp.watch([
+gulp.task('watch', ['default', 'browser-sync'], function(cb) {
+	gulp.watch([
 		paths.cssSrc + '/**/*.scss',
 		'!**/cms-wysiwyg.scss',
 		'!**/cms.scss'
@@ -337,6 +336,4 @@ gulp.task('build', [
 	'images'
 ]);
 
-gulp.task('default', function(cb) {
-	runSequence('build', 'modernizr', cb);
-});
+gulp.task('default', ['build', 'init']);
