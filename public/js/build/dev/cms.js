@@ -5645,6 +5645,9 @@ Ext.extend(Ext.form.CKEditor, Ext.form.TextArea, {
 
 	isValid: function(value) {
         var charCount = this.getCharCount();
+		if (!this.editor) {
+			return true;
+		}
 
         if (!this.allowBlank && !charCount) {
             if (this.wasBlank) {
@@ -9966,6 +9969,7 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 					collapsed: false,
 					customEditors: this.metaDataEditors,
 					customRenderers: this.metaDataRenderers,
+					customConverters: {},
 					forceValidation: true,
 					hidden: true,
 					collapsible: false,
@@ -9977,8 +9981,6 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 				Ext.apply(metaDataPanelConfig, this.metaDataConfig);
 				this.metaDataPanel = new Ext.grid.PropertyGrid(metaDataPanelConfig);
 				this.metaDataPanel.store.on('load', validateMetaPanel, this);
-
-
 
 				this.items = [{
 					xtype: 'container',
@@ -10125,7 +10127,7 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 					fn: this.updateOpenNewWindow
 				}
 			});
-
+//TEMP = this;
 			this.relateePanel.getSelectionModel().on({
 				'selectionchange': {
 					scope: this,
@@ -10148,7 +10150,7 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 						} else if (sm && sm.getCount() == 1 && this.relateeStore && this.relateeStore.fields.containsKey('relationMetadata')) {
 							this.metaDataPanel.show();
 							this.metaDataPanel.ownerCt.doLayout();
-							this.metaDataPanel.startEditing(0, 1);
+							//this.metaDataPanel.startEditing(0, 1);
 						}
 					}
 				},
@@ -10163,11 +10165,15 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 							if (rec.data.relationMetadata && rec.data.relationMetadata[Garp.currentModel]) {
 								this.metaDataPanel._recordRef = rec.id;
 								var r = rec.data.relationMetadata[Garp.currentModel];
+								var converters = this.metaDataConfig.customConverters;
 								// null values don't get shown in propertygrid. Make it empty strings
 								// @TODO: check to see if this is Ok.
 								for (var i in r) {
 									if(r[i] === null){
 										r[i] = '';
+									}
+									if (converters && converters.hasOwnProperty(i)) {
+										r[i] = converters[i](r[i], r);
 									}
 								}
 								this.metaDataPanel.setSource(r);
