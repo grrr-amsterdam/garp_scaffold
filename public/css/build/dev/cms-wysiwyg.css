@@ -118,10 +118,16 @@
 }
 
 */
-body ul, body ol, body p {
+body ul,
+body ol,
+body p {
   font-family: sans-serif;
   line-height: 1.5; }
+
 body a {
   color: #f00; }
-body h1, body h2, body h3 {
+
+body h1,
+body h2,
+body h3 {
   font-family: sans-serif; }
