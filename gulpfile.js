@@ -48,7 +48,7 @@ var gulp            = require('gulp'),
 	browserSync     = require('browser-sync'),
 	mainBowerFiles  = require('main-bower-files'),
 	argv            = require('yargs').argv,
-	sh              = require('execSync'),
+	sh              = require('sync-exec'),
 	eventStream     = require('event-stream'),
 	runSequence     = require('run-sequence');
 
@@ -68,7 +68,7 @@ function handleError(error, emitEnd) {
 }
 
 function getShellOutput(command) {
-	result = sh.exec(command);
+	result = sh(command);
 	if (result.stderr) {
 		handleError('Error getting shell output: ' + result.stderr);
 		$.util.beep();
