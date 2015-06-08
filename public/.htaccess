@@ -8,16 +8,6 @@ SetEnvIf Host ^localhost\.(.*) APPLICATION_ENV=development
 php_value upload_max_filesize 30M
 php_value post_max_size 30M
 
-# Force the latest IE version, in various cases when it may fall back to IE7 mode
-#  github.com/rails/rails/commit/123eb25#commitcomment-118920
-# Use ChromeFrame if it's installed for a better experience for the poor IE folk
-<IfModule mod_setenvif.c>
-	<IfModule mod_headers.c>
-		BrowserMatch MSIE ie
-		Header set X-UA-Compatible "IE=Edge,chrome=1" env=ie
-	</IfModule>
-</IfModule>
-
 # Proper MIME types
 <IfModule mod_mime.c>
 	# Audio
