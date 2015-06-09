@@ -43,9 +43,12 @@ var gulp            = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
 	$               = gulpLoadPlugins(),
 	jshintStylish   = require('jshint-stylish'),
+	del             = require('del'),
 	pxtorem         = require('postcss-pxtorem'),
 	autoprefixer    = require('autoprefixer-core'),
+	url             = require('rework-plugin-url'),
 	browserSync     = require('browser-sync'),
+	path            = require('path'),
 	mainBowerFiles  = require('main-bower-files'),
 	argv            = require('yargs').argv,
 	sh              = require('sync-exec'),
@@ -147,7 +150,7 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-gulp.task('sass', function() {
+gulp.task('sass', ['clean:css'], function() {
 	var postcssOptions = {
 		map: true
 	};
@@ -168,21 +171,25 @@ gulp.task('sass', function() {
     ];
 
 	$.util.log($.util.colors.green('Building css to ' + paths.cssBuild));
-	return gulp.src([paths.cssSrc + '/base.scss'])
+
+
+	return gulp.src(paths.cssSrc + '/base.scss')
 		.pipe($.sass({
 			onError: function(err) {
 				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
 				return browserSync.notify('Error: ' + err.message + ' => ' + err.file + ':' + err.line);
 			}
 		}))
-		.pipe($.postcss(processors))
-		.pipe($.if(ENV !== 'development' && cdnType !== 'local', $.cssUrlAdjuster({
-			// hacky slashes are necessary because one slash is stripped by $.cssUrlAdjuster
-			prepend: 'http:///' + paths.cdn + paths.cdnCss + '/',
-			append: '?v=' + semver
-		})))
+		//.pipe($.postcss(processors))
+		.pipe($.if(ENV !== 'development' && cdnType !== 'local', $.rework(url(function(url){
+			return paths.cdn + paths.cdnCss + '/' + url;
+		}))))
 		.pipe($.if(ENV !== 'development', $.minifyCss()))
+		.pipe($.if(ENV !== 'development', $.buffer()))
+		.pipe($.if(ENV !== 'development', $.rev()))
 		.pipe(gulp.dest(paths.cssBuild))
+		.pipe($.if(ENV !== 'development', $.rev.manifest()).on('error', handleError))
+		.pipe($.if(ENV !== 'development', gulp.dest(paths.cssBuild)))
 		.pipe(browserSync.reload({stream:true}))
 	;
 });
@@ -257,7 +264,12 @@ gulp.task('javascript', ['jshint'], function() {
 		.pipe($.if(ENV !== 'development', $.uglify())).on('error', handleError)
 		.pipe($.babel())
 		.pipe($.if(ENV === 'development', $.sourcemaps.write()))
+		.pipe($.if(ENV !== 'development', $.rev()))
 		.pipe(gulp.dest(paths.jsBuild))
+		.pipe($.if(ENV !== 'development', $.rev.manifest({
+			merge: true
+		})).on('error', handleError))
+		.pipe($.if(ENV !== 'development', gulp.dest(__dirname)))
 		.pipe(browserSync.reload({stream:true}))
 	;
 });
@@ -285,6 +297,14 @@ gulp.task('jshint', function() {
 	return gulp.src(paths.jsSrc + '/**/*.js')
 		.pipe($.jshint('.jshintrc'))
 		.pipe($.jshint.reporter('jshint-stylish'));
+});
+
+gulp.task('clean:css', function (cb) {
+  del([paths.cssBuild + '/base-*.css'], cb);
+});
+
+gulp.task('clean:js', function (cb) {
+  del([paths.jsBuild + '/main-*.js'], cb);
 });
 
 gulp.task('modernizr', function() {
