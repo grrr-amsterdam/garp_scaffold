@@ -287,7 +287,7 @@ gulp.task('jshint', function() {
 		.pipe($.jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('modernizr', function() {
+gulp.task('modernizr', ['init'], function() {
 	return gulp.src([paths.cssBuild + '/base.css', paths.jsBuild + '/main.js'])
 		.pipe($.modernizr('modernizr.js')).on('error', handleError)
 		.pipe($.uglify())
