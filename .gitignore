@@ -27,7 +27,6 @@ build/api
 build/build
 build/logs
 build/phpdox
-vendor
 node_modules
 public/js/build/dev/*
 public/css/compiled/dev/*
