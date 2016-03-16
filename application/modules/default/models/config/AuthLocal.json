@@ -1,6 +1,6 @@
 {
 	"visible": false,
-	
+
 	"inputs": {
 		"password": {
 			"maxLength": 32
@@ -14,12 +14,14 @@
 			"required": false
 		}
 	},
-	
+
 	"listFields": ["id", "ip_address"],
-	
+
 	"relations": {
 		"User": {
 			"type": "belongsTo"
 		}
-	}
+	},
+
+	"module": "garp"
 }
