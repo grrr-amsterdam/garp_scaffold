@@ -2,7 +2,7 @@ language: php
 php:
     - '5.3'
 script:
-    - vendor/bin/phpunit --bootstrap garp/tests/TestHelper.php tests/
+    - vendor/bin/phpunit --bootstrap tests/TestHelper.php tests/
 before_install:
     #- gem install semver
     #- rm -rf node_modules
@@ -14,7 +14,7 @@ before_install:
     - mysql -e "create database IF NOT EXISTS garpscaffold_t;" -uroot
     - mysql -e "create user garp_development@localhost identified by 'welovegarp';" -uroot
     - mysql -e "grant all privileges on *.* to garp_development@localhost;" -uroot
-    - php garp/scripts/garp.php spawn -b --e=testing
+    - php vendor/grrr-amsterdam/garp3/scripts/garp.php spawn -b --e=testing
     - composer install
 before_script:
     #- chmod -R +x vendor
