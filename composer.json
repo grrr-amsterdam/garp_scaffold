@@ -9,5 +9,14 @@
 	},
 
     "require": {
+		"grrr-amsterdam/garp3": "^3.7.0"
+	},
+
+	"autoload": {
+        "psr-0": {
+            "App_": "library/",
+            "Golem_": "library/",
+            "Model_": "application/modules/default/"
+        }
     }
 }

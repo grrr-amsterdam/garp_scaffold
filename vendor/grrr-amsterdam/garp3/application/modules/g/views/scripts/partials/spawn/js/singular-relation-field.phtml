@@ -1,0 +1,99 @@
+<?php
+if (!$this->relationName):
+	throw new Exception('This partial requires a String as $relationName parameter.');
+endif;
+if (!$this->relation instanceof Garp_Spawn_Relation):
+	throw new Exception('This partial requires a Garp_Spawn_Relation instance as $relation parameter.');
+endif;
+if (!$this->modelSet instanceof Garp_Spawn_Model_Set):
+	throw new Exception('This partial requires a Garp_Spawn_Model_Set instance as $modelSet parameter.');
+endif;
+if ($this->relation->model === 'Image'):
+	throw new Exception('This partial is intended for related models which are not images; please use image-field.phtml for that.');
+endif;
+
+$lcRelationLabel = strtolower($this->relation->label);
+$relationJoinedFieldName = $this->relationName;
+
+$relationFieldName = $this->relation->column;
+if ($this->relation->multilingual):
+	$relationFieldName = '_' . $relationFieldName . '_' . $this->locale;
+	$relationJoinedFieldName = $relationJoinedFieldName . '_' . $this->locale;
+endif;
+
+if (isset($this->relation->simpleSelect) && $this->relation->simpleSelect):
+	// simple drop down select
+	$model = $this->modelSet[$this->relation->model];
+	$possibleDisplayFields = array_filter($model->fields->listFieldNames, function($c) use ($model) {
+		return $model->fields->getField($c)->isTextual();
+	});
+	$displayField = 'name';
+	if (count($possibleDisplayFields)):
+		$displayField = current($possibleDisplayFields);
+	endif;
+?>
+				name: '<?php echo $relationFieldName ?>',
+				displayField: '<?php echo $this->escape($displayField) ?>',
+				xtype: 'relationfield',
+				hidden: <?php echo ($this->relation->visible ? 'false' : 'true') ?>,
+				triggerFn: false,
+				fieldLabel: __('<?php
+					if ($this->relation->label === $this->relation->model):
+						foreach ($this->modelSet as $model):
+							if ($model->id === $this->relation->model):
+								echo $model->label;
+								break;
+							endif;
+						endforeach;
+					else:
+						echo $this->relation->label;
+					endif;
+				?>'),
+				allowBlank: <?php echo $this->relation->type === 'belongsTo' || $this->relation->required ? 'false' : 'true' ?>,
+				<?php if (!$this->relation->editable): ?>
+				disabled: true,
+				<?php endif; ?>
+				model: '<?php echo $this->relation->model ?>'
+<?php
+
+	else:
+		// select with popup relation chooser:
+
+?>
+				name: '<?php echo $relationFieldName ?>',
+				xtype: 'bindedfield',
+				bindedField: '<?php echo strtolower($relationJoinedFieldName) ?>'
+			}, {
+				name: '<?php echo strtolower($relationJoinedFieldName) ?>',
+				xtype: 'joinedrelationfield',
+				hidden: <?php echo ($this->relation->visible ? 'false' : 'true') ?>,
+				bindedField: '<?php echo $relationFieldName ?>',
+				fieldLabel: __('<?php
+					if ($this->relation->label === $this->relation->model):
+						foreach ($this->modelSet as $model):
+							if ($model->id === $this->relation->model):
+								echo $model->label;
+								break;
+							endif;
+						endforeach;
+					else:
+						echo $this->relation->label;
+					endif;
+				?>'),
+				allowBlank: <?php echo $this->relation->type === 'belongsTo' ? 'false' : 'true' ?>,
+				<?php if (!$this->relation->editable): ?>
+				disabled: true,
+				<?php endif; ?>
+				model: '<?php echo $this->relation->model ?>'
+<?php
+		endif;
+		if ($this->relation->info): ?>
+}, {
+<?php
+	echo $this->partial('partials/spawn/js/input-field-caption.phtml', 'g', array(
+		'text' => "__('" . addslashes($this->relation->info) . "')",
+		'fieldName' => $this->relation->getNameKey($this->language),
+		'hidden' => !$this->relation->visible
+	));
+endif; ?>
+
