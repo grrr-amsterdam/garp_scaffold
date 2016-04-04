@@ -2,7 +2,7 @@ language: php
 php:
     - '5.3'
 script:
-    - vendor/bin/phpunit --bootstrap tests/TestHelper.php tests/
+    - composer test
 before_install:
     #- gem install semver
     #- rm -rf node_modules

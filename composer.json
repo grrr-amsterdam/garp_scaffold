@@ -18,5 +18,10 @@
             "Golem_": "library/",
             "Model_": "application/modules/default/"
         }
+    },
+
+    "scripts": {
+    	"test": "phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/"
     }
+
 }
