@@ -2,6 +2,7 @@ language: php
 php:
     - '5.3'
 script:
+    - ls -alG vendor/bin
     - composer test
 before_install:
     #- gem install semver
