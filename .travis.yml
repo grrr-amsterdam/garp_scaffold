@@ -2,7 +2,6 @@ language: php
 php:
     - '5.3'
 script:
-    - ls -alG vendor/zendframework/zendframework1/
     - composer test
 before_install:
     #- gem install semver
@@ -18,7 +17,7 @@ before_install:
     - php vendor/grrr-amsterdam/garp3/scripts/garp.php spawn -b --e=testing
     #- composer install
 before_script:
-    #- chmod -R +x vendor
+    - chmod -R +x vendor/bin
     #- gulp --dev
 
     # Set MySQL timezone for Melkweg db unit tests
