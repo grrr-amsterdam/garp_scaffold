@@ -2,6 +2,7 @@ language: php
 php:
     - '5.3'
 script:
+    - ls -alG vendor/zendframework/zendframework1/
     - composer test
 before_install:
     #- gem install semver
