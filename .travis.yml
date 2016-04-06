@@ -18,7 +18,7 @@ before_install:
     - php vendor/grrr-amsterdam/garp3/scripts/garp.php spawn -b --e=testing
     #- composer install
 before_script:
-    - chmod -R +x vendor/bin
+    - chmod +x vendor/bin/phpunit
     #- gulp --dev
 
     # Set MySQL timezone for Melkweg db unit tests
