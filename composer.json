@@ -21,7 +21,7 @@
     },
 
     "scripts": {
-    	"test": "vendor/bin/phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/"
+    	"test": "phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/"
     }
 
 }
