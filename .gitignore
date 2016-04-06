@@ -7,7 +7,6 @@ application/data/cache/URI/**
 !application/data/cache/URI/.gitdir
 application/data/cache/tags/**
 !application/data/cache/tags/.gitdir
-application/configs/version.php
 application/data/logs/*.log
 chromedriver.log
 public/cached/**
