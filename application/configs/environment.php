@@ -13,7 +13,15 @@ function determineEnvironment($host) {
 	return 'production';
 }
 
-define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') :
+$memcachedPorts = array(
+	'production'  => 11212,
+	'staging'     => 11213,
+	'development' => 11211
+);
+
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ?:
 	determineEnvironment(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '')));
 
-
+defined('MEMCACHE_PORT') || define('MEMCACHE_PORT',
+	array_key_exists(APPLICATION_ENV, $memcachedPorts) ? $memcachedPorts[APPLICATION_ENV] :
+   	$memcachedPorts['development']);

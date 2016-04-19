@@ -9,7 +9,7 @@
 	},
 
     "require": {
-		"grrr-amsterdam/garp3": "^3.7.0"
+		"grrr-amsterdam/garp3": "^3.8.0"
 	},
 
 	"autoload": {
