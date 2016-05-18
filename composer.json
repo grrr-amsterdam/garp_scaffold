@@ -2,7 +2,9 @@
 	"name": "grrr/garp3-project",
 	"description": "This is the PHP dependency package setup for a Garp 3 project.",
 	"license": "proprietary",
-	"preferred-install": "dist",
+	"config": {
+		"preferred-install": "dist"
+	},
 
     "require-dev": {
 		"phpunit/phpunit": "3.7.*"
