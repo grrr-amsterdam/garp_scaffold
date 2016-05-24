@@ -4,12 +4,13 @@
 
 // COLORS (base)
 // The following is inspired by this article: http://sachagreif.com/sass-color-variables/
-
 $black: #222;
 $white: #ffffff;
 
 $red: #f00;
 $blue: #00f;
+
+$textColor: $black;
 
 $primaryColor: $red;
 $secondaryColor: $blue;
@@ -46,10 +47,10 @@ $defaultLineHeight: 1.5;
 
 $bodyFont: sans-serif;
 $headingFont: sans-serif;
-$smallCapFont: sans-serif;
+
 
 // WIDTHS & SIZES
-$siteInnerWidth: 1020px;
+$siteWidth: 1020;
 
 /*
  * z-index
@@ -64,9 +65,9 @@ $z-index: (
 
 // BREAKPOINTS
 // The following is inspired by this article: http://css-tricks.com/media-queries-sass-3-2-and-codekit/
-$small: 640;
-$medium: 1024;
-$large: 1400;
-
-$fix-mqs: false !default;
-$old-ie: false !default;
+$small: 540;
+$medium: 680;
+$mediumLarge: 900;
+$large: 1200;
+$extraLarge: 1400;
+$huge: 1700;

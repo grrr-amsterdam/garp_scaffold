@@ -15,6 +15,9 @@ linters:
   ColorKeyword:
     enabled: true
 
+  ColorVariable:
+    enabled: false
+
   Comment:
     enabled: false
 
@@ -53,6 +56,9 @@ linters:
 
   IdWithExtraneousSelector:
     enabled: true
+
+  ImportantRule:
+    enabled: false
 
   Indentation:
     enabled: false
@@ -124,8 +130,14 @@ linters:
   TrailingSemicolonAfterPropertyValue:
     enabled: true
 
+  TrailingWhitespace:
+    enabled: false
+
   UnnecessaryMantissa:
     enabled: true
+
+  UnnecessaryParentReference:
+    enabled: false
 
   UrlFormat:
     enabled: true

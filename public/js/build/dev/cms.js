@@ -738,10 +738,10 @@ Ext.ns('Garp.renderers');
 
 /**
  * General Column Renderers & Field converters
- * 
+ *
  */
 Ext.apply(Garp.renderers,{
-	
+
 	/**
 	 * Converter for fullname fields. Combines first, prefix, last into one field. Usefull e.g. as displayField for relationFields
 	 * @param {Object} v field value (not used)
@@ -759,7 +759,7 @@ Ext.apply(Garp.renderers,{
 		}
 		return name.join(' ');
 	},
-	
+
 	/**
 	 * Google address resolver. Forms only
 	 * @param {Object} arr
@@ -788,29 +788,29 @@ Ext.apply(Garp.renderers,{
 			if(i.types.indexOf('street_number') > -1){
 				housenumber = i.short_name;
 			}
-			
+
 		});
 		if (housenumber) {
 			out = street + ' ' + housenumber;
 		} else if (street) {
 			out = street;
-		} 
+		}
 		if(city){
 			out += ', ' + city;
 		}
 		if(country != 'NL'){
 			out += ', ' + country_long;
 		}
-		return out;		
+		return out;
 	},
-	
+
 	/**
 	 * We do not want HTML to be viewed in a grid column. This causes significant performance hogs and Adobe Flash™ bugs otherwise...
 	 */
 	htmlRenderer: function(){
 		return '';
 	},
-	
+
 	/**
 	 * Shorter Date & Time
 	 * @param {Date/String} date
@@ -825,8 +825,8 @@ Ext.apply(Garp.renderers,{
 		}
 		return '-';
 	},
-	
-	
+
+
 	/**
 	 * Date & Time
 	 * @param {Date/String} date
@@ -841,7 +841,7 @@ Ext.apply(Garp.renderers,{
 		}
 		return '-';
 	},
-	
+
 	/**
 	 * Used in metaPanel
 	 * @param {Object} v
@@ -852,7 +852,7 @@ Ext.apply(Garp.renderers,{
 		}
 		return v ? Garp.renderers.intelliDateTimeRenderer(v) : '<i>' + __('No date specified') + '</i>';
 	},
-	
+
 	/**
 	 * Date only
 	 * @param {Object} date
@@ -870,9 +870,9 @@ Ext.apply(Garp.renderers,{
 		}
 		return '-';
 	},
-	
+
 	/**
-	 * 
+	 *
 	 * @param {Date/String} date
 	 * @param {Object} meta
 	 * @param {Object} rec
@@ -890,7 +890,7 @@ Ext.apply(Garp.renderers,{
 		}
 		return '-';
 	},
-	
+
 	/**
 	 * Year
 	 * @param {Date/String} date
@@ -905,13 +905,13 @@ Ext.apply(Garp.renderers,{
 		}
 		return '-';
 	},
-	
-	
+
+
 	/**
-	 * For use in Forms. 
-	 * 
+	 * For use in Forms.
+	 *
 	 * Displays today @ time, yesterday @ time or just the date (WITHOUT time)
-	 * 
+	 *
 	 * @TODO Decide if this also needs to go into grids. Make adjustments then.
 	 * @param {Date} date
 	 */
@@ -930,16 +930,16 @@ Ext.apply(Garp.renderers,{
 				if(date.getDate() == now.getDate()){
 					//if(date.getMinutes() == now.getMinutes()){
 					//	return __('a few seconds ago');
-					//} 
+					//}
 					return __('Today at') + ' ' + date.format('H:i');
 				}
 				return date.format('j M');
-			}	
+			}
 		}
 		return date.format('j M Y');
 	},
-	
-	
+
+
 	/**
 	 * Image
 	 * @param {Object} val
@@ -963,21 +963,25 @@ Ext.apply(Garp.renderers,{
 			compile: false,
 			disableFormats: true
 		});
-		
+
 		if (typeof record == 'undefined') {
 			return __('New Image');
 		}
-		
+
 		var v = val ? (/^https?:\/\//.test(val) ? remoteTpl.apply([val]) : localTpl.apply([val])) : __('No Image uploaded');
 		return v;
 	},
-	
+
 	/**
 	 * Relation Renderer for buttons & columnModel
 	 * @param {String} val image Id
-	 * @param {Object} meta information. Only used in columnModel.renderer setup 
+	 * @param {Object} meta information. Only used in columnModel.renderer setup
 	 */
-	imageRelationRenderer: function(val, meta, record){
+	imageRelationRenderer: function(val, meta, record, locale) {
+		locale = !locale ? DEFAULT_LANGUAGE : locale;
+		if (Ext.isObject(val) && locale in val) {
+			val = val[locale];
+		}
 		var imgHtml = '<img src="' + IMAGES_CDN + 'scaled/cms_list/' + val + '" width="64" alt="" />';
 		if (meta) {	// column model renderer
 			if (!val) {
@@ -988,7 +992,12 @@ Ext.apply(Garp.renderers,{
 			return val ? imgHtml : null;
 		}
 	},
-	
+	imageRelationColumnRendererDelegate: function(locale) {
+		return function(val, meta, record) {
+			return Garp.renderers.imageRelationRenderer(val, meta, record, locale);
+		};
+	},
+
 	/**
 	 * Image rendererer primarily intended for Garp.formPanel, not realy appropriate as a column renderer. Use imageRenderer instead
 	 * @param {String} val
@@ -1006,9 +1015,9 @@ Ext.apply(Garp.renderers,{
 		var v =  val ? tpl.apply([val]) : record.phantom === true ? __('New Image') : __('No Image uploaded');
 		return v;
 	},
-	
+
 	/**
-	 * 
+	 *
 	 * @param {String} val
 	 */
 	uploadedImagePreviewRenderer: function(val){
@@ -1019,7 +1028,7 @@ Ext.apply(Garp.renderers,{
 		return tpl.apply(val);
 	},
 
-	
+
 	/**
 	 * cropPreviewRenderer
 	 */
@@ -1045,15 +1054,15 @@ Ext.apply(Garp.renderers,{
 			w = Math.ceil(w);
 			mt = Math.floor(mt);
 			ml = Math.floor(ml);
-			
+
 			return '<div style="background: #aaa; width: ' + size + 'px; height: ' + size + 'px; border: 1px #888 solid;"><div style="width: ' + w + 'px; height: ' + h + 'px; background-color: #eee;margin: ' + mt + 'px ' + ml + 'px;"></div></div>';
 		} else {
 			return '';
 		}
 	},
-	
+
 	/**
-	 * 
+	 *
 	 * @param {Number} row
 	 * @param {Number} cell
 	 * @param {Object} view
@@ -1064,11 +1073,11 @@ Ext.apply(Garp.renderers,{
 		}
 		return false;
 	},
-	
+
 	/**
 	 * remoteDisplayFieldRenderer
 	 * grabs the external model and uses its displayField
-	 * 
+	 *
 	 * Usage from extended model:
 	 * @example this.addColumn({
 	 *  // [...]
@@ -1076,7 +1085,7 @@ Ext.apply(Garp.renderers,{
 	 * 	dataIndex: 'Cinema'
 	 * 	renderer: Garp.renderers.remoteDisplayFieldRenderer.createDelegate(null, ['Cinema'], true) // no scope, Cinema model, append arguments
 	 * });
-	 * 
+	 *
 	 * @param {Object} val
 	 * @param {Object} meta
 	 * @param {Object} rec
@@ -1109,25 +1118,25 @@ Ext.apply(Garp.renderers,{
 						}
 					});
 				}
-			
+
 		}, {
 			buffer: 200,
 			scope: this
 		});
-		
+
 		return '<div class="remoteDisplayFieldSpinner"></div>';
 	},
-	
+
 	checkboxRenderer: function(v){
 		return v == '1'  ? __('yes') : __('no');
 	},
-	
+
 	i18nRenderer: function(v){
 		if(v && typeof v == 'object' && v[DEFAULT_LANGUAGE]){
 			return v[DEFAULT_LANGUAGE];
 		} else if (typeof v !== 'object') {
 			return v;
-		} 
+		}
 		return '-';
 	}
 });
@@ -2907,12 +2916,12 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 	 * @cfg uploadURL
 	 */
 	uploadURL: BASE + 'g/content/upload',
-	
+
 	/**
 	 * @cfg supportedExtensions
 	 */
 	supportedExtensions: ['gif', 'jpg', 'jpeg', 'png'],
-	
+
 	/**
 	 * Override, because MySQL null values != ''
 	 */
@@ -2923,7 +2932,7 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 		}
 		return val;
 	},
-	
+
 	/**
 	 * Simple name based check
 	 * @param {Object} fileName
@@ -2936,7 +2945,7 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 		extension = extension[extension.length - 1];
 		var name = extension[0];
 		if (!name.length) {
-			return false; // also dont support files with an extension but no name 
+			return false; // also dont support files with an extension but no name
 		}
 		return this.supportedExtensions.indexOf(extension.toLowerCase()) > -1;
 	},
@@ -2976,7 +2985,7 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 		}
 		return false;
 	},
-	
+
 	/**
 	 * Button Handler
 	 */
@@ -3001,43 +3010,53 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 		}
 		return false;
 	},
-	
+
 	/**
 	 * Check extension and go!
 	 * @param {Object} fileInput field
 	 */
 	performUpload: function(fileInput){
 		var scope = this;
-		
+		var uploadUrl = scope.uploadURL;
+		var overwriteCbx = scope.form.findField(scope.name + '_overwrite_cbx');
+		if (overwriteCbx && overwriteCbx.checked) {
+			uploadUrl += '?overwrite=1';
+			// Uncheck box to remove dirty state
+			overwriteCbx.setValue(0);
+		}
+
 		if (Ext.isIE) {
-			
 			var lm = new Ext.LoadMask(Ext.getBody(),{
 				msg: __('Loading')
 			});
 			lm.show();
 			var dh = Ext.DomHelper;
 			var iframe = Ext.get(dh.insertHtml('beforeEnd', Ext.getBody().dom, '<iframe src="javscript:false;" name="uploadFrame" style="display:none;"></iframe>'));
-			var form = Ext.get(dh.insertHtml('beforeEnd', Ext.getBody().dom, '<form method="post" target="uploadFrame" action="' + this.uploadURL + '" enctype="multipart/form-data"></form>'));
+			var form = Ext.get(dh.insertHtml('beforeEnd', Ext.getBody().dom, '<form method="post" target="uploadFrame" action="' + uploadUrl + '" enctype="multipart/form-data"></form>'));
 			Ext.get(fileInput).appendTo(form);
 			iframe.on('load', function(){
-				
+
 				var result = Ext.decode(iframe.dom.contentDocument.body.innerHTML);
 				if(!result || !result.success){
 					//scope.setValue(scope.originalValue);
-					Ext.Msg.alert(__('Garp'), __('Error uploading file.'));	
+					var msg = '';
+					if (result.messages) {
+						msg = result.messages.join('<br />');
+					}
+					Ext.Msg.alert(__('Error'), '<b>' + __('Error uploading file') + '</b>' + (msg ? ':<br />' + msg : ''));
 				} else {
 					scope.setValue(result.filename);
 					scope.fireEvent('change', scope, result.filename);
 				}
-				
+
 				form.remove();
 				iframe.remove();
 				lm.hide();
-				
-				
+
+
 			});
-			form.dom.submit();				
-			
+			form.dom.submit();
+
 		} else {
 			var file;
 			if (fileInput.dom && fileInput.dom.files) {
@@ -3061,8 +3080,8 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 					// round to nearest 1000
 					exampleA = Math.round((exampleA + 500) / 1000) * 1000;
 					var exampleB = Math.floor(scope.maxSurface / exampleA);
-					error(__('Error'), '<b>' + __('Resolution too high. ' + 
-							'Please make sure the image\'s surface area does not exceed ' + readableMaxSurface) + 
+					error(__('Error'), '<b>' + __('Resolution too high. ' +
+							'Please make sure the image\'s surface area does not exceed ' + readableMaxSurface) +
 							' pixels. <br>For instance: ' + exampleA + ' x ' + exampleB + ' pixels.</b>');
 
 				} else if (!scope.validateExtension(file.name)) {
@@ -3071,14 +3090,14 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 						'<b>' + __('Extension not supported') + '</b><br /><br />' +
 						__('Supported extensions are:') + '<br /> ' + scope.supportedExtensions.join(' ')
 					);
-					
+
 				} else {
 					var fd = new FormData();
 					var xhr = new XMLHttpRequest();
 					scope.uploadDialog = Ext.Msg.progress(__('Upload'), __('Initializing upload'));
-					
+
 					fd.append('filename', file);
-					
+
 					xhr.addEventListener('load', function(e){
 						var response = Ext.decode(xhr.responseText);
 						scope.uploadDialog.hide();
@@ -3086,7 +3105,10 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 							scope.setValue(response.filename);
 							scope.fireEvent('change', scope, response.filename);
 						} else {
-							error();
+							if (Ext.isArray(response.messages)) {
+								response.messages = response.messages.join('<br>');
+							}
+							error(__('Error'), response.messages);
 						}
 					}, false);
 					xhr.addEventListener('error', function(e){
@@ -3099,15 +3121,15 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 							scope.uploadDialog.updateText(__('Uploading') + ' ' + (Math.ceil(e.loaded / e.total * 100)) + '%');
 						}
 					}, false);
-					
-					xhr.open('POST', scope.uploadURL);
+
+					xhr.open('POST', uploadUrl);
 					scope.uploadDialog.updateText(__('Uploading&hellip;'));
-					
+
 					// we'll use a timeout to be sure that the dialog is ready, small downloads otherwise result in an ugly flashy UX
 					setTimeout(function(){
 						xhr.send(fd);
 					}, 350);
-					
+
 				}
 			};
 
@@ -3118,42 +3140,42 @@ Ext.ux.form.UploadField = Ext.extend(Ext.ux.form.FileUploadField, {
 			}
 		}
 	},
-	
+
 	/**
 	 * sets up Drag 'n Drop
 	 */
 	setupDnD: function(){
-	
+
 		var opts = {
 			normalized: false,
 			preventDefault: true,
 			stopPropagation: true
 		};
-		
+
 		this.wrap.on('dragenter', function(e){
-			// unfortunately, we can't grab file extension here, so we'll present it as allowed. On drop we'll check extensions 
+			// unfortunately, we can't grab file extension here, so we'll present it as allowed. On drop we'll check extensions
 			this.wrap.addClass('x-focus');
 		}, this, opts);
-		
+
 		this.wrap.on('dragexit', function(e){
 			this.wrap.removeClass('x-focus');
 		}, this, opts);
-		
+
 		this.wrap.on('dragover', function(e){
 		}, this, opts);
-		
+
 		this.wrap.on('drop', function(e){
 			this.handleFileDrop(e);
 		}, this, opts);
 	},
-	
+
 	onDestroy: function(){
 		if (this.uploadDialog) {
 			this.uploadDialog.hide();
 		}
 		Ext.ux.form.UploadField.superclass.onDestroy.call(this);
 	},
-	
+
 	initComponent: function(){
 		this.on('fileselected', this.handleFileSelect, this);
 		Ext.ux.form.UploadField.superclass.initComponent.call(this, arguments);
@@ -3581,7 +3603,7 @@ if (Ext.isIE) {
             return String(this.getValue()) !== String(this.originalValue);
         },
         getDocMarkup: function(){
-            return '<html><head><link rel="stylesheet" href="' + BASE + '/css/garp/garp-richtexteditor.css" type="text/css"></head><body style="padding:0 !important;"></body></html>';
+            return '<html><head><link rel="stylesheet" href="' + BASE + 'css/garp/garp-richtexteditor.css" type="text/css"></head><body style="padding:0 !important;"></body></html>';
         },
 
         onRender: function(ct, position){
@@ -4633,7 +4655,7 @@ if (Ext.isIE) {
          * Note: IE8-Standards has unwanted scroller behavior, so the default meta tag forces IE7 compatibility
          */
         getDocMarkup: function(){
-            return '<html><head><link rel="stylesheet" href="' + BASE + '/css/garp/garp-richtexteditor.css" type="text/css"></head><body></body></html>';
+            return '<html><head><link rel="stylesheet" href="' + BASE + 'css/garp/garp-richtexteditor.css" type="text/css"></head><body></body></html>';
         },
 
         // private
@@ -5571,7 +5593,8 @@ Ext.reg('richtexteditor', Ext.ux.form.RichTextEditor);
 Ext.form.CKEditor = function(config) {
     this.config = config;
 
-    config.CKEditor = {
+
+    config.CKEditor = window.WYSIWYG_CKEDITOR_CONFIG || {
         // Allow only these tags (=true for all of them)
         allowedContent: true,
 		customConfig: '',
@@ -5581,7 +5604,7 @@ Ext.form.CKEditor = function(config) {
         toolbar: [
             ['Bold', 'Italic', '-', 'RemoveFormat'],
             ['Link', 'Unlink'],
-            ['NumberedList','BulletedList', 'Format'],
+            ['NumberedList', 'BulletedList', 'Blockquote', 'Format'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Source', '-', 'CharCount']
         ],
 
@@ -5745,51 +5768,52 @@ Ext.reg('wysiwygeditor', Ext.form.CKEditor);
 Ext.reg('richwysiwygeditor', Ext.form.RichCKEditor);
 
 /**
- * 
+ *
  * i18nSource: a form field to contain values for referenced language fields;
  * it acts as a conduit for other fields in the form (they are grouped in i18nFieldsets).
  * e.g. on 'setValue' all referenced fields are 'setValue'd with their respective language value:
- *  
- *  field.name.setValue(obj) -->> field._name_nl.setValue(str); 
+ *
+ *  field.name.setValue(obj) -->> field._name_nl.setValue(str);
  *                                field._name_en.setValue(str);
- *  
+ *
  */
 Garp.i18nSource = Ext.extend(Ext.form.Field, {
 
 	ref: '../',
 	style: 'display:none; height: 0; margin: 0; padding: 0;',
 	hideLabel: true,
-	
+
 	originalValue: null,
-	
+
 	initComponent: function(ct){
 		Garp.i18nSource.superclass.initComponent.call(this, ct);
 		Garp.i18nSource.superclass.hide.call(this);
 	},
-	
+
 	/**
 	 * Get referenced field
 	 * @param {String} lang
 	 */
 	getRefField: function(lang){
+		if (this.name == 'faq_id') {
+			window.refOwner = this.refOwner;
+		}
 		return this.refOwner.find('name', ('_' + this.name + '_' + lang))[0];
 	},
-	
+
 	setValue: function(v){
 		Ext.each(LANGUAGES, function(lang){
 			if (this.getRefField(lang)) {
-				if (v !== null) {
-					this.getRefField(lang).setValue(v[lang]);
-				}
+				this.getRefField(lang).setValue(v === null ? null : v[lang]);
 			}
 		}, this);
 		Garp.i18nSource.superclass.setValue.call(this, v);
 	},
-	
+
 	setRawValue: function(v){
 		return this.setValue(v);
 	},
-	
+
 	getValue: function(v){
 		var out = {};
 		Ext.each(LANGUAGES, function(lang){
@@ -5800,7 +5824,7 @@ Garp.i18nSource = Ext.extend(Ext.form.Field, {
 		}, this);
 		return out;
 	},
-	
+
 	getRawValue: function(v){
 		return this.getValue(v);
 	},
@@ -5808,6 +5832,7 @@ Garp.i18nSource = Ext.extend(Ext.form.Field, {
 	isDirty: function(v){
 		var out = false;
 		Ext.each(LANGUAGES, function(lang){
+			//console.log(this.getRefField(lang));
 			if (this.getRefField(lang) && this.getRefField(lang).isDirty()) {
 				out = true;
 				return false;
@@ -5815,7 +5840,7 @@ Garp.i18nSource = Ext.extend(Ext.form.Field, {
 		}, this);
 		return out;
 	},
-	
+
 	/**
 	 * Perform function on all referenced fields
 	 * @param {String} function to perform
@@ -5833,7 +5858,7 @@ Garp.i18nSource = Ext.extend(Ext.form.Field, {
 			return Garp.i18nSource.superclass[func].call(this, param);
 		}
 	},
-	
+
 	setVisible: function(state){
 		return this._setAll('setVisible', state, true);
 	},
@@ -5851,8 +5876,8 @@ Garp.i18nSource = Ext.extend(Ext.form.Field, {
 	},
 	disable: function(state){
 		return this._setAll('disable', state);
-	}	
-	
+	}
+
 });
 Ext.reg('i18nsource', Garp.i18nSource);
 
@@ -5868,6 +5893,7 @@ Garp.i18nFieldSet = Ext.extend(Ext.form.FieldSet, {
 	}
 });
 Ext.reg('i18nfieldset', Garp.i18nFieldSet);
+
 Garp.WysiwygField = Ext.extend(Ext.form.TextField, {
 
 	region: 'center',
@@ -6938,19 +6964,19 @@ Garp.WysiwygAbstract = Ext.extend(Ext.BoxComponent, {
  *
  */
 Garp.FilterMenu = function(){
-	
+
 	this.init = function(tb){
-		
+
 		/**
 		 * Reference to the toolbar
 		 */
 		this.tb = tb;
-		
+
 		this.defaultFilter = {
 			text: __('All'),
 			ref: 'all'
 		};
-		
+
 		/**
 		 * Resets the button and the menu. (Provides only visual feedback: no filter applied)
 		 */
@@ -6960,17 +6986,28 @@ Garp.FilterMenu = function(){
 			this.tb.filterStatus.hide();
 			this.tb.filterStatus.update('');
 		};
-		
+
 		/**
 		 * Checks the model for possible fields to filter on. If it's not in the model, we can't put it as a filter option in the menu
 		 */
 		this.buildMenu = function(){
-			
+
 			var menuOptions = [];
-			if(Garp.dataTypes[Garp.currentModel].filterMenu){
+			if (Garp.dataTypes[Garp.currentModel].filterMenu) {
 				Ext.each(Garp.dataTypes[Garp.currentModel].filterMenu, function(i){
 					menuOptions.push(i);
 				});
+
+				// Reverted. Changing filterMenu from an array to an object creates trouble
+				// elsewhere down the stream.
+				//
+				// This fixes asynchronously added filters by providing a transparent interface for
+				// adding filters _after_ the filterMenu has been initialized
+				//Garp.dataTypes[Garp.currentModel].filterMenu = {
+					//push: function(item) {
+						//Garp.gridPanel.filterMenu.filterBtn.menu.addItem(item);
+					//}
+				//};
 			}
 			var model = Garp.dataTypes[Garp.currentModel];
 			menuOptions.push(this.defaultFilter);
@@ -6989,39 +7026,39 @@ Garp.FilterMenu = function(){
 					ref: 'my'
 				});
 			}
-			
+
 			Ext.each(menuOptions, function(option){
 				if(typeof option.isDefault !== 'undefined' && option.isDefault){
 					this.defaultFilter = option;
 					return false;
 				}
 			}, this);
-			
+
 			return menuOptions;
 		};
-		
+
 		/**
 		 * Applies the selected filter and reflects the UI
 		 * @param {Object} menu item
 		 */
 		function applyFilter(item){
-			
+
 			var grid = tb.ownerCt;
 			var storeParams = grid.getStore().baseParams;
-			
+
 			if (!storeParams.query) {
 				storeParams.query = {};
 			}
-			
+
 			delete storeParams.query.online_status;
 			delete storeParams.query.author_id;
-			
+
 			if(typeof Garp.dataTypes[Garp.currentModel].clearFilters == 'function'){
 				Garp.dataTypes[Garp.currentModel].clearFilters();
 			} else if (item.ref == 'all'){
 				storeParams.query = {};
 			}
-			
+
 			switch (item.ref) {
 				case 'published':
 					Ext.apply(storeParams.query, {
@@ -7044,19 +7081,19 @@ Garp.FilterMenu = function(){
 			grid.getStore().reload();
 			return true;
 		}
-		
+
 		/**
-		 * Build the menu 
+		 * Build the menu
 		 */
 		this.filterMenu = this.buildMenu();
-		
+
 		this.filterStatus = tb.add({
 			ref: 'filterStatus',
 			text: this.defaultFilter.ref !== 'all' ? this.defaultFilter.text : '',
 			xtype: 'tbtext',
 			hidden: (this.defaultFilter.ref === 'all')
 		});
-		
+
 		/**
 		 * Create the button
 		 */
@@ -7075,10 +7112,10 @@ Garp.FilterMenu = function(){
 				items: this.filterMenu
 			}
 		});
-		
+
 		// Set default as checked:
 		this.filterBtn.menu.find('text', this.defaultFilter.text)[0].setChecked(true);
-		
+
 		// Reflect UI on menu changes:
 		this.filterBtn.menu.on('itemclick', function(item, evt){
 			if(item.ref === 'all'){
@@ -7092,8 +7129,8 @@ Garp.FilterMenu = function(){
 			this.filterStatus.show();
 			this.filterBtn.setIconClass('icon-filter-on');
 		}, this);
-		
-		// Make sure we don't end up with an "No items to display" AND a filter Status text: 
+
+		// Make sure we don't end up with an "No items to display" AND a filter Status text:
 		this.tb.on('change', function(tb){
 			if(tb.store.getCount() === 0){
 				this.filterStatus.hide();
@@ -8032,13 +8069,13 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 	border: true,
 	preventBodyReset: false,
 	autoScroll: true,
-	
+
 	rec: null,
-	
+
 	quickCreatableInit: Ext.emptyFn,
-	
+
 	initComponent: function(){
-	
+
 		if (!this.iconCls) {
 			this.setIconClass(Garp.dataTypes[this.model].iconCls);
 		}
@@ -8046,7 +8083,7 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 			this.setTitle(Garp.dataTypes[this.model].text);
 		}
 		this.addEvents('aftersave', 'afterinit');
-		
+
 		this.writer = new Ext.data.JsonWriter({
 			paramsAsHash: false,
 			encode: false
@@ -8056,7 +8093,7 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 		Ext.each(cm, function(c){
 			fields.push(c.dataIndex);
 		});
-		
+
 		this.store = new Ext.data.DirectStore({
 			fields: fields,
 			autoLoad: false,
@@ -8080,7 +8117,7 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 			},
 			writer: this.writer
 		});
-		
+
 		var items = Ext.apply({}, Garp.dataTypes[this.model].formConfig[0].items[0]);
 		var listeners = Ext.apply({}, Garp.dataTypes[this.model].formConfig[0].listeners);
 		items = {
@@ -8091,15 +8128,18 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 			border: false
 		};
 
-		// Collapse fieldsets, to save some room (window is tiny as it is)
+		// Collapse fieldsets and hide non-required fields,
+		// to save some room (window is tiny as it is)
 		for (var j = 0; j < items.items[0].items.length; ++j) {
 			if ('collapsed' in items.items[0].items[j]) {
 				items.items[0].items[j].collapsed = true;
 			}
+			if (items.items[0].items[j].disabled ||
+			   items.items[0].items[j].allowBlank) {
+				items.items[0].items[j].hidden = true;
+			}
 		}
-		
-		// Now hide disabled items, they have no function when adding a new item. It may otherwise confuse users:
-		// Also: if the field is not in the columnModel, it has no place here in this window
+
 		this.items = [{
 			border: false,
 			xtype: 'form',
@@ -8112,7 +8152,7 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 			},
 			items: items
 		}];
-		
+
 		if (!this.buttons) {
 			this.buttons = [];
 		}
@@ -8131,10 +8171,10 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 			},
 			scope: this
 		}]);
-		
+
 		Garp.RelateCreateWindow.superclass.initComponent.call(this);
 	},
-	
+
 	saveAll: function(doClose){
 		if (!this.form.getForm().isValid()) {
 			this.form.getForm().items.each(function(){
@@ -8165,7 +8205,7 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 			this.loadMask.show();
 		}
 	},
-	
+
 	afterRender: function(){
 		Garp.RelateCreateWindow.superclass.afterRender.call(this);
 		this.form.getForm().setValues(Garp.dataTypes[this.model].defaultData);
@@ -8175,13 +8215,13 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 		var rec = new this.store.recordType(Ext.apply({}, Garp.dataTypes[this.model].defaultData));
 		this.rec = rec;
 		this.store.insert(0, rec);
-		
+
 		this.getForm = function(){
 			return this.form.getForm();
 		};
-		
+
 		this.on('save-all', this.saveAll, this);
-		
+
 		this.on('show', function(){
 			this.formcontent.fireEvent('loaddata', rec, this);
 			this.quickCreatableInit();
@@ -8200,7 +8240,6 @@ Garp.RelateCreateWindow = Ext.extend(Ext.Window,{
 				this.setHeight(this.getHeight());
 				this.center();
 			}
-			window.weenerdog = this;
 			this.keymap = new Ext.KeyMap(this.formcontent.getEl(), [{
 				key: Ext.EventObject.ENTER,
 				ctrl: true,
@@ -8652,7 +8691,7 @@ Garp.YouTubeUploadWindow = Ext.extend(Ext.Window,{
 /**
  * Ext.ux
  * RelationField / JoinedRelationField / BindedField
- * 
+ *
  * @TODO: move out of extux into Garp
  */
 
@@ -8685,7 +8724,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 	/**
 	 * Gets called when the RelationPickerWindow is closed;
 	 * @param {Object} selected
-	 */	
+	 */
 	selectCallback: function(selected){
 		var v = this.getValue();
 		if (selected && selected.hasOwnProperty('selected')) {
@@ -8697,7 +8736,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 				this.disable();
 				// ...then reload to get the 'real' value from the server:
 				// the reason we reload, is that the displayfield might not get passed from the picker (it just might not be there)
-				
+
 				this.store.on({
 					load: function(){
 						this.setValue(selected.selected.get('id'));
@@ -8713,15 +8752,15 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 				});
 				this.store.load();
 			}
-			
+
 			this.originalValue = v;
 			this.win.destroy();
 			this.fireEvent('select', selected);
 			return;
-		} 
+		}
 		this.win.destroy();
 	},
-	
+
 	triggerFn: function(){
 		this.win = new Garp.ModelPickerWindow({
 			model: this.model,
@@ -8732,7 +8771,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 		this.win.on('close', this.selectCallback, this);
 		this.win.show();
 	},
-	
+
 	createRelationUrl: function(){
 		if (this.getValue()) {
 			return BASE + 'admin?' +
@@ -8743,7 +8782,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 		}
 		return false;
 	},
-	
+
 	onRelationOpenTriggerClick: function(){
 		if (this.tip) {
 			if (this.tip.isVisible()) {
@@ -8758,7 +8797,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 			}
 		}
 	},
-	
+
 	// override, to allow for null values (or "unrelate", so to say)
 	getValue: function(){
 		var value = Ext.ux.RelationField.superclass.getValue.call(this);
@@ -8767,8 +8806,11 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 		}
 		return value;
 	},
-	
+
 	setValue: function(v){
+		if (!this.el) {
+			return;
+		}
 		this.el.removeClass('x-form-invalid');
 		if (v) {
 			if (this.store.find('id', v) < 0) {
@@ -8789,7 +8831,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 							this.assertValue();
 							this.collapse();
 						} else {
-							// value not found! DB Integrity issue! 
+							// value not found! DB Integrity issue!
 							this.store.clearFilter();
 							this.el.addClass('x-form-invalid');
 						}
@@ -8805,7 +8847,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 		}
 		Ext.ux.RelationField.superclass.setValue.call(this, v);
 	},
-	
+
 	initComponent: function(){
 		this.store = new Ext.data.DirectStore({
 			autoLoad: false,
@@ -8827,7 +8869,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 				destroy: Ext.emptyFn
 			}
 		});
-		
+
 		this.store.on({
 			'load': {
 				single: true,
@@ -8843,14 +8885,14 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 				}
 			}
 		});
-		
+
 		if (this.triggerFn) {
 			this.onTriggerClick = this.triggerFn;
 		} else {
 			this.store.load();
 		}
-		
-		
+
+
 		Ext.ux.RelationField.superclass.initComponent.call(this);
 		this.triggerConfig = {
 			tag: 'span',
@@ -8871,23 +8913,23 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 		if (!Garp.dataTypes[this.model]) {
 			this.disable();
 		}
-		
+
 	},
-	
+
 	getTrigger : function(index){
         return this.triggers[index];
     },
-    
+
     afterRender: function(){
 		Ext.form.TwinTriggerField.superclass.afterRender.call(this);
 		var triggers = this.triggers, i = 0, len = triggers.length;
-		
+
 		for (; i < len; ++i) {
 			if (this['hideTrigger' + (i + 1)]) {
 				triggers[i].hide();
 			}
 		}
-		
+
 		if (Garp.dataTypes[this.model].previewItems && Garp.dataTypes[this.model].previewItems.length) {
 			this.tip = new Ext.ToolTip({
 				target: this.el,
@@ -8925,7 +8967,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
     initTrigger : function(){
         var ts = this.trigger.select('.x-form-trigger', true),
             triggerField = this;
-            
+
         ts.each(function(t, all, index){
             var triggerIndex = 'Trigger'+(index+1);
             t.hide = function(){
@@ -8974,7 +9016,7 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
         Ext.destroy(this.triggers);
         Ext.form.TwinTriggerField.superclass.onDestroy.call(this);
     },
-	
+
 	/**
      * The function that should handle the trigger's click event.  This method does nothing by default
      * until overridden by an implementing function. See {@link Ext.form.TriggerField#onTriggerClick}
@@ -8996,14 +9038,14 @@ Ext.ux.RelationField = Ext.extend(Ext.form.ComboBox,{
 
 
 /**
- * Joined RelationFields are pre-filled relations sent from the server. If we want to change it, 
+ * Joined RelationFields are pre-filled relations sent from the server. If we want to change it,
  * we need to update the bindedField referenced field. The server then joins again.
  * Untill then, we use the referenced model's displayFieldRederer
  */
 Ext.ux.JoinedRelationField = Ext.extend(Ext.ux.RelationField, {
-	
+
 	bindedField: null,
-	
+
 	selectCallback: function(selected){
 		var val, disp;
 		if(selected && typeof selected.selected !== 'undefined'){
@@ -9019,17 +9061,17 @@ Ext.ux.JoinedRelationField = Ext.extend(Ext.ux.RelationField, {
 			this.fireEvent('select', selected);
 		}
 	},
-	
+
 	// joinedRelation saves data in it's bindedField. The field itself must not get send!
 	isDirty: function(){
 		return false;
 	},
-	
+
 	// joinedRelation saves data in it's bindedField. The field itself must not get send!
 	getValue: function(){
 		return null;
 	},
-	
+
 	createRelationUrl: function(){
 		var id = this.form.findField(this.bindedField).getValue();
 		if (id) {
@@ -9041,7 +9083,7 @@ Ext.ux.JoinedRelationField = Ext.extend(Ext.ux.RelationField, {
 		}
 		return false;
 	},
-	
+
 	setValue: function(v){
 		Ext.ux.RelationField.superclass.setValue.call(this, v);
 		return this;
@@ -9049,7 +9091,7 @@ Ext.ux.JoinedRelationField = Ext.extend(Ext.ux.RelationField, {
 });
 
 /**
- * Glue component; this field holds the ID value for a joinedRelationField 
+ * Glue component; this field holds the ID value for a joinedRelationField
  */
 Ext.ux.BindedField = Ext.extend(Ext.form.TextField, {
 	bindedField: null,
@@ -9058,7 +9100,7 @@ Ext.ux.BindedField = Ext.extend(Ext.form.TextField, {
 		this.hideFieldLabel = true;
 		Ext.ux.BindedField.superclass.initComponent.call(this, v);
 	},
-	
+
 	// allow null values:
 	getValue: function(){
 		var val = Ext.ux.BindedField.superclass.getValue.call(this);
@@ -9067,7 +9109,7 @@ Ext.ux.BindedField = Ext.extend(Ext.form.TextField, {
 		}
 		return val;
 	}
-	
+
 });
 
 // xtypes
@@ -9455,9 +9497,10 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 	/**
 	 * @function getGridCfg
 	 * @param hideHeader
+	 * @param panelType "relatePanel" or "relateePanel"
 	 * @return defaultGridObj
 	 */
-	getGridCfg: function(hideHeaders){
+	getGridCfg: function(hideHeaders, panelType) {
 		return {
 			border: true,
 			region: 'center',
@@ -9470,31 +9513,23 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 				},
 				columns: (function(){
 					var cols = [], cmClone, c, l;
-					if (this.columns) {
-						cmClone = Garp.dataTypes[this.model].columnModel;
-						var shown = 0;
-						for (c = 0, l = cmClone.length; c < l; c++) {
-							// Skip hidden columns to keep it simple in the relationPanel
-							if (typeof cmClone[c].hidden === 'boolean' && cmClone[c].hidden) {
-								continue;
-							}
-							col = Ext.apply({}, cmClone[c]);
-							col.hidden = this.columns.indexOf(col.dataIndex) == -1;
-							cols.push(col);
-						}
-						return cols;
+					if (typeof Garp.dataTypes[this.model].getColumnModelForRelationPanel == 'function') {
+						cmClone = Garp.dataTypes[this.model].getColumnModelForRelationPanel(this, panelType);
 					} else {
 						cmClone = Garp.dataTypes[this.model].columnModel;
-						for (c = 0, l = cmClone.length; c < l; c++) {
-							// Skip hidden columns to keep it simple in the relationPanel
-							if (typeof cmClone[c].hidden === 'boolean' && cmClone[c].hidden) {
-								continue;
-							}
-							col = Ext.apply({}, cmClone[c]);
-							cols.push(col);
-						}
-						return cols;
 					}
+					for (c = 0, l = cmClone.length; c < l; c++) {
+						// Skip hidden columns to keep it simple in the relationPanel
+						if (typeof cmClone[c].hidden === 'boolean' && cmClone[c].hidden) {
+							continue;
+						}
+						col = Ext.apply({}, cmClone[c]);
+						if (this.columns) {
+							col.hidden = this.columns.indexOf(col.dataIndex) == -1;
+						}
+						cols.push(col);
+					}
+					return cols;
 				}).call(this)
 			}),
 			pageSize: Garp.pageSize,
@@ -9901,7 +9936,7 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 					},
 					scope: this
 				}
-			}, this.getGridCfg(false)));
+			}, this.getGridCfg(false, 'relatePanel')));
 
 			var relateePanelCfg = Ext.apply({}, {
 				itemId: 'relateePanel',
@@ -9923,7 +9958,7 @@ Ext.ux.RelationPanel = Ext.extend(Ext.Panel, {
 					},
 					scope: this
 				})
-			}, this.getGridCfg(this.maxItems !== null));
+			}, this.getGridCfg(this.maxItems !== null, 'relateePanel'));
 			if (this.paginated) {
 				relateePanelCfg.pageSize = Garp.pageSize;
 				relateePanelCfg.bbar = new Ext.PagingToolbar({
@@ -12332,25 +12367,55 @@ Garp.MetaPanel = Ext.extend(Ext.Container, {
  * @class Garp.ModelMenu
  * @author Peter
  * garp.modelmenu.js
- * 
+ *
  */
 
-Garp.ModelMenu = function(cfg){
-	
+Garp.ModelMenu = function(cfg) {
 	Ext.apply(this, cfg);
-	
+
+	var definedModelsInMenu = extractConfiguredModelNames(this.menuItems);
+	this.menuItems = this.menuItems.concat(Object.keys(Garp.dataTypes).filter(function(modelName) {
+		return definedModelsInMenu.indexOf(modelName) == -1;
+	}));
+
 	var menuItems = [];
-	
-	for (var key in Garp.dataTypes){
-		if(this.menuItems.indexOf(key) == -1){
-			this.menuItems.push(key);
-		}	
+	menuItems.push(createMenuItemsForModels(this.menuItems));
+
+	Garp.ModelMenu.superclass.constructor.call(this, Ext.applyIf(cfg, {
+		cls: 'garp-model-menu',
+		text: __('Content'),
+		iconCls: 'icon-no-model',
+		menu: new Ext.menu.Menu({
+			items: menuItems
+		})
+	}));
+
+	this.on('afterrender', function(){
+		this.getEl().on('click', function(){
+			Garp.viewport.gridPanelCt.expand();
+		});
+	}, this);
+
+	function extractConfiguredModelNames(menuItems) {
+		return menuItems.filter(function(item) {
+			return !Ext.isObject(item);
+		}).concat(Ext.flatten(menuItems.filter(function(item) {
+			return Ext.isObject(item);
+		}).map(function(item) {
+			return extractConfiguredModelNames(item.menu);
+		})));
 	}
-	
-	menuItems.push((function(){
+
+	function createMenuItemsForModels(menuItems) {
 		var model, models = [];
-		Ext.each(this.menuItems, function(model){
-			if (model == '-') { 
+		Ext.each(menuItems, function(model) {
+			if (typeof model.menu !== 'undefined') {
+				models.push({
+					iconCls: model.iconCls || '',
+					text: model.text || 'submenu',
+					menu: createMenuItemsForModels(model.menu)
+				});
+			} else if (model == '-') {
 				// Check if models are already in array, otherwise a separator doesn't make sense.
 				if (models.length > 0 && models[models.length - 1] != '-') {
 					models.push('-');
@@ -12364,7 +12429,7 @@ Garp.ModelMenu = function(cfg){
 					throw 'Oops! dataType "' + model + '" not found! Does it exist in the smd?';
 				}
 				if (dataType.setupACL(Garp[model])) {
-					dataType.fireEvent('init');	
+					dataType.fireEvent('init');
 					models.push({
 						hidden: dataType.hidden,
 						text: __(dataType.text),
@@ -12382,24 +12447,7 @@ Garp.ModelMenu = function(cfg){
 			}
 		});
 		return models;
-	}).call(this));
-	
-	Garp.ModelMenu.superclass.constructor.call(this, Ext.applyIf(cfg, {
-		cls: 'garp-model-menu',
-		text: __('Content'),
-		iconCls: 'icon-no-model',
-		menu: new Ext.menu.Menu({
-			items: menuItems
-		})
-	}));
-
-	this.on('afterrender', function(){
-		this.getEl().on('click', function(){
-			Garp.viewport.gridPanelCt.expand();
-		});
-	}, this);
-	
-	
+	};
 };
 
 Ext.extend(Garp.ModelMenu, Ext.Button, {});
@@ -12443,7 +12491,7 @@ Ext.extend(Garp.WelcomePanel, Ext.Container, {
  *
  * @description Defines both Garp.gridpanel & its corresponding Garp.gridpanelstore.
  * Also decorates the directstore to allow for querying (searching)
- * 
+ *
  */
 
 
@@ -12454,7 +12502,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 	 * @cfg {string} model: current Model for this panel
 	 */
 	model: null,
-	
+
 	/**
 	 * @function newItem
 	 * Creates one new item in the store. Displays it on the grid and selects it
@@ -12468,19 +12516,19 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 		this.store.insert(0, rec);
 		this.getSelectionModel().selectFirstRow();
 	},
-	
+
 	/**
 	 * @function deleteItems
 	 * Delete one (or more) item(s) from the store and calls save to sync it with the server
 	 * Not applicable if this panel is disabled (various reasons) or the current model doesn't support it.
 	 */
 	deleteItems: function(){
-		
+
 		var count = this.getSelectionModel().getCount();
 		if (count <= 0) {
 			return;
 		}
-		
+
 		// phantom records will get deleted right away. Always. No questioning ;)
 		var rec = this.getSelectionModel().getSelected();
 		if(rec.phantom){
@@ -12489,12 +12537,12 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			this.fireEvent('afterdelete');
 			return;
 		}
-		
+
 		// not allowed?
 		if (this.disabled || Garp.dataTypes[Garp.currentModel].disableDelete) {
 			return;
 		}
-		
+
 		Ext.Msg.confirm(__('Garp'), count == 1 ? __('Are you sure you want to delete the selected item?') : __('Are you sure you want to delete the selected items?'), function(btn){
 			var sm = this.getSelectionModel();
 			if (btn == 'yes') {
@@ -12508,26 +12556,26 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			sm.selectRow(sm.last); // focus gridpanel again.
 		}, this);
 	},
-	
+
 	/**
 	 * @function saveAll
 	 */
 	saveAll: function(){
 		this.fireEvent('beforesave');
-		
+
 		var scrollTop = this.getView().scroller.getScroll().top;
-				
+
 		// Let's not show a loadMask if there's no modified records, a save operation would appear to never end,
 		// because the listener to hide te loadMask will never be called:
 		if (this.getStore().getModifiedRecords().length > 0) {
 			this.loadMask.show();
 		}
-		
+
 		var currentModified = this.getStore().getModifiedRecords();
 		if(currentModified.length){
-			currentModified = currentModified[0]; 
+			currentModified = currentModified[0];
 		}
-		
+
 		// Reload the store after saving, to get an accurate and fresh new view on the data
 		this.getStore().on({
 			'save': {
@@ -12540,7 +12588,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 								scope: this,
 								single: true,
 								fn: function(){
-									
+
 									if (currentModified && currentModified.get && !store.getById(currentModified.get('id'))) {
 										this.getStore().on({
 											load: {
@@ -12584,7 +12632,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 		// Let the store decide whether or not to actually save:
 		this.getStore().save();
 	},
-	
+
 	/**
 	 * @function loadStoreWithDefaults
 	 * Conveniently load the store with potential filter defaults.
@@ -12596,7 +12644,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			this.getStore().load();
 		}
 	},
-	
+
 	/**
 	 * @function selectAll
 	 * Selects all items on the grid -if not disabled-, or clears all selection(s).
@@ -12607,13 +12655,13 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 		}
 		var sm = this.getSelectionModel();
 		var store = this.getStore();
-		if (sm.getCount() === store.getCount()) { // if all are already selected 
+		if (sm.getCount() === store.getCount()) { // if all are already selected
 			sm.clearSelections(); // ... clear the selection
 		} else {
 			sm.selectAll(); // ... otherwise, selectAll
 		}
 	},
-	
+
 	/**
 	 * @function focus
 	 * focuses the panel so cursor keys are enabled
@@ -12623,7 +12671,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 		if (!sm.hasSelection()) {
 			sm.selectFirstRow();
 		}
-		
+
 		// now focus the actual row in the grid's view:
 		var row = 0;
 		var sel = sm.getSelections();
@@ -12631,9 +12679,9 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			row = this.getStore().indexOf(sel[0]);
 		}
 		this.getView().focusRow(row);
-		
+
 	},
-	
+
 	/**
 	 * @function setupEvents
 	 * Now initialize listeners:
@@ -12643,12 +12691,12 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 		 * Listen to Keyboard events
 		 */
 		var pagingToolbar = this.getBottomToolbar();
-		
+
 		function checkTarget(evt){
 			// We might possibly have focus in a textbox in this gridpanel; we don't want the KeyMap to interfere
 			return (!evt.getTarget('input') && !evt.getTarget('textarea') && !evt.getTarget('iframe'));
 		}
-		
+
 		var keyMap = new Ext.KeyMap(this.getEl(), [{
 			key: 'a',
 			ctrl: true,
@@ -12667,7 +12715,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 					if (Garp.dataTypes[Garp.currentModel].disableDelete || Garp.toolbar.deleteButton.disabled) {
 						return;
 					}
-					
+
 					this.fireEvent('delete');
 					o.stopEvent();
 				}
@@ -12687,7 +12735,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			},
 			scope: this
 		}]);
-		
+
 		var keyNav = new Ext.KeyNav(this.getEl(), {
 			'enter': this.fireEvent.createDelegate(this, ['defocus']),
 			'pageUp': function(e){
@@ -12710,7 +12758,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			},
 			scope: this
 		});
-		
+
 		/**
 		 * Various events:
 		 */
@@ -12728,20 +12776,20 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			}
 		});
 	},
-	
+
 	/**
 	 * init
 	 */
 	initComponent: function(){
 		this.addEvents('beforesave', 'rowselect', 'beforerowselect', 'storeloaded', 'rowdblclick', 'selectionchange');
-		
+
 		var fields = Garp.dataTypes[this.model].getStoreFieldsFromColumnModel();
-		
+
 		this.writer = new Ext.data.JsonWriter({
 			paramsAsHash: false,
 			encode: false
 		});
-		
+
 		var scope = this;
 		function confirmLoad(store, options){
 			// check to see if the store has any dirty records. If so, do not continue, but give the user the option to discard / save.
@@ -12786,9 +12834,9 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 				return false;
 			}
 		}
-		
+
 		this.filterMenu = new Garp.FilterMenu();
-		
+
 		this.store = new Ext.data.DirectStore({
 			autoLoad: false,
 			autoSave: false,
@@ -12823,9 +12871,9 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			},
 			writer: this.writer
 		});
-		
+
 		scope = this;
-		
+
 		// Set defaults:
 		Ext.applyIf(this, {
 			cm: new Ext.grid.ColumnModel({
@@ -12834,7 +12882,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 				},
 				columns: Garp.dataTypes[this.model].columnModel,
 				listeners: {
-					// Defer, because renderers notified will not notice about the new state of columns on beforehand 
+					// Defer, because renderers notified will not notice about the new state of columns on beforehand
 					'hiddenchange': function(){
 						setTimeout(function(){
 							scope.getView().refresh();
@@ -12871,20 +12919,20 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 						scope: this,
 						fn: function(){
 							this.getBottomToolbar().plugins[0].resetUI();
-						}	
+						}
 					}
 				}
 			})
 		});
-		
+
 		this.relayEvents(this.sm, ['beforerowselect', 'rowselect', 'selectionchange', 'rowdblclick']);
 		Garp.GridPanel.superclass.initComponent.call(this);
 		this.on('render', function(){
 			this.setupEvents();
 		}, this);
-		
+
 		this.on('headerclick', function(grid, ci, e){
-			
+
 			// virtual columns might not be able to sort. Find out:
 			if(grid.getColumnModel().columns[ci].virtual){
 				var virtualSortField;
@@ -12892,7 +12940,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 				if (grid.getColumnModel().columns[ci].sortable) {
 					virtualSortField = grid.getColumnModel().columns[ci].dataIndex;
 				} else {
-					// Others might point to others to sort on their behalf 
+					// Others might point to others to sort on their behalf
 					virtualSortField = grid.getColumnModel().columns[ci].virtualSortField;
 				}
 				if (virtualSortField) {
@@ -12912,13 +12960,13 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 						}
 					});
 					grid.getStore().sort(virtualSortField);
-				} 
+				}
 				return false;
 			}
 		});
-		
+
 	},
-	
+
 	setupContextMenus: function(){
 		var scope = this;
 		var refreshOption = {
@@ -12935,7 +12983,7 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 				scope.newItem();
 			}
 		};
-		
+
 		var cellContextMenu = new Ext.menu.Menu({
 			items: [{
 				iconCls: 'icon-open',
@@ -12961,23 +13009,25 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 		var viewContextMenu = new Ext.menu.Menu({
 			items: [newItemOption, '-', refreshOption]
 		});
-		
+
 		this.on('contextmenu', function(e){
 			e.stopEvent();
 			cellContextMenu.hide();
 			viewContextMenu.showAt(e.getXY());
 		});
-		
+
 		this._previousContextedRow = null;
 		function removeContextMenuSelected(){
-			if (this._previousContextedRow !== null) {
-				Ext.get(this.getView().getRow(this._previousContextedRow)).removeClass(this.getView().contextRowCls);
+			if (this._previousContextedRow !== null &&
+			   Ext.get(this.getView().getRow(this._previousContextedRow))) {
+				Ext.get(this.getView().getRow(this._previousContextedRow)).removeClass(
+					this.getView().contextRowCls);
 			}
 		}
-		
+
 		this.getView().el.on('click', removeContextMenuSelected.createDelegate(this));
 		this.getView().el.on('contextmenu', removeContextMenuSelected.createDelegate(this));
-		
+
 		this.on('cellcontextmenu', function(grid, ri, ci, e){
 			e.stopEvent();
 			var gv = grid.getView();
@@ -12988,13 +13038,14 @@ Garp.GridPanel = Ext.extend(Ext.grid.GridPanel, {
 			cellContextMenu.showAt(e.getXY());
 		});
 	},
-	
+
 	afterRender: function(){
 		this.getBottomToolbar().on('defocus', this.focus.createDelegate(this));
 		Garp.GridPanel.superclass.afterRender.call(this);
 		this.setupContextMenus();
 	}
 });
+
 /**
  * @class Garp.FormPanel
  * @extends Ext.FormPanel
@@ -13552,7 +13603,7 @@ Ext.reg('garpformpanel', Garp.FormPanel);
  * @class Garp.Toolbar
  * @extends Ext.Toolbar
  * @author: Peter
- * 
+ *
  * @description Garp.Toolbar, main Garp toolbar, included in Garp.viewport
  */
 Garp.Toolbar = Ext.extend(Ext.Toolbar, {
@@ -13565,7 +13616,7 @@ Garp.Toolbar = Ext.extend(Ext.Toolbar, {
 	 */
 	addColumnMenu: function(grid){
 	},
-	
+
 	/**
 	 * @function removeColumnMenu
 	 *
@@ -13573,13 +13624,13 @@ Garp.Toolbar = Ext.extend(Ext.Toolbar, {
 	 */
 	removeColumnMenu: function(){
 	},
-	
-	
+
+
 	initComponent: function(){
 		Ext.apply(this, {
 			style: 'padding:0px 10px 0px 10px;border:0;',
 			cls: 'garp-main-toolbar cms-branding-small',
-			
+
 			items: [Garp.modelMenu, '-', {
 				xtype: 'tbspacer'
 			}, {
@@ -13602,7 +13653,7 @@ Garp.Toolbar = Ext.extend(Ext.Toolbar, {
 				xtype: 'tbseparator',
 				ref: 'separator'
 			}, {
-				text: __('more'),
+				text: __('More'),
 				iconCls: 'icon-extra',
 				ref: 'extraMenu',
 				menu: new Ext.menu.Menu({
@@ -13639,23 +13690,23 @@ Garp.Toolbar = Ext.extend(Ext.Toolbar, {
 							if (!Garp.currentModel) {
 								return;
 							}
-							
+
 							if (Garp.gridPanel.getSelectionModel().getCount() == 1) {
-							
+
 								Ext.select('body').addClass('print-form');
 								Garp.gridPanel.ownerCt.collapse();
 								Garp.viewport.doLayout();
 								setTimeout(function(){
 									window.print();
-									
+
 									Garp.gridPanel.ownerCt.expand();
 									Ext.select('body').removeClass('print-form');
 								}, 500);
-								
-								
+
+
 							} else {
 								Ext.select('body').addClass('print-grid');
-								
+
 								var pw = Garp.gridPanel.ownerCt.getWidth();
 								Garp.gridPanel.getSelectionModel().clearSelections();
 								if (Garp.formPanel.ownerCt.collapse) {
@@ -13664,20 +13715,20 @@ Garp.Toolbar = Ext.extend(Ext.Toolbar, {
 								Garp.gridPanel.ownerCt.collapse();
 								Garp.gridPanel.ownerCt.setWidth(640);
 								Garp.gridPanel.ownerCt.expand();
-								
+
 								var el = Ext.select('.x-grid3-scroller').first();
 								var w = el.getStyle('width');
 								var h = el.getStyle('height');
-								
+
 								el.setStyle({
 									'overflow': 'visible',
 									'position': 'fixed',
 									'height': 'auto'
 								});
-								
+
 								setTimeout(function(){
 									window.print();
-									
+
 									el.first().setStyle({
 										'overflow': 'auto',
 										'overflow-x': 'hidden',
@@ -13685,22 +13736,22 @@ Garp.Toolbar = Ext.extend(Ext.Toolbar, {
 										'width': w,
 										'height': h
 									});
-									
+
 									Garp.gridPanel.ownerCt.setWidth(pw);
 									if (Garp.formPanel.ownerCt.expand) {
 										Garp.formPanel.ownerCt.expand();
 									}
 									Garp.gridPanel.ownerCt.expand();
 									Garp.viewport.doLayout();
-									
+
 									Ext.select('body').removeClass('print-grid');
-									
+
 								}, 500);
 							}
-							
+
 						}
 					}, '-', {
-						hidden: !((document.fullScreenElement && document.fullScreenElement !== null) ||   
+						hidden: !((document.fullScreenElement && document.fullScreenElement !== null) ||
       								(!document.mozFullScreen && !document.webkitIsFullScreen)),
 						text: __('Full Screen'),
 						iconCls: 'icon-fullscreen',
@@ -13716,7 +13767,7 @@ Garp.Toolbar = Ext.extend(Ext.Toolbar, {
 								if (de.mozRequestFullScreen) {
 									de.mozRequestFullScreen();
 								} else if (de.webkitRequestFullScreen){
-									de.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);  
+									de.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
 								}
 							}
 						}
@@ -13732,10 +13783,11 @@ Garp.Toolbar = Ext.extend(Ext.Toolbar, {
 				})
 			}]
 		});
-		
+
 		Garp.Toolbar.superclass.initComponent.call(this);
 	}
 });
+
 /**
  * Garp infoPanel. Simplistic panel with info about the currently selected model. setInfo gets called from garp.js->changeModel
  */
@@ -14231,19 +14283,19 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 	title: __('Import'),
 	iconCls: 'icon-import',
 	maximizable: true,
-	border: false,	
+	border: false,
 	defaults: {
 		border: true,
 		frame: false,
 		style: 'background-color: #fff;',
 		bodyStyle: 'background-color: #fff;padding-top: 10px; '
 	},
-	
+
 	navHandler: function(dir){
 		var page = this.getLayout().activeItem.id;
 		page = parseInt(page.substr(5, page.length), 10);
 		page += dir;
-		
+
 		var form = this.get('page-1').getForm();
 		if (page <= 0) {
 			page = 0;
@@ -14252,13 +14304,13 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 			this.nextBtn.setDisabled(!form.findField('datafile').getValue());
 			//form.findField('datafile').resumeEvents();
 		} else if (page == 1) {// not realy a UI page..
-			this.progress.reset(); 
+			this.progress.reset();
 			this.progress.wait({
 				text: __('Processing')
 			});
 			Ext.select('.x-progress-bar').setHeight(18);
 			this.prevBtn.disable();
-			this.nextBtn.disable(); 
+			this.nextBtn.disable();
 			form.submit();
 			//form.findField('datafile').suspendEvents();
 		} else if (page == 2){
@@ -14273,16 +14325,41 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 		}
 		this.getLayout().setActiveItem('page-' + page);
 	},
-	
+
 	showMappingUI: function(data){
+		if (Ext.isArray(data[0])) {
+			this.createMappingUIFromArray(data);
+		} else {
+			this.createMappingUIFromObject(data);
+		}
+	},
+
+	getValueForCombo: function(options, data, i) {
+		// Ignore by default
+		var val = options[options.length-1][0];
+		var keys = Object.keys(data[0]);
+
+		// Only map when key is literally available in sample data
+		// @todo Now only works when key is @ same index as in columnModel: almost never works
+		if (typeof options[i] !== 'undefined' && typeof keys[i] !== 'undefined' && options[i][0] === keys[i]) {
+			val = options[i][0];
+		}
+		return val;
+	},
+
+	/**
+	 * Based on createMappingUIFromArray(), see below.
+	 * Can be abstracted far better to avoid duplication.
+	 */
+	createMappingUIFromObject: function(data) {
 		var items = [];
 		var options = [];
 		Ext.each(Garp.dataTypes[Garp.currentModel].columnModel, function(c){
 			options.push([c.dataIndex, c.header]);
 		});
 		options.push(['',__('  (Ignore)')]);
-		
-		var columnCount = data[0].length;
+
+		var columnCount = Object.keys(data[0]).length;
 		var selectListener = function(field, value){
 			var elms = Ext.select('.'+field.name, null, this.el.body);
 			if(!value){
@@ -14291,11 +14368,12 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 				elms.removeClass('garp-import-hidden-col');
 			}
 		};
-		
+
 		for(var i=0; i < columnCount; i++){
 			var col = [];
+			var assocKey = Object.keys(data[0])[i];
 			col.push({
-				name: 'col-' + i,
+				name: assocKey,
 				xtype: 'combo',
 				allowBlank: false,
 				editable: false,
@@ -14304,7 +14382,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 				mode: 'local',
 				store: options,
 				submitValue: false,
-				value: i < columnCount ? options[i][0] : columnCount,
+				value: this.getValueForCombo(options, data, i),
 				width: 140,
 				listeners: {
 					'select': selectListener,
@@ -14314,19 +14392,19 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 			for(var rows = 0; rows< data.length; rows++){
 				col.push({
 					xtype: 'box',
-					html: (data[rows][i] || '' ) + '', // convert null to ''
+					html: (data[rows][assocKey] || '' ) + '', // convert null to ''
 					cls: 'row-' + rows + ' col-' + i,
 					style: 'background-color: #fff; margin: 5px 10px 5px 2px;'
 				});
-				
+
 			}
 			items.push({
 				items:col
 			});
 		}
-		
+
 		var width = (150 * columnCount);
-		
+
 		this.mappingColumns = new Ext.Panel({
 			layout: 'column',
 			columns: options.length,
@@ -14336,7 +14414,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 				width: 150
 			}
 		});
-		
+
 		this.get('page-2').add({
 			xtype: 'panel',
 			style: 'margin: 10px;',
@@ -14345,7 +14423,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 			autoScroll: true,
 			items: this.mappingColumns
 		});
-		
+
 		this.get('page-2').add({
 			xtype: 'fieldset',
 			//style: 'background-color: #fff;',
@@ -14370,18 +14448,134 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 				name: 'ignoreErrors'
 			}]
 		});
-		
+
 		this.getLayout().setActiveItem('page-2');
 		this.get('page-2').doLayout();
 		this.navHandler(0);
 		this.get('page-2').getForm().findField('ignore-first-row').setValue(true);
 	},
-	
+
+	createMappingUIFromArray: function(data) {
+		var items = [];
+		var options = [];
+		Ext.each(Garp.dataTypes[Garp.currentModel].columnModel, function(c){
+			options.push([c.dataIndex, c.header]);
+		});
+		options.push(['',__('  (Ignore)')]);
+
+		var columnCount = data[0].length;
+		var selectListener = function(field, value){
+			var elms = Ext.select('.'+field.name, null, this.el.body);
+			if(!value){
+				elms.addClass('garp-import-hidden-col');
+			} else {
+				elms.removeClass('garp-import-hidden-col');
+			}
+		};
+
+		for(var i=0; i < columnCount; i++){
+			var col = [];
+			col.push({
+				name: 'col-' + i,
+				xtype: 'combo',
+				allowBlank: false,
+				editable: false,
+				triggerAction: 'all',
+				typeAhead: false,
+				mode: 'local',
+				store: options,
+				submitValue: false,
+				value: typeof options[i] != 'undefined' ? options[i][0] : options[options.length-1][0],
+				width: 140,
+				listeners: {
+					'select': selectListener,
+					scope: this
+				}
+			});
+			for(var rows = 0; rows< data.length; rows++){
+				col.push({
+					xtype: 'box',
+					html: (data[rows][i] || '' ) + '', // convert null to ''
+					cls: 'row-' + rows + ' col-' + i,
+					style: 'background-color: #fff; margin: 5px 10px 5px 2px;'
+				});
+
+			}
+			items.push({
+				items:col
+			});
+		}
+
+		var width = (150 * columnCount);
+
+		this.mappingColumns = new Ext.Panel({
+			layout: 'column',
+			columns: options.length,
+			width: width + 10,
+			items: items,
+			defaults: {
+				width: 150
+			}
+		});
+
+		this.get('page-2').add({
+			xtype: 'panel',
+			style: 'margin: 10px;',
+			frame: true,
+			bodyStyle: 'padding:10px;',
+			autoScroll: true,
+			items: this.mappingColumns
+		});
+
+		this.get('page-2').add({
+			xtype: 'fieldset',
+			//style: 'background-color: #fff;',
+			items: [{
+				xtype: 'checkbox',
+				fieldLabel: __('Ignore first row'),
+				name: 'ignore-first-row',
+				checked: false,
+				submitValue: false,
+				handler: function(cb, checked){
+					var elms = Ext.select('.row-0', null, this.el.body);
+					if(checked){
+						elms.addClass('garp-import-hidden-row');
+					} else {
+						elms.removeClass('garp-import-hidden-row');
+					}
+				},
+				scope: this
+			},{
+				xtype: 'checkbox',
+				fieldLabel: __('Continue on error(s)'),
+				name: 'ignoreErrors'
+			}]
+		});
+
+		this.getLayout().setActiveItem('page-2');
+		this.get('page-2').doLayout();
+		this.navHandler(0);
+		this.get('page-2').getForm().findField('ignore-first-row').setValue(true);
+	},
+
 	proceedImport: function(){
-		var mapping = [];
+		var mapping;
 		var combos = this.get('page-2').findByType('combo');
 		Ext.each(combos, function(c){
-			mapping.push(c.getValue());
+			var name = c.getName();
+			if (name.indexOf('col-') != 0) {
+				if (!mapping) {
+					mapping = {};
+				}
+				// do it the associative way
+				mapping[name] = c.getValue();
+			} else {
+				if (!mapping) {
+					mapping = [];
+				}
+				// do it the array way
+				mapping.push(c.getValue());
+			}
 		});
 		var form = this.get('page-2').getForm();
 		Ext.apply(form.baseParams,{
@@ -14393,7 +14587,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 		this.lm.show();
 		form.submit();
 	},
-	
+
 	initComponent: function(){
 		this.progress = new Ext.ProgressBar({
 			animate: true
@@ -14410,7 +14604,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 				items: [{
 					xtype: 'uploadfield',
 					uploadURL: BASE+'g/content/upload/type/document',
-					supportedExtensions: ['xls', 'xlsx', 'xml'],
+					supportedExtensions: ['xls', 'xlsx', 'xml', 'json'],
 					allowBlank: false,
 					name: 'filename',
 					fieldLabel: __('Filename'),
@@ -14423,7 +14617,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 					}
 				},{
 					xtype: 'displayfield',
-					value: __('Excel filetypes are supported')
+					value: __('Excel and JSON filetypes are supported')
 				}]
 			}]
 		},{
@@ -14438,7 +14632,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 				'actioncomplete': function(form, action){
 					if (action.result && action.result.success) {
 						this.showMappingUI(action.result.data);
-					} 
+					}
 				},
 				'actionfailed': function(form, action){
 						var msg = __('Something went wrong. Please try again.');
@@ -14447,7 +14641,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 						}
 						Ext.Msg.alert(__('Error'), msg);
 						this.close();
-					
+
 				},
 				scope: this
 			},
@@ -14497,7 +14691,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 				items: []
 			}]
 		}];
-		
+
 		this.buttonAlign = 'left';
 		this.buttons = [{
 			text: __('Previous'),
@@ -14513,7 +14707,7 @@ Garp.ImportWindow = Ext.extend(Ext.Window, {
 			disabled: true,
 			handler: this.navHandler.createDelegate(this, [1])
 		}];
-		
+
 		//this.on('show', this.navHandler.createDelegate(this, [-1]));
 		Garp.ImportWindow.superclass.initComponent.call(this);
 	}
@@ -14526,15 +14720,15 @@ Ext.ns('Garp');
  */
 
 Garp.PasswordFieldset = Ext.extend(Ext.form.FieldSet, {
-	
+
 	callback: Ext.emptyFn,
 
 	style:'margin:0;padding:0;',
 	defaultType: 'textfield',
 	defaults:{
 		allowBlank: true
-	},	
-	
+	},
+
 	collapseAndHide: function(){
 		this.showpassword.hide();
 		this.password.hide();
@@ -14544,9 +14738,9 @@ Garp.PasswordFieldset = Ext.extend(Ext.form.FieldSet, {
 		this.plaintext.setValue('');
 		this.plaintext.originalValue = '';
 	},
-	
+
 	initComponent: function(ct){
-	
+
 		this.items = [{
 			ref: 'setPasswordBtn',
 			fieldLabel : ' &nbsp; ',
@@ -14567,9 +14761,22 @@ Garp.PasswordFieldset = Ext.extend(Ext.form.FieldSet, {
 		}, {
 			ref: 'password',
 			fieldLabel : __('Password'),
-			inputType: 'password',
+			inputType: 'text',
 			hidden: true,
 			listeners: {
+				/**
+				 * This render callback tricks Google Chrome. It normally tries to auto-populate
+				 * forms with a password field. In our case it fails horribly and clears the form,
+				 * leaving the administrator with blank fields.
+				 * This callback swaps the "text" type for an actual "password" type. Chrome will
+				 * leave the form alone thinking it does not contain a password field.
+				 */
+				'render': function() {
+					var dom = this.el.dom;
+					setTimeout(function() {
+						dom.setAttribute('type', 'password');
+					}, 100);
+				},
 				'change': this.callback
 			}
 		}, {
@@ -14593,7 +14800,7 @@ Garp.PasswordFieldset = Ext.extend(Ext.form.FieldSet, {
 				r[c ? 'plaintext' : 'password'].setValue(r[c ? 'password' : 'plaintext'].getValue());
 			}
 		}];
-		
+
 		var scope = this;
 		this._interval = setInterval(function(){
 			if (scope.password) {
@@ -14610,31 +14817,31 @@ Garp.PasswordFieldset = Ext.extend(Ext.form.FieldSet, {
 				clearInterval(this._interval);
 			}
 		}, 100);
-		
+
 		Garp.PasswordFieldset.superclass.initComponent.call(this, ct);
-		
-		
+
+
 	}
-	
-	
-	
-	
+
+
+
+
 	/**
 	 * Private
 	 */
-	
+
 	/*listeners: {
 		click: function(){
-			
+
 			var id = this.refOwner.getForm().findField('id').getValue();
 			var scope = this;
 			var win;
-			
+
 			function btnHandler(ref){
 				if (ref.text != __('Cancel')) {
 					var val = win.password.getValue();
 					scope.refOwner.getForm().findField(scope.passwordFieldname).setValue(val ? val : null);
-					scope.callback(scope, val);		
+					scope.callback(scope, val);
 				}
 				win.close();
 			}
@@ -14654,7 +14861,7 @@ Garp.PasswordFieldset = Ext.extend(Ext.form.FieldSet, {
 							key: Ext.EventObject.ESC,
 							fn: win.close
 						}]);
-						
+
 						// we need to delay this, because monitorValid is a taskRunner
 						win.passwordform.startMonitoring();
 						setTimeout(function(){
@@ -14692,10 +14899,10 @@ Garp.PasswordFieldset = Ext.extend(Ext.form.FieldSet, {
 							var r = this.refOwner, c = this.checked;
 							r.password.setVisible(!c);
 							r.plaintext.setVisible(c);
-							r[c ? 
-								'plaintext' : 
-								'password'].setValue(r[c ? 
-									'password' : 
+							r[c ?
+								'plaintext' :
+								'password'].setValue(r[c ?
+									'password' :
 									'plaintext'].getValue());
 						}
 					}]
@@ -14711,10 +14918,11 @@ Garp.PasswordFieldset = Ext.extend(Ext.form.FieldSet, {
 			win.show();
 		}
 	}*/
-	
+
 });
 
 Ext.reg('passwordfieldset', Garp.PasswordFieldset);
+
 /**
  * Simplistic Date&Time Picker 
  * @param {Object} config
@@ -14818,15 +15026,15 @@ Ext.ux.menu.DateTimeMenu = Ext.extend(Ext.menu.DateMenu, {
 
 /**
  * @class Garp.DataType
- * Provides basic DataType skeleton to 
- * 
+ * Provides basic DataType skeleton to
+ *
  * @author Peter
  */
 
 Ext.ns('Garp');
 
 Garp.DataType = Ext.extend(Ext.util.Observable, {
-	
+
 	/**
 	 * Grid store needs field definitions. We create it from the columnModel
 	 */
@@ -14847,7 +15055,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 		});
 		return fields;
 	},
-	
+
 	/**
 	 * EXPERIMENTAL view tpl (creates HTML view, when editing is not allowed)
 	 */
@@ -14863,11 +15071,11 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 		this.viewTpl = new Ext.XTemplate(str,{ compiled: true });
 		return this.viewTpl;
 	},
-	
+
 	/**
 	 * Sets permissions according to Garp.API offered methods
 	 * @param {Object} model
-	 * @return false if model is not accesible in the first place 
+	 * @return false if model is not accesible in the first place
 	 */
 	setupACL: function(model){
 		if(!Ext.isDefined(model.create)){
@@ -14892,8 +15100,8 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 		}
 		return true;
 	},
-	
-	/** 
+
+	/**
 	 * Removes a column
 	 * @param {String} dataIndex
 	 */
@@ -14915,7 +15123,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 		});
 		return column;
 	},
-	
+
 	/**
 	 * Add a column
 	 * @param {Object} column
@@ -14923,7 +15131,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 	addColumn: function(column){
 		this.columnModel.push(column);
 	},
-	
+
 	/**
 	 * Insert a column
 	 * @param {Object} index
@@ -14932,15 +15140,15 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 	insertColumn: function(index, column){
 		this.columnModel.splice(index, 0, column);
 	},
-	
-	/** 
+
+	/**
 	 * Remove a field
 	 * @param {String} name
 	 */
 	removeField: function(name){
 		this.formConfig[0].items[0].items.remove(this.getField(name));
 	},
-	
+
 	/**
 	 * Get a Field by its name
 	 * @param {String} name
@@ -14957,7 +15165,38 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 		});
 		return field;
 	},
-	
+
+	getFieldBy: function(field, value) {
+		var out = { field: null, index: null };
+		Ext.each(this.formConfig[0].items[0].items, function(items) {
+			Ext.each(items, function(item, index) {
+				if (typeof i[field] !== 'undefined' && i[field] == value) {
+					out.field = item;
+					out.index = index;
+					return false;
+				}
+			});
+		});
+		return out;
+	},
+
+	/**
+	 * Get field index
+	 * @param {String} name
+	 */
+	getFieldIndex: function(name) {
+		var _index = -1;
+		Ext.each(this.formConfig[0].items[0].items, function(item, index) {
+				if (item.name === name) {
+				console.log('found item', name, 'at index', index);
+				console.log(item);
+					_index = index;
+				}
+				return false;
+		});
+		return _index;
+	},
+
 	/**
 	 * add a Field at the end
 	 * @param {Object} config
@@ -14965,7 +15204,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 	addField: function(config){
 		this.formConfig[0].items[0].items.push(config);
 	},
-	
+
 	/**
 	 * Adds an array of fields
 	 * @param {Object} arr of configs
@@ -14975,7 +15214,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 			this.addField(config);
 		}, this);
 	},
-	
+
 	/**
 	 * add a Field at specified index
 	 * @param {Object} index
@@ -14984,8 +15223,8 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 	insertField: function(index, config){
 		this.formConfig[0].items[0].items.splice(index, 0, config);
 	},
-	
-	
+
+
 	/**
 	 * Grab your RelationPanel
 	 * @param {Object} modelName
@@ -15017,9 +15256,9 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 			};
 		};
 	},
-	
+
 	/**
-	 * Retrieve all relation data 
+	 * Retrieve all relation data
 	 * @return {Array} modelNames
 	 */
 	getRelations: function(){
@@ -15031,7 +15270,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 		});
 		return out;
 	},
-	
+
 	/**
 	 * Add a RelationPanel, simple convenience utility
 	 * @param {Object} config
@@ -15042,7 +15281,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 		});
 		this.formConfig.push(cfg);
 	},
-	
+
 	/**
 	 * Adds a listener
 	 * @param {Object} eventName
@@ -15064,7 +15303,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 			};
 		}
 	},
-	
+
 	// private
 	setupListeners: function(eventName){
 		Ext.applyIf(this.formConfig[0], {
@@ -15072,68 +15311,68 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 		});
 		Ext.applyIf(this.formConfig[0].eventName, {
 			loaddata : function(){}
-		});		
+		});
 	},
-	
-	
+
+
 	constructor: function(cfg){
 		this.addEvents('init');
 		this.listeners = cfg.listeners;
 		this.initialCfg = Ext.apply({}, cfg);
-		
+
 		Ext.apply(this, cfg);
-		
+
 		Ext.applyIf(this, {
-		
+
 			// simple description text to be used at infopanel
 			description: '',
-			
+
 			// count is used at infopanel
 			countTpl: new Ext.XTemplate([__('Total'), ': {count} ', '<tpl if="count == 1">', __('item'), '</tpl>', '<tpl if="count != 1">', __('items'), '</tpl>']),
-			
+
 			// disabling will prevent this model from being accesible altogether
 			disabled: false,
-			
-			// prevents User to delete record  
+
+			// prevents User to delete record
 			disableDelete: false,
-			
+
 			// prevents User to create record
 			disableCreate: false,
-			
-			// For relationpanels and fields. If this model is too complicated, one might want to set this to false: 
+
+			// For relationpanels and fields. If this model is too complicated, one might want to set this to false:
 			quickCreatable: true,
-			
+
 			// how to display a record:
 			displayFieldRenderer: function(rec){
 				return rec.get('name') ? rec.get('name') : rec.phantom ? __('New ' + this.text) : __('Unnamed ' + this.text);
 			},
-			
+
 			// the items to use for simple tooltips when referenced from a relationfield
 			previewItems: [],
-			
+
 			// the items that the form's metaPanel will hold
 			metaPanelItems: [],
-			
+
 			// previewlink can hold an object previewLink{urlTpl, param} for building a dynamic preview path for the user
 			// urlTpl is an Ext.Template, and param the field/column reference
 			previewLink: null,
-			
+
 			// the icon
 			iconCls: 'icon-' + this.text.toLowerCase(),
-			
+
 			// this datatype does not contain editable fields, so hide the form and focus on the first relation tab:
 			isRelationalDataType: false
 		});
-		
+
 		Ext.applyIf(this.defaultData, {
 			'created': null,
 			'modified': null
 		});
-		
+
 		Ext.applyIf(this, {
 			columnModel: []
 		});
-		
+
 		if (this.isRelationalDataType) {
 			Ext.apply(this, {
 				disableCreate: true,
@@ -15144,7 +15383,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 				fp.items.get(0).hideTabStripItem(0);
 			});
 		}
-		
+
 		for (var column in this.defaultData) {
 			var found = false;
 			Ext.each(this.columnModel, function(item){
@@ -15154,7 +15393,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 			});
 			if (!found) {
 				var txt = Ext.util.Format.capitalize(column.replace('_', ' '));
-				
+
 				this.columnModel.push({
 					hidden: true,
 					renderer: (column == 'created' || column == 'modified') ? Garp.renderers.dateTimeRenderer : null,
@@ -15163,7 +15402,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 				});
 			}
 		}
-		
+
 		Ext.each(this.columnModel, function(col){
 			if(col.defaultData && col.defaultData === null){
 				col.useNull = true;
@@ -15172,7 +15411,7 @@ Garp.DataType = Ext.extend(Ext.util.Observable, {
 				col.sortable = false;
 			}
 		});
-		
+
 		Garp.DataType.superclass.constructor.call(this, cfg);
 	}
 });
@@ -16145,7 +16384,12 @@ Garp.setupEventManager = function(){
 			var s = Garp.gridPanel.getSelectionModel().getSelected();
 			if (t && s) {
 				var tpl = new Ext.Template(t.urlTpl);
-				var url = tpl.apply([s.get(t.param)]);
+				var paramValue = s.get(t.param);
+				if (Ext.isObject(paramValue) && DEFAULT_LANGUAGE in paramValue) {
+					paramValue = paramValue[DEFAULT_LANGUAGE];
+				}
+				var url = tpl.apply([paramValue]);
+				url += '&cb=' + +new Date();
 				var win = window.open(BASE + url);
 			}
 		},
@@ -16228,6 +16472,9 @@ Garp.flashMessage = function(){
 			var date = new Date();
 			date.setHours(date.getHours(-1));
 			value += ((date===null) ? "" : "; expires="+date.toGMTString());
+			if (typeof COOKIEDOMAIN !== 'undefined') {
+				value += '; domain=' + escape(COOKIEDOMAIN);
+			}
 			document.cookie='FlashMessenger' + "=" + value;
 			return true;
 		}

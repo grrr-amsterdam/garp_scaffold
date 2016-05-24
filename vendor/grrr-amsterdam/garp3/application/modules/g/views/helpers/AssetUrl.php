@@ -103,6 +103,10 @@ class G_View_Helper_AssetUrl extends Zend_View_Helper_BaseUrl {
 
 
 	protected function _getLocalUrl($file) {
+		if (!strlen($file)) {
+			return '';
+		}
+
 		$baseUrl = $this->getBaseUrl();
 		$baseUrl = '/' . ltrim($baseUrl, '/\\');
 
@@ -140,7 +144,7 @@ class G_View_Helper_AssetUrl extends Zend_View_Helper_BaseUrl {
 
 	protected function _processRevManifest($file) {
 		// If argument is the root and not a file, return early
-		if ($file === '/') {
+		if ($file === '/' || !$file) {
 			return $file;
 		}
 

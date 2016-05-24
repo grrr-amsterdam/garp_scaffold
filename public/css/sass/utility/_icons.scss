@@ -49,8 +49,8 @@
  * or --after in de fontname before generating the icons
  */
 
-.icon-close:after { @extend %icon; content: "\f100"; }
-.icon-mail:before { @extend %icon; content: "\f101"; }
+.icon-close::after { @extend %icon; content: "\f100"; }
+.icon-mail::before { @extend %icon; content: "\f101"; }
 
 
 /*

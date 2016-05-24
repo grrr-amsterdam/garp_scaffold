@@ -1,0 +1,11 @@
+.nav-primary {
+	@include bare-list; @include clearfix;
+}
+
+.nav-primary > li {
+	float: left;
+}
+
+.nav-primary a {
+	display: block; line-height: 40px;
+}
