@@ -3,10 +3,6 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="nl"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
-	<?php if ($this->config()->cdn->type != 'local'): ?>
-	<link rel="dns-prefetch" href="//<?php echo $this->config()->cdn->domain ?>">
-	<?php endif ?>
-
 	<?php
 		$title = '';
 		if ($this->currentPage == 'home'):
@@ -35,6 +31,16 @@
 
 	<meta http-equiv="cleartype" content="on">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="<?php echo $this->escape($this->description ?: $this->config()->app->description); ?>">
+	<?php // TODO: echo $this->social()->facebookOgData($this->ogData ?: array()); ?>
+	<?php
+	/* Robots must never crawl staging or development sites! */
+	if (APPLICATION_ENV != 'production'):
+	?>
+	<meta name="robots" content="noindex, nofollow">
+	<?php endif; ?>
+
+
 	<?php
 		$canonical = $this->fullUrl($this->url());
 		if ($this->canonical_url):
@@ -42,61 +48,79 @@
 		endif;
 	?>
 	<link rel="canonical" href="<?php echo $this->escape($canonical) ?>">
+	<link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
+
 	<?php
-		/* Robots must never crawl staging or development sites! */
-		if (APPLICATION_ENV != 'production'):
+	// Prefetch DNS for CDN if it is not the same domain
+	if ($this->config()->cdn->type != 'local'): ?>
+	<link rel="dns-prefetch" href="<?php echo $this->assetUrl(''); ?>">
+	<?php endif ?>
+
+	<?php
+	/**
+ 	 * Preload web fonts
+ 	 * Note: the crossorigin attribute is mandatory for fonts, event when loaded from the same domain.
+ 	 * <link rel="preload" href="//<?php echo $this->config()->cdn->domain ?>/css/fonts/[NAME].woff2" as="font" type="font/woff2" crossorigin>
+	 */
 	?>
-	<meta name="robots" content="noindex, nofollow">
-	<?php endif; ?>
 
-	<meta name="description" content="<?php echo $this->escape($this->description ?: $this->config()->app->description); ?>">
-	<?php // echo $this->social()->facebookOgData($this->ogData ?: array()); ?>
+	<link rel="dns-prefetch" href="//www.googletagmanager.com">
+	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->build . '/base.css') ?>">
 
-	<!--[if lte IE 8]>
-	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/ie-old.css') ?>">
-	<![endif]-->
-	<!--[if gt IE 8]><!-->
-	<link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/base.css') ?>">
-	<!--<![endif]-->
 	<script>
 		BASE = "<?php echo $this->baseUrl('/') ?>";
-		CDN_URL = "http://<?php echo $this->config()->cdn->domain ?>";
+		CDN_URL = "<?php echo $this->assetUrl('') ?>";
 		CDN_IMAGE_ROOT = CDN_URL + "<?php echo $this->config()->cdn->path->upload->image ?>";
-		JS_ROOT = "<?php echo $this->config()->assets->js->root ?>";
+		JS_ROOT = "<?php echo $this->config()->assets->js->build ?>";
+		CSS_ROOT = "<?php echo $this->config()->assets->css->build ?>";
+		ICON_SPRITE = "<?php echo $this->assetUrl($this->config()->assets->css->build . '/img/icons.svg') ?>";
 
 		<?php
 		// Inline Modernizr since it's such a wee script
-		require_once(APPLICATION_PATH . '/../public' .  $this->config()->assets->js->root . '/modernizr.js');
+		require_once(APPLICATION_PATH . '/../public' .  $this->config()->assets->js->build . '/modernizr.js');
 
 		// Load scripts async thru loadJS()
-		$this->partial('partials/load-js.phtml');
+		require_once(APPLICATION_PATH . '/../public' .  $this->config()->assets->js->root . '/loadJS.js');
 		?>
 
-		var cutsMustard = 'querySelector' in document && 'addEventListener' in window;
+		var cutsMustard = 'querySelector' in document && 'addEventListener' in window && 'requestAnimationFrame' in window;
 		if (cutsMustard) {
-			loadJS("<?php echo $this->assetUrl($this->config()->assets->js->root . '/main.js') ?>");
+			loadJS("<?php echo $this->assetUrl($this->config()->assets->js->build . '/bundle.js') ?>");
+		} else {
+			// If the browser does support JS, but does not cut the mustard, put back to .no-js class
+			// This is a horrible solution, but Modernizr does not respect the `enableJSClass: false` option...
+			var reJS = new RegExp('(^|\\s)js(\\s|$)');
+      		document.documentElement.className = document.documentElement.className.replace(reJS, '$1no-js$2');
 		}
-		?>
+
+		// Polyfill <picture> when needed
+		if (!Modernizr.picture) {
+    		document.createElement("picture");
+			loadJS("<?php echo $this->assetUrl($this->config()->assets->js->build . '/../../polyfills/picturefill.js') ?>");
+		}
 	</script>
-	<link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
 </head>
 <body>
 	<?php echo $this->partial('partials/google-tag-manager.phtml', 'g'); ?>
+
 	<div class="wrapper">
+		<?php echo $this->partial('partials/navbar.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
 		<?php echo $this->partial('partials/header.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
-		<div class="content">
-			<?php echo $this->layout()->content; ?>
-		</div>
+		<?php echo $this->layout()->content; ?>
 	</div>
-	<?php echo $this->partial('partials/cookie-announcement.phtml', 'default');?>
+
 	<?php
+		echo $this->partial('partials/cookie-announcement.phtml', 'default');
+
 		echo $this->script()->render();
+
 		if ($browseboxConfig = $this->browsebox()->config()):
 			echo $browseboxConfig;
 		endif;
-		if ($this->social()->needsFacebookInit()) {
+
+		if ($this->social()->needsFacebookInit()):
 			echo $this->social()->facebookInit();
-		}
+		endif;
 	?>
 </body>
 </html>

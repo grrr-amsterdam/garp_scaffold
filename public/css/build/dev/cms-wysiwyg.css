@@ -26,28 +26,6 @@
    mixins
    ========================================================================== */
 /**
- * Font smoothing
- */
-/**
- * Shortcut for :hover, :active, and :focus styles.
- *
- * Usage:
- * a {
- *   color: blue;
- *   @include hover { color: red; }
- * }
- */
-/**
- * Shortcut for :active styles.
- * Used for specifiying a explicit active style (overwrites hover() for example).
- *
- * Usage:
- * a {
- *   color: blue;
- *   @include active { color: red; }
- * }
- */
-/**
  * Clearfix
  * Actually an @extend, but we don't want to depend on inclusion order
  *
@@ -56,7 +34,6 @@
  */
 /*
  * Bare list
- * Author: Mattijs Bliek
  *
  * Get rid of list-style and padding
  */
@@ -64,13 +41,12 @@
  * For image replacement
  */
 /**
- * For using breakpoints
+ * Media query breakpoints mixins
+ *
  * Usage:
  * div { width: 60px;
  *	@include breakpoint-min($small) { width: 80px; }
  * }
- *
- * Pass true as a second parameter to toggle high dpi screens
  */
 /**
  * For targetting high dpi screens
@@ -79,19 +55,6 @@
  *	width: 30px; height: 30px; background: url('img.jpg');
  *	@include high-dpi() { background: url('image-2x.jpg'); @include background-size(30px 30px); }
  * }
- */
-/**
- * For targeting old-IE
- * Usage:
- * div {
- *  @include old-ie { zoom: 1; }
- * }
- */
-/**
- * Calculate fluid ratio based on two dimensions (width/height)
- * @see http://voormedia.com/blog/2012/11/responsive-background-images-with-fixed-or-fluid-aspect-ratios
- * Usage:
- * .header { @include fluid-ratio(800px 200px, 300px 150px); background-image: url('img/branding.png'); }
  */
 /* ==========================================================================
    variables

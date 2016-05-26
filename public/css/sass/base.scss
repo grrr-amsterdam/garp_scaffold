@@ -1,4 +1,4 @@
-/*!
+/*
  _________   ________   ________   _______-+-
 /\* ______\ /\* ____ \ /\* ____ \ /\* ____ \
 \ \ \_____/ \ \ \__/\ \\ \ \__/\ \\ \ \__/\ \
@@ -24,13 +24,14 @@
  */
 
 
-/* import order is important */
+// Import Normalize.css from npm so it’s easy to update
+@import '../../../node_modules/normalize.css/normalize';
+
 @import 'utility/functions';
 @import 'utility/mixins';
 @import 'utility/variables';
 @import 'utility/fonts';
 @import 'utility/icons';
-@import 'utility/normalize';
 
 /* ==========================================================================
 	PRIMER
@@ -40,31 +41,31 @@ html {
 	box-sizing: border-box; font-size: 62.5%; line-height: 1.4;
 	-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
-*, *:before, *:after { box-sizing: inherit; }
+
+*, *::before, *::after { box-sizing: inherit; }
 
 body {
 	background: #fff; margin: 0;
-	font-family: $bodyFont; font-weight: normal; font-size: map-get($fontSizesSmall, body); color: $black;
+	font-family: $bodyFont; font-weight: normal;
+	font-size: map-get($fontSizesSmall, body); color: $black;
+	background-image: url('img/spinner.gif');
 }
-
 
 /*
  * Forms
  */
 button, input, select, textarea {
-	font-family: $bodyFont; font-weight: normal; font-size: map-get($fontSizesSmall, body); color: $black;
+	color: $black;
+	font-family: $bodyFont; font-weight: normal;
+	font-size: map-get($fontSizesSmall, body); 
 }
 
 
 /*
  * Links
  */
-a {
-
-}
-
 a:hover, a:focus {
-	outline: 0; vertical-align: baseline; transition: color .1s;
+	outline: 0; vertical-align: baseline;
 	-webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove the blue tap-highlight on mobile */
 }
 
@@ -72,7 +73,9 @@ a:hover, a:focus {
 /*
  * Typography
  */
-p { margin-top: 0; margin-bottom: $defaultLineHeight+em; &:last-child { margin-bottom: 0; }}
+p {
+	margin-top: 0; margin-bottom: $defaultLineHeight + em;
+}
 
 h1 {
 	font-size: map-get($fontSizesSmall, h1);
@@ -94,14 +97,16 @@ h6 { }
 /*
  * Media
  */
-img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
+img, object, iframe, video {
+	max-width: 100%; width: auto; height: auto;
+}
 
 
 /* ==========================================================================
 	LAYOUT
 	========================================================================== */
+.wrapper {}
 
-.content { max-width: $siteInnerWidth; margin: 0 auto; }
 
 /* ==========================================================================
 	MODULES
@@ -109,6 +114,7 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 
 @import 'modules/cookie-info';
 @import 'modules/flash-message';
+@import 'modules/nav-primary';
 
 /* ==========================================================================
    HELPERS
@@ -122,10 +128,6 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 	.hide-on-lap { display: none !important; }
 }
 
-@include old-ie {
-	.hide-on-lap { display: none !important; }
-}
-
 .show-only-on-palm { display: none; }
 @include bp-max($small) {
 	.show-only-on-palm { display: block !important; }
@@ -134,23 +136,16 @@ img, object, iframe, video { max-width: 100%; width: auto; height: auto; }
 .is-hidden { display: none !important; visibility: hidden !important; }
 .is-offscreen { position: absolute !important; left: -999em !important; }
 .is-invisible { visibility: hidden !important; }
-.clearfix {
-	zoom: 1;
-	&:after { height: 0; visibility: hidden; display: block; clear: both; content: ''; }
-}
 
 /* Hide form field that should be left empty */
-form .hp { display: none;}
+form .hp {
+	display: none;
+}
 
 
 /* ==========================================================================
 	HOVER - disable on scroll (see function disableHoverStylesOnScroll() in main.js)
 	========================================================================== */
-
-.disable-hover { pointer-events: none; }
-
-/* ==========================================================================
-	PRINT
-	========================================================================== */
-
-@import 'utility/print';
+.disable-hover {
+	pointer-events: none;
+}

@@ -2,59 +2,400 @@
  * Gulpfile
  * Author: Mattijs Bliek
  *
- * IMPORTANT:
- * Gulp needs to be installed globally on your system before
- * you're able to run tasks. This can be done by running:
- * `npm install -g gulp`
- *
- * -------------------------------------------------------------
- *
- * DESCRIPTION:
- * Gulp is used to manage and generate front-end assets, such as
- * css, javascript, and compressed images. You can run gulp from
- * the command line with the commands below.
- *
- * -------------------------------------------------------------
- *
- * TODO:
- * - CSS sourcemaps are not rendering properly
- *
- * -------------------------------------------------------------
- *
- * COMMANDS:
- *
- * Generate a build for an environment:
- * `gulp`
- *
- * Arguments:
- * --e=environment (development|staging|production)
- * --skipImages (don't build compressed images)
- *
- * Generate images for an environment:
- * `gulp images`
- *
- * Watch files and run a server (use for development only):
- * `gulp watch`
- *
+ * See README.md for usage instructions
  * -------------------------------------------------------------
  */
 
-var gulp            = require('gulp'),
+var gulp          = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
 	$               = gulpLoadPlugins(),
-	jshintStylish   = require('jshint-stylish'),
 	pxtorem         = require('postcss-pxtorem'),
-	autoprefixer    = require('autoprefixer-core'),
+	autoprefixer    = require('autoprefixer'),
 	browserSync     = require('browser-sync'),
-	mainBowerFiles  = require('main-bower-files'),
-	argv            = require('yargs').argv,
-	sh              = require('sync-exec'),
-	eventStream     = require('event-stream');
+  browserify      = require('browserify'),
+  babelify        = require('babelify'),
+  del             = require('del'),
+  watchify        = require('watchify'),
+	assign          = require('lodash.assign'),
+  runSequence     = require('run-sequence'),
+  source          = require('vinyl-source-stream'),
+  buffer          = require('vinyl-buffer'),
+	path            = require('path'),
+  execSync        = require('child_process').execSync,
+	argv            = require('yargs').argv;
 
-var semver;
 var paths = {};
+var isWatching = false;
 var ENV = argv.e ? argv.e : 'development';
+var PROFILE = argv.profile ? argv.profile : 'development';
+var GARP_DIR = __dirname + '/vendor/grrr-amsterdam/garp3';
 
+/**
+ * Constructs paths and gets the domain for Browserify
+ */
+gulp.task('init', function() {
+	domain = getConfigValue('app.domain');
+	paths = constructPaths();
+
+	$.util.log($.util.colors.green('-----------------'));
+	$.util.log($.util.colors.green('Environment: ' + ENV));
+  $.util.log($.util.colors.green('Building css to ' + paths.cssBuild));
+  $.util.log($.util.colors.green('Building js to ' + paths.jsBuild));
+	$.util.log($.util.colors.green('-----------------'));
+});
+
+/**
+ * Deletes all previous build files
+ */
+gulp.task('clean', function() {
+  return del([
+    paths.cssBuild + '/**/*',
+    paths.jsBuild + '/**/*'
+  ]);
+});
+
+/**
+ * Auto refresh and hot reloading in the browser
+ *
+ * Also makes your development computer available to
+ * third party devices over the network.
+ */
+gulp.task('browser-sync', function() {
+	if (!domain) {
+		handleError('Could not get "' + ENV + '" domain from application/configs/app.ini');
+	}
+	browserSync({
+		proxy: domain,
+		open: false,
+		notify: {
+			styles: [
+        "display: none",
+        "padding: 15px",
+        "font-family: sans-serif",
+        "position: fixed",
+        "font-size: 0.9em",
+        "z-index: 9999",
+        "right: 0px",
+        "bottom: 0px",
+        "border-top-left-radius: 5px",
+        "background-color: rgb(27, 32, 50)",
+        "margin: 0",
+        "color: white",
+        "text-align: center"
+			]
+		}
+	});
+});
+
+/**
+ * Builds css files
+ */
+gulp.task('sass', function() {
+	var postcssOptions = {
+		map: true
+	};
+	var processors = [
+      autoprefixer({
+          browsers: ['>5%', 'last 2 versions', 'ie 9', 'ie 10']
+      }),
+      pxtorem({
+        root_value: 10,
+        unit_precision: 5,
+        prop_white_list: [
+          'font',
+          'font-size',
+        ],
+        replace: false,
+        media_query: false
+      })
+    ];
+
+  return gulp.src(paths.cssSrc + '/base.scss')
+    .pipe($.sass().on('error', $.sass.logError))
+    .pipe($.postcss(processors))
+    .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
+    .pipe(gulp.dest(paths.cssBuild))
+    .pipe(browserSync.reload({stream:true}))
+  ;
+});
+
+gulp.task('sass:cms', function() {
+  return gulp.src([paths.cssSrc + '/cms.scss', paths.cssSrc + '/cms-wysiwyg.scss'])
+    .pipe($.sass({
+      onError: function(err) {
+        handleError(err.message + ' => ' + err.file + ':' + err.line, false);
+      }
+    }))
+    .pipe($.if(ENV !== 'development', $.csso()))
+    .pipe(gulp.dest(paths.cssBuild))
+  ;
+});
+
+/**
+ * Lints Sass
+ */
+gulp.task('sass:lint', function() {
+  var scssLintOutput = function(file, stream) {
+  if (!file.scsslint.success) {
+    $.util.log($.util.colors.gray('-----------------'));
+    $.util.log($.util.colors.green(file.scsslint.issues.length) + ' scss-lint issue(s) found:');
+    file.scsslint.issues.forEach(function(issue) {
+      $.util.colors.underline(file.path);
+      $.util.log($.util.colors.green(issue.reason) + ' => ' + $.util.colors.underline(file.path) + ':' + issue.line);
+    });
+    $.util.log($.util.colors.gray('-----------------'));
+  }
+  };
+  return gulp.src(paths.cssSrc + '/**/*.scss')
+    .pipe($.scssLint({
+      'config': __dirname + '/.scss-lint.yml',
+      'customReport': scssLintOutput
+    })).on('error', handleError)
+  ;
+});
+
+
+/**
+ * Javascript bundle with Browserify
+ */
+var b;
+
+function initBrowserify() {
+  var customOpts = {
+    entries: paths.jsSrc + '/main.js'
+  };
+  var opts = assign({}, watchify.args, customOpts);
+  b = browserify(opts);
+
+  // If this is a watch task, wrap browserify in watchify
+  if (isWatching) {
+    b = watchify(b);
+  }
+  b.transform(babelify, {
+    presets: ["es2015"]
+  }).on('error', handleError);
+
+  b.on('update', bundle);
+  bundle();
+};
+
+gulp.task('javascript', initBrowserify);
+
+function bundle() {
+  eslint();
+
+  return b.bundle()
+    .on('error', function(err) { // log errors if they happen
+      $.util.log($.util.colors.red(err.message));
+    })
+    .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe($.if(ENV === 'development' && PROFILE !== 'production', $.sourcemaps.init({loadMaps: true})))
+    .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.uglify())).on('error', handleError)
+    .pipe($.if(ENV === 'development' && PROFILE !== 'production', $.sourcemaps.write({loadMaps: true})))
+    .pipe(gulp.dest(paths.jsBuild))
+    .pipe(browserSync.stream({once: true}));
+};
+
+gulp.task('bundle', bundle);
+
+/**
+ * Lints JS
+ */
+function eslint() {
+  return gulp.src(paths.jsSrc + '/**/*.js')
+      .pipe($.eslint('.eslintrc').on('error', handleError))
+      .pipe($.eslint.format());
+}
+
+gulp.task('eslint', eslint);
+
+
+/**
+ * Builds the JS for the CMS
+ */
+gulp.task('javascript:cms', function() {
+  return gulp.src(require(GARP_DIR + '/public/js/cmsBuildStack.js').stack)
+    .pipe($.concat('cms.js'))
+    .pipe($.if(ENV !== 'development', $.uglify())).on('error', handleError)
+    .pipe(gulp.dest(paths.jsBuild))
+  ;
+});
+
+/**
+ * Builds the JS for the Garp front-end models
+ */
+gulp.task('javascript:models', function() {
+  return gulp.src([
+    paths.jsSrc + '/../garp/models/*.js',
+    paths.jsSrc + '/../models/*.js',
+  ])
+    .pipe($.concat('extended-models.js'))
+    .pipe($.uglify()).on('error', handleError)
+    .pipe(gulp.dest(paths.jsBuild))
+  ;
+});
+
+/**
+ * Compresses images
+ */
+gulp.task('images', function() {
+  if (argv.skipImages) {
+    return;
+  }
+  $.util.log($.util.colors.green('Building images to ' + paths.imgBuild));
+  return gulp.src(paths.imgSrc + '/*.{png,gif,jpg,svg}')
+    .pipe($.imagemin({
+      progressive: true,
+      svgoPlugins: [{removeViewBox: false}]
+    }))
+    .on('error', handleError)
+    .pipe(gulp.dest(paths.imgBuild))
+  ;
+});
+
+/**
+ * Creates an svg sprite out of all files in the public/css/img/icons folder
+ *
+ * This sprite is lazy loaded with JS, see load-icons.js for more info
+ */
+gulp.task('images:icons', function () {
+    return gulp.src(paths.css + '/img/icons/*.svg')
+		.pipe($.svgmin(function (file) {
+        var prefix = path.basename(file.relative, path.extname(file.relative));
+        return {
+            plugins: [{
+                cleanupIDs: {
+                    prefix: prefix + '-',
+                    minify: true
+                }
+            }]
+        }
+    }).on('error', handleError))
+    .pipe($.svgstore({ inlineSvg: true }).on('error', handleError))
+    .pipe(gulp.dest(paths.cssBuild + '/img'));
+});
+
+/**
+ * Checks js and scss source files for Modernizr tests such as Modernizr.flexbox or .flexbox
+ * and creates a custom modernizr build containing only the tests you use.
+ *
+ * Note: this task isn't run on watch, you can run it manually via `gulp modernizr`
+ */
+gulp.task('modernizr:build', function() {
+  return gulp.src([paths.cssSrc + '/**/*.scss', paths.jsSrc + '/modules/*.js', paths.jsSrc + '/main.js'])
+  .pipe($.modernizr({
+    "enableJSClass": false,
+    "options" : [
+      'setClasses',
+    ],
+    "tests": [
+      "picture"
+    ]
+  }))
+  .pipe($.uglify())
+  .pipe(gulp.dest(paths.jsBuild))
+});
+
+/**
+ * Used for running modernizr as an individual Gulp task
+ */
+gulp.task('modernizr', ['init', 'modernizr:build']);
+
+/**
+ * Watches for file changes and runs Gulp tasks accordingly
+ */
+gulp.task('watch', ['default', 'browser-sync'], function(cb) {
+  isWatching = true;
+
+	gulp.watch([
+		paths.cssSrc + '/**/*.scss',
+		'!**/cms-wysiwyg.scss',
+		'!**/cms.scss'
+	], ['sass', 'sass:lint']);
+	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
+	gulp.watch(paths.cssSrc + '/img/icons/*.svg', ['icons']);
+	gulp.watch(paths.jsSrc + '/**/*.js', ['bundle']);
+	gulp.watch(paths.js + '/models/*.js', ['javascript-models']);
+	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
+	gulp.watch(paths.js +'/garp/*.js', ['javascript-cms']);
+	gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
+});
+
+/**
+ * Add revision hash behind filename so we can cache assets forever
+ */
+gulp.task('revision', function() {
+  var cssFilter = $.filter('**/*.css', {restore: true});
+  var jsFilter = $.filter('**/*.js', {restore: true});
+  var imgFilter = $.filter('**/*.{png,gif,jpg,svg}', {restore: true});
+
+  return gulp.src([
+    paths.cssBuild + '/base.css',
+    paths.cssBuild + '/cms.css',
+    paths.cssBuild + '/wysiwyg_editor.css',
+    paths.imgBuild + '/*.{png,gif,jpg,svg}',
+    paths.jsBuild + '/cms.js',
+    paths.jsBuild + '/extended-models.js',
+    paths.jsBuild + '/main.js',
+    paths.jsBuild + '/modernizr.js'
+  ])
+    .pipe($.rev())
+    .pipe(cssFilter)
+    .pipe(gulp.dest(paths.cssBuild))
+    .pipe(cssFilter.restore)
+    .pipe(jsFilter)
+    .pipe(gulp.dest(paths.jsBuild))
+    .pipe(jsFilter.restore)
+    .pipe(imgFilter)
+    .pipe(gulp.dest(paths.imgBuild))
+    .pipe(imgFilter.restore)
+    .pipe($.rev.manifest('rev-manifest-' + ENV + '.json'))
+    .pipe(gulp.dest('./'));
+
+});
+
+/*
+ * Replace image and font urls in css files
+ */
+gulp.task('revision:replace', function(){
+  var manifestFile = './rev-manifest-' + ENV + '.json';
+  var manifest = gulp.src(manifestFile);
+
+  return gulp.src(paths.cssBuild + "/*.css")
+    .pipe($.revReplace({ manifest: manifest }))
+    .pipe(gulp.dest(paths.cssBuild));
+
+});
+
+gulp.task('default', [
+  'init',
+  'clean',
+	'sass',
+  'sass:cms',
+	'sass:lint',
+	'javascript',
+	'javascript:cms',
+	'javascript:models',
+	'images',
+	'images:icons',
+	'modernizr:build'
+], function(callback) {
+  if (ENV === 'development') {
+    $.util.log('Skipping revisioning for development');
+    return callback();
+  }
+  runSequence('revision', 'revision:replace', callback);
+});
+
+
+/**
+ * ----------------------------------------------------
+ *
+ * Utility functions
+ *
+ * ----------------------------------------------------
+ */
 function handleError(error, emitEnd) {
 	if (typeof(emitEnd) === 'undefined') {
 		emitEnd = true;
@@ -67,13 +408,13 @@ function handleError(error, emitEnd) {
 }
 
 function getShellOutput(command) {
-	result = sh(command);
-	if (result.stderr) {
-		handleError('Error getting shell output: ' + result.stderr);
+  var result = execSync(command).toString('utf-8');
+	if (!result) {
+		handleError('Error getting shell output');
 		$.util.beep();
 	}
 	// Do a replace because of newline in shell output
-	return result.stdout.replace(/\s?$/, '');
+	return result.replace(/\s?$/, '');
 }
 
 function getConfigValue(value) {
@@ -81,7 +422,7 @@ function getConfigValue(value) {
 		handleError('Can\'t get undefined config value');
 		return;
 	}
-	var command = 'php ' + __dirname + '/garp/scripts/garp.php config get ' + value + ' --e=' + ENV;
+	var command = 'php ' + GARP_DIR + '/scripts/garp.php config get ' + value + ' --e=' + ENV;
 	return getShellOutput(command);
 }
 
@@ -89,251 +430,18 @@ function constructPaths() {
 	paths.public      = 'public';
 
 	paths.js          = paths.public + '/js';
-	paths.jsSrc       = paths.js     + '/src';
-	paths.jsBuild     = paths.public + getConfigValue('assets.js.root');
+	paths.jsSrc       = paths.public + getConfigValue('assets.js.root');
+	paths.jsBuild     = paths.public + getConfigValue('assets.js.build');
 
 	paths.css         = paths.public + '/css';
-	paths.cssSrc      = paths.public + getConfigValue('assets.sass.root');
-	paths.cssBuild    = paths.public + getConfigValue('assets.css.root');
+	paths.cssSrc      = paths.public + getConfigValue('assets.css.root');
+	paths.cssBuild    = paths.public + getConfigValue('assets.css.build');
 
 	paths.imgSrc      = paths.css      + '/img';
 	paths.imgBuild    = paths.cssBuild + '/img';
-	paths.cdn         = getConfigValue('cdn.domain');
-	paths.cdnCss      = getConfigValue('assets.css.root');
+	//paths.cdn         = getConfigValue('cdn.domain');
+	//paths.cdnCss      = getConfigValue('assets.css.build');
 
 	return paths;
 }
 
-gulp.task('init', function() {
-	// modernizr doesn't work without the dir set to 755, so do that
-	sh('chmod -R 755 ./node_modules/gulp-modernizr');
-
-	semver = getShellOutput('semver');
-	domain = getConfigValue('app.domain');
-	cdnType  = getConfigValue('cdn.type');
-	paths  = constructPaths();
-
-	$.util.log($.util.colors.green('-----------------'));
-	$.util.log($.util.colors.green('Semver: ' + semver));
-	$.util.log($.util.colors.green('Environment: ' + ENV));
-	$.util.log($.util.colors.green('CDN type: ' + cdnType));
-	$.util.log($.util.colors.green('-----------------'));
-});
-
-gulp.task('browser-sync', function() {
-	if (!domain) {
-		handleError('Could not get ' + ENV + ' domain from application/configs/app.ini');
-	}
-	browserSync({
-		proxy: domain,
-		open: false,
-		notify: {
-			 styles: [
-				"display: none",
-				"padding: 15px",
-				"font-family: sans-serif",
-				"position: fixed",
-				"font-size: 0.9em",
-				"z-index: 9999",
-				"right: 0px",
-				"bottom: 0px",
-				"border-top-left-radius: 5px",
-				"background-color: rgb(27, 32, 50)",
-				"margin: 0",
-				"color: white",
-				"text-align: center"
-			]
-		}
-	});
-});
-
-gulp.task('sass', function() {
-	var postcssOptions = {
-		map: true
-	};
-	var processors = [
-        autoprefixer({
-            browsers: ['>5%', 'last 3 versions', 'safari 5', 'ie 9', 'opera 12.1']
-        }),
-        pxtorem({
-			root_value: 10,
-			unit_precision: 5,
-			prop_white_list: [
-				'font',
-				'font-size',
-			],
-			replace: false,
-			media_query: false
-        })
-    ];
-
-	$.util.log($.util.colors.green('Building css to ' + paths.cssBuild));
-	return gulp.src([paths.cssSrc + '/base.scss'])
-		.pipe($.sass({
-			onError: function(err) {
-				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
-				return browserSync.notify('Error: ' + err.message + ' => ' + err.file + ':' + err.line);
-			}
-		}))
-		.pipe($.postcss(processors))
-		.pipe($.if(ENV !== 'development' && cdnType !== 'local', $.cssUrlAdjuster({
-			// hacky slashes are necessary because one slash is stripped by $.cssUrlAdjuster
-			prepend: 'http:///' + paths.cdn + paths.cdnCss + '/',
-			append: '?v=' + semver
-		})))
-		.pipe($.if(ENV !== 'development', $.minifyCss()))
-		.pipe(gulp.dest(paths.cssBuild))
-		.pipe(browserSync.reload({stream:true}))
-	;
-});
-
-gulp.task('sass-cms', function() {
-	return gulp.src([paths.cssSrc + '/cms.scss', paths.cssSrc + '/cms-wysiwyg.scss'])
-		.pipe($.sass({
-			onError: function(err) {
-				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
-			}
-		}))
-		.pipe($.if(ENV !== 'development', $.minifyCss()))
-		.pipe(gulp.dest(paths.cssBuild))
-	;
-});
-
-gulp.task('sass-ie', function() {
-	return gulp.src(paths.cssSrc + '/ie-old.scss')
-		.pipe($.sass({
-			onError: function(err) {
-				handleError(err.message + ' => ' + err.file + ':' + err.line, false);
-			}
-		}))
-		.pipe($.if(ENV !== 'development', $.minifyCss()))
-		.pipe(gulp.dest(paths.cssBuild))
-	;
-});
-
-gulp.task('scss-lint', function() {
-	var scssLintOutput = function(file, stream) {
-		if (!file.scsslint.success) {
-			$.util.log($.util.colors.gray('-----------------'));
-			$.util.log($.util.colors.green(file.scsslint.issues.length) + ' scss-lint issue(s) found:');
-			file.scsslint.issues.forEach(function(issue) {
-				$.util.colors.underline(file.path);
-				$.util.log($.util.colors.green(issue.reason) + ' => ' + $.util.colors.underline(file.path) + ':' + issue.line);
-			});
-			$.util.log($.util.colors.gray('-----------------'));
-		}
-	};
-	return gulp.src(paths.cssSrc + '/**/*.scss')
-		.pipe($.scssLint({
-			'config': __dirname + '/.scss-lint.yml',
-			'customReport': scssLintOutput
-		})).on('error', handleError)
-	;
-});
-
-
-gulp.task('javascript', ['jshint'], function() {
-	$.util.log($.util.colors.green('Building js to ' + paths.jsBuild));
-
-	var vendorFiles = gulp.src(mainBowerFiles({ filter: '**/*.js' }))
-		.pipe($.concat('vendor.js'));
-
-	var appFiles = gulp.src([
-			paths.jsSrc + '/../garp/front/styling.js',
-			paths.jsSrc + '/../garp/front/cookies.js',
-			paths.jsSrc + '/../garp/front/flashmessage.js',
-			paths.jsSrc + '/**/!(main|loadJS|modernizr).js',
-			paths.jsSrc + '/main.js'
-		])
-		.pipe($.concat('app.js'));
-
-    return eventStream.concat(vendorFiles, appFiles)
-        .pipe($.order([
-            "vendor.js",
-            "app.js"
-        ]))
-        .pipe($.concat('main.js'))
-		.pipe($.if(ENV === 'development', $.sourcemaps.init()))
-		.pipe($.if(ENV !== 'development', $.uglify())).on('error', handleError)
-		.pipe($.babel())
-		.pipe($.if(ENV === 'development', $.sourcemaps.write()))
-		.pipe(gulp.dest(paths.jsBuild))
-		.pipe(browserSync.reload({stream:true}))
-	;
-});
-
-gulp.task('javascript-cms', function() {
-	return gulp.src(require('./garp/public/js/cmsBuildStack.js').stack)
-		.pipe($.concat('cms.js'))
-		.pipe($.if(ENV !== 'development', $.uglify())).on('error', handleError)
-		.pipe(gulp.dest(paths.jsBuild))
-	;
-});
-
-gulp.task('javascript-models', function() {
-	return gulp.src([
-		paths.jsSrc + '/../garp/models/*.js',
-		paths.jsSrc + '/../models/*.js',
-	])
-		.pipe($.concat('extended-models.js'))
-		.pipe($.uglify()).on('error', handleError)
-		.pipe(gulp.dest(paths.jsBuild))
-	;
-});
-
-gulp.task('jshint', function() {
-	return gulp.src(paths.jsSrc + '/**/*.js')
-		.pipe($.jshint('.jshintrc'))
-		.pipe($.jshint.reporter('jshint-stylish'));
-});
-
-gulp.task('modernizr', ['init'], function() {
-	return gulp.src([paths.cssBuild + '/base.css', paths.jsBuild + '/main.js'])
-		.pipe($.modernizr('modernizr.js')).on('error', handleError)
-		.pipe($.uglify())
-		.pipe(gulp.dest(paths.jsBuild))
-	;
-});
-
-gulp.task('images', ['init'], function() {
-	if (argv.skipImages) {
-		return;
-	}
-	$.util.log($.util.colors.green('Building images to ' + paths.imgBuild));
-	return gulp.src(paths.imgSrc + '/*.{png,gif,jpg,svg}')
-		.pipe($.imagemin({
-			progressive: true,
-			svgoPlugins: [{removeViewBox: false}]
-		}))
-		.on('error', handleError)
-		.pipe(gulp.dest(paths.imgBuild))
-	;
-});
-
-gulp.task('watch', ['default', 'browser-sync'], function(cb) {
-	gulp.watch([
-		paths.cssSrc + '/**/*.scss',
-		'!**/cms-wysiwyg.scss',
-		'!**/cms.scss'
-	], ['sass', 'sass-ie', 'scss-lint']);
-	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
-	gulp.watch(paths.jsSrc + '/**/*.js', ['javascript']);
-	gulp.watch(paths.js + '/models/*.js', ['javascript-models']);
-	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
-	gulp.watch(paths.js +'/garp/*.js', ['javascript-cms']);
-	gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
-});
-
-gulp.task('build', [
-	'init',
-	'sass-ie',
-	'sass-cms',
-	'sass',
-	'scss-lint',
-	'javascript-cms',
-	'javascript-models',
-	'javascript',
-	'images'
-]);
-
-gulp.task('default', ['build', 'init']);

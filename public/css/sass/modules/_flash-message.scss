@@ -1,12 +1,25 @@
-/** Flash message */
+/**
+ * Flash message
+ */
 .flash-message {
-	@extend .gamma; z-index: 1000; position: fixed; top: 20%; left: 50%; width: 600px; margin: 0 0 0 -320px; padding: 60px; font-size: 18px; line-height: 1.5; color: #111; background: #FF4136;
-	opacity: 0;
-	transform: translate3d(0, -50px, 0);
+	z-index: 1000; 
+	position: fixed; top: 20%; left: 50%;
+	width: 600px; margin: 0 0 0 -320px; padding: 60px;
+	background: #fff; color: $textColor;
+	font-size: 18px; line-height: 1.5; opacity: 0;
+	transform: translateY(-50px);
 	transition: opacity .25s ease-out, transform .25s ease-out;
-	p {
-		margin-bottom: 0;
-	}
+	will-change: transform;
 }
-.flash-message-active .flash-message { opacity: 1; transform: translate3d(0, 0, 0); }
-.flash-message-inactive .flash-message { opacity: 0; transform: translate3d(0, -50px, 0); }
+
+.flash-message p {
+	margin-bottom: 0;
+}
+
+.flash-message-active .flash-message {
+	opacity: 1; transform: translateY(0);
+}
+
+.flash-message-inactive .flash-message {
+	opacity: 0; transform: translateYd(-50px);
+}
