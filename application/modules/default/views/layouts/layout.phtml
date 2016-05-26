@@ -1,6 +1,5 @@
 <!doctype html>
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="nl"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="nl"> <!--<![endif]-->
+<html class="no-js" lang="nl">
 <head>
 	<meta charset="utf-8">
 	<?php
@@ -73,7 +72,6 @@
 		CDN_IMAGE_ROOT = CDN_URL + "<?php echo $this->config()->cdn->path->upload->image ?>";
 		JS_ROOT = "<?php echo $this->config()->assets->js->build ?>";
 		CSS_ROOT = "<?php echo $this->config()->assets->css->build ?>";
-		ICON_SPRITE = "<?php echo $this->assetUrl($this->config()->assets->css->build . '/img/icons.svg') ?>";
 
 		<?php
 		// Inline Modernizr since it's such a wee script
@@ -97,6 +95,18 @@
 		if (!Modernizr.picture) {
     		document.createElement("picture");
 			loadJS("<?php echo $this->assetUrl($this->config()->assets->js->build . '/../../polyfills/picturefill.js') ?>");
+		}
+
+		// Polyfill svg `use` with external source
+		function svgSupportsExternalSource() {
+			var newerIEUA = /\bTrident\/[567]\b|\bMSIE (?:9|10)\.0\b/, webkitUA = /\bAppleWebKit\/(\d+)\b/, olderEdgeUA = /\bEdge\/12\.(\d+)\b/;
+        	return newerIEUA.test(navigator.userAgent) || (navigator.userAgent.match(olderEdgeUA) || [])[1] < 10547 || (navigator.userAgent.match(webkitUA) || [])[1] < 537 ? false : true;
+		}
+
+		if (!svgSupportsExternalSource()) {
+			loadJS("<?php echo $this->assetUrl($this->config()->assets->js->build . '/../../polyfills/svg4everybody.js') ?>", function() {
+				svg4everybody();
+			});
 		}
 
 		// Polyfill <picture> when needed

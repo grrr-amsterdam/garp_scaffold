@@ -4,7 +4,6 @@ import enhance from './modules/enhance.js';
 // Import functions that are executed on DOMready regardless of DOM
 import { enhancer as scrollListener } from './modules/scroll-listener';
 import { enhancer as responsive } from './modules/responsive';
-import loadIconSprite from './modules/icon-sprite';
 import disableHoverStylesOnScroll from './modules/disable-hover-styles-on-scroll.js';
 import FlashMessage from './modules/flashmessage.js';
 
@@ -25,7 +24,6 @@ const executeOnReady = () => {
 		fm.show();
 	}
 
-  loadIconSprite(); // Load icon sprite
 	disableHoverStylesOnScroll(); // Disable hover styles on scroll
   scrollListener(); // Initialise central scroll listener
   responsive(); // Set document width on resize and orientation change
