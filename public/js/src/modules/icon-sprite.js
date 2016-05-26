@@ -20,6 +20,7 @@ export default () => {
   }
 
   const req = new XMLHttpRequest();
+  /* eslint-disable func-names */
   req.addEventListener('load', function() {
     renderIconSprite(this.response);
   });

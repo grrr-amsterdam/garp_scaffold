@@ -24,12 +24,12 @@ const executeOnReady = () => {
 		const fm = new FlashMessage(cookieMsg);
 		fm.show();
 	}
-  
+
   loadIconSprite(); // Load icon sprite
 	disableHoverStylesOnScroll(); // Disable hover styles on scroll
   scrollListener(); // Initialise central scroll listener
   responsive(); // Set document width on resize and orientation change
-}
+};
 
 function main() {
 	if (mainReady) {

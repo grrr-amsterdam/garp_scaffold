@@ -31,7 +31,6 @@
 @import 'utility/mixins';
 @import 'utility/variables';
 @import 'utility/fonts';
-@import 'utility/icons';
 
 /* ==========================================================================
 	PRIMER
@@ -40,6 +39,7 @@
 html {
 	box-sizing: border-box; font-size: 62.5%; line-height: 1.4;
 	-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+	background-image: url('img/spinner.gif');
 }
 
 *, *::before, *::after { box-sizing: inherit; }

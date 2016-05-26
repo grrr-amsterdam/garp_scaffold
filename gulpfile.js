@@ -21,6 +21,7 @@ var gulp          = require('gulp'),
   source          = require('vinyl-source-stream'),
   buffer          = require('vinyl-buffer'),
 	path            = require('path'),
+	reworkUrl       = require('rework-plugin-url'),
   execSync        = require('child_process').execSync,
 	argv            = require('yargs').argv;
 
@@ -37,11 +38,13 @@ gulp.task('init', function() {
 	domain = getConfigValue('app.domain');
 	paths = constructPaths();
 
-	$.util.log($.util.colors.green('-----------------'));
+	$.util.log($.util.colors.green('----------------------------------'));
 	$.util.log($.util.colors.green('Environment: ' + ENV));
-  $.util.log($.util.colors.green('Building css to ' + paths.cssBuild));
-  $.util.log($.util.colors.green('Building js to ' + paths.jsBuild));
-	$.util.log($.util.colors.green('-----------------'));
+	$.util.log($.util.colors.green(''));
+  $.util.log($.util.colors.green('CDN url used in css: ' + (paths.cssCdn ? paths.cssCdn : '[local]')));
+  $.util.log($.util.colors.green('Building css to:     ' + paths.cssBuild));
+  $.util.log($.util.colors.green('Building js to:      ' + paths.jsBuild));
+	$.util.log($.util.colors.green('----------------------------------'));
 });
 
 /**
@@ -110,7 +113,13 @@ gulp.task('sass', function() {
   return gulp.src(paths.cssSrc + '/base.scss')
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.postcss(processors))
-    .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
+    //.pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
+    .pipe($.if(paths.cssCdn !== '', $.rework(
+      reworkUrl(function(url) {
+        // Prepend url with cdn path
+        return paths.cssCdn + '/' + url;
+      })
+    )))
     .pipe(gulp.dest(paths.cssBuild))
     .pipe(browserSync.reload({stream:true}))
   ;
@@ -182,9 +191,7 @@ function bundle() {
   eslint();
 
   return b.bundle()
-    .on('error', function(err) { // log errors if they happen
-      $.util.log($.util.colors.red(err.message));
-    })
+    .on('error', handleError)
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe($.if(ENV === 'development' && PROFILE !== 'production', $.sourcemaps.init({loadMaps: true})))
@@ -338,6 +345,7 @@ gulp.task('revision', function() {
     paths.jsBuild + '/modernizr.js'
   ])
     .pipe($.rev())
+    .pipe($.revDeleteOriginal())
     .pipe(cssFilter)
     .pipe(gulp.dest(paths.cssBuild))
     .pipe(cssFilter.restore)
@@ -355,6 +363,7 @@ gulp.task('revision', function() {
 /*
  * Replace image and font urls in css files
  */
+
 gulp.task('revision:replace', function(){
   var manifestFile = './rev-manifest-' + ENV + '.json';
   var manifest = gulp.src(manifestFile);
@@ -362,7 +371,6 @@ gulp.task('revision:replace', function(){
   return gulp.src(paths.cssBuild + "/*.css")
     .pipe($.revReplace({ manifest: manifest }))
     .pipe(gulp.dest(paths.cssBuild));
-
 });
 
 gulp.task('default', [
@@ -436,8 +444,11 @@ function constructPaths() {
 
 	paths.imgSrc      = paths.css      + '/img';
 	paths.imgBuild    = paths.cssBuild + '/img';
-	//paths.cdn         = getConfigValue('cdn.domain');
-	//paths.cdnCss      = getConfigValue('assets.css.build');
+  paths.cssCdn      = getConfigValue('cdn.domain');
+  if (paths.cssCdn) {
+	  var protocol    = getConfigValue('cdn.ssl') ? 'https://' : 'http://';
+	  paths.cssCdn    = protocol + paths.cssCdn + getConfigValue('assets.css.build');
+  }
 
 	return paths;
 }
