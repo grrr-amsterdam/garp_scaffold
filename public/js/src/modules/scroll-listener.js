@@ -10,7 +10,7 @@ const onScroll = e => {
 	});
 };
 
-export const init = () => {
+export const enhancer = () => {
 	window.addEventListener('scroll', onScroll);
 };
 

@@ -50,7 +50,7 @@ export const forEach = (a, fn) => Array.prototype.forEach.call(a, fn);
 
 export const filter = (a, fn) => Array.prototype.filter.call(a, fn);
 
-export const not = fn => e => !fn;
+export const not = fn => (...args) => !fn(...args);
 
 export const objectByKey = (arr, key) =>
 	arr.reduce((prev, curr) => {

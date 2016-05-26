@@ -10,7 +10,7 @@ const renderIconSprite = svg => {
     document.body.appendChild(container);
     document.documentElement.classList.add(SUCCESS_CLASS);
     svg4everybody();
-}
+};
 
 export default () => {
   // If there are no svg icons on the current page, there
@@ -26,4 +26,4 @@ export default () => {
 
   req.open("get", ICON_SPRITE, true);
   req.send();
-}
+};

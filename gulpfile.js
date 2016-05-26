@@ -91,9 +91,6 @@ gulp.task('browser-sync', function() {
  * Builds css files
  */
 gulp.task('sass', function() {
-	var postcssOptions = {
-		map: true
-	};
 	var processors = [
       autoprefixer({
           browsers: ['>5%', 'last 2 versions', 'ie 9', 'ie 10']

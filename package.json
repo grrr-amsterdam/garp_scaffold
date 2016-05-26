@@ -9,6 +9,7 @@
     "babelify": "^7.3.0",
     "browser-sync": "^2.12.8",
     "browserify": "^13.0.1",
+    "del": "^2.2.0",
     "eslint-config-defaults": "^9.0.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",

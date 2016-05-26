@@ -59,7 +59,7 @@
 	<?php
 	/**
  	 * Preload web fonts
- 	 * Note: the crossorigin attribute is mandatory for fonts, event when loaded from the same domain.
+ 	 * Note: the crossorigin attribute is mandatory for fonts, even when loaded from the same domain.
  	 * <link rel="preload" href="//<?php echo $this->config()->cdn->domain ?>/css/fonts/[NAME].woff2" as="font" type="font/woff2" crossorigin>
 	 */
 	?>
@@ -91,6 +91,12 @@
 			// This is a horrible solution, but Modernizr does not respect the `enableJSClass: false` option...
 			var reJS = new RegExp('(^|\\s)js(\\s|$)');
       		document.documentElement.className = document.documentElement.className.replace(reJS, '$1no-js$2');
+		}
+
+		// Polyfill <picture> when needed
+		if (!Modernizr.picture) {
+    		document.createElement("picture");
+			loadJS("<?php echo $this->assetUrl($this->config()->assets->js->build . '/../../polyfills/picturefill.js') ?>");
 		}
 
 		// Polyfill <picture> when needed
