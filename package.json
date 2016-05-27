@@ -2,6 +2,12 @@
   "name": "garpscaffold",
   "description": "Garp scaffold",
   "private": true,
+  "scripts": {
+  	  "start": "gulp watch",
+  	  "build": "gulp",
+  	  "build:staging": "gulp --e=staging",
+  	  "build:production": "gulp --e=production"
+  },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "babel-eslint": "^6.0.4",

@@ -113,7 +113,7 @@ gulp.task('sass', function() {
   return gulp.src(paths.cssSrc + '/base.scss')
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.postcss(processors))
-    //.pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
+    .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
     .pipe($.if(paths.cssCdn !== '', $.rework(
       reworkUrl(function(url) {
         // Prepend url with cdn path
