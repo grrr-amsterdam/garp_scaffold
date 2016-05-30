@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/grrr-amsterdam/garp_scaffold.svg)](https://travis-ci.org/grrr-amsterdam/garp_scaffold)
 
 # Readme for Garp Scaffold
-=======
 
 This is a scaffold set to initiate [Garp 3](https://github.com/grrr-amsterdam/garp3) projects.
 
@@ -51,7 +50,7 @@ We use [Sass](http://sass-lang.com/) for css compilation. However we prefer to s
 vanilla css as possible. Definitely make use of variables, but try to limit your use of mixins and
 loops. Also never use extend.
 
-We have a bunch more conventions for writing CSS. **Please head these conventions**, they lead to
+We have a bunch more conventions for writing CSS. **Please heed these conventions**, they lead to
 more consistent and maintainable code. See the [css coding standards](https://github.com/grrr-amsterdam/garp3/wiki/coding-standards-html-css)
 for more info.
 
@@ -80,7 +79,7 @@ more details.
 
 ## Building with Gulp
 
-[Gulp](http://gulpjs.com) is our task runner of choice. It takes can care of building CSS, compiling
+[Gulp](http://gulpjs.com) is our task runner of choice. It takes care of building CSS, compiling
 JavaScript, and much more.
 
 Gulp takes most of it’s configuration values—such as where to put build files, or which cdn to
@@ -104,7 +103,7 @@ staging or production build.
 gulp watch
 ```
 
-Runs a build and watches for file changes in CSS, JavaScript and `php` and `phtml` file the
+Runs a build and watches for file changes in CSS and JavaScript, as well as php/phtml files in the
 `application/modules` directory.
 
 **BrowserSync**
@@ -139,7 +138,7 @@ a sprite automatically.
 In your views you can render an icon via the SVG helper as such, whereby [icon-name] is taken from
 the filename of the SVG:
 ```php
-$this->svg('[icon-name]`)
+$this->svg('[icon-name]')
 ```
 
 Coloring icons is as easy as using `fill: #f00` in css.
@@ -147,7 +146,7 @@ Coloring icons is as easy as using `fill: #f00` in css.
 **Note**
 If your icons are not changing color, it is most likely because there are inline `fill`
 attributes on your SVG. Open up the SVG in your text editor and remove all `fill` attributes to
-make the it colorable through CSS.
+make it colorable through CSS.
 
 
 ## Preloading webfonts

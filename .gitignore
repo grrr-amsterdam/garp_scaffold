@@ -28,5 +28,5 @@ build/logs
 build/phpdox
 node_modules
 public/js/build/dev/*
-public/css/compiled/dev/*
+public/css/build/dev/*
 bower_components

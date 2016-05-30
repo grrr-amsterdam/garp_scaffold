@@ -75,7 +75,10 @@
 
 		<?php
 		// Inline Modernizr since it's such a wee script
-		require_once(APPLICATION_PATH . '/../public' .  $this->config()->assets->js->build . '/modernizr.js');
+		$modernizr = APPLICATION_PATH . '/../public' .  $this->config()->assets->js->build . '/modernizr.js';
+		if(file_exists($modernizr)){
+			require_once($modernizr);
+		}
 
 		// Load scripts async thru loadJS()
 		require_once(APPLICATION_PATH . '/../public' .  $this->config()->assets->js->root . '/loadJS.js');
@@ -117,7 +120,15 @@
 	</script>
 </head>
 <body>
-	<?php echo $this->partial('partials/google-tag-manager.phtml', 'g'); ?>
+	<?php
+	// Warn user if Modernizr does not exist
+	if(!file_exists($modernizr)) :
+		echo $this->partial('partials/modernizr-warning.phtml');
+	endif;
+
+	// Google Tag Manager
+	echo $this->partial('partials/google-tag-manager.phtml', 'g');
+	?>
 
 	<div class="wrapper">
 		<?php echo $this->partial('partials/navbar.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
