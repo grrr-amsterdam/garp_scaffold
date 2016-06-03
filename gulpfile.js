@@ -114,7 +114,7 @@ gulp.task('sass', function() {
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.postcss(processors))
     .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
-    .pipe($.if(paths.cssCdn !== '', $.rework(
+    .pipe($.if(ENV !== 'development' && paths.cssCdn !== '', $.rework(
       reworkUrl(function(url) {
         // Prepend url with cdn path
         return paths.cssCdn + '/' + url;
