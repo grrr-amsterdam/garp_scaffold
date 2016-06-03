@@ -317,12 +317,12 @@ gulp.task('watch', ['default', 'browser-sync'], function(cb) {
 		'!**/cms-wysiwyg.scss',
 		'!**/cms.scss'
 	], ['sass', 'sass:lint']);
-	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass-cms']);
+	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass:cms']);
 	gulp.watch(paths.cssSrc + '/img/icons/*.svg', ['icons']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['bundle']);
-	gulp.watch(paths.js + '/models/*.js', ['javascript-models']);
+	gulp.watch(paths.js + '/models/*.js', ['javascript:models']);
 	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
-	gulp.watch(paths.js +'/garp/*.js', ['javascript-cms']);
+	gulp.watch(paths.js +'/garp/*.js', ['javascript:cms']);
 	gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
 });
 
