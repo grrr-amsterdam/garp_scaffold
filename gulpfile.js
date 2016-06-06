@@ -341,8 +341,7 @@ gulp.task('revision', function() {
     paths.imgBuild + '/*.{png,gif,jpg,svg}',
     paths.jsBuild + '/cms.js',
     paths.jsBuild + '/extended-models.js',
-    paths.jsBuild + '/main.js',
-    paths.jsBuild + '/modernizr.js'
+    paths.jsBuild + '/main.js'
   ])
     .pipe($.rev())
     .pipe($.revDeleteOriginal())
