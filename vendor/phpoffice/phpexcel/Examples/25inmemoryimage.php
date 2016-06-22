@@ -2,7 +2,7 @@
 /**
  * PHPExcel
  *
- * Copyright (C) 2006 - 2014 PHPExcel
+ * Copyright (c) 2006 - 2015 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,7 @@
  *
  * @category   PHPExcel
  * @package    PHPExcel
- * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    ##VERSION##, ##DATE##
  */
@@ -35,12 +35,12 @@ define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 date_default_timezone_set('Europe/London');
 
 /** Include PHPExcel */
-require_once dirname(__FILE__) . '/../Classes/PHPExcel.php';
+require_once dirname(__FILE__) . '/../src/Bootstrap.php';
 
 
 // Create new PHPExcel object
 echo date('H:i:s') , " Create new PHPExcel object" , EOL;
-$objPHPExcel = new PHPExcel();
+$objPHPExcel = new \PHPExcel\Spreadsheet();
 
 // Set document properties
 echo date('H:i:s') , " Set document properties" , EOL;
@@ -60,19 +60,25 @@ imagestring($gdImage, 1, 5, 5,  'Created with PHPExcel', $textColor);
 
 // Add a drawing to the worksheet
 echo date('H:i:s') , " Add a drawing to the worksheet" , EOL;
-$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+$objDrawing = new \PHPExcel\Worksheet\MemoryDrawing();
 $objDrawing->setName('Sample image');
 $objDrawing->setDescription('Sample image');
 $objDrawing->setImageResource($gdImage);
-$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+$objDrawing->setRenderingFunction(\PHPExcel\Worksheet\MemoryDrawing::RENDERING_JPEG);
+$objDrawing->setMimeType(\PHPExcel\Worksheet\MemoryDrawing::MIMETYPE_DEFAULT);
 $objDrawing->setHeight(36);
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 echo date('H:i:s') , " Write to Excel2007 format" , EOL;
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter = \PHPExcel\IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 echo date('H:i:s') , " File written to " , str_replace('.php', '.xlsx', pathinfo(__FILE__, PATHINFO_BASENAME)) , EOL;
+
+
+echo date('H:i:s') , " Write to HTML format" , EOL;
+$objWriter = \PHPExcel\IOFactory::createWriter($objPHPExcel, 'HTML');
+$objWriter->save(str_replace('.php', '.html', __FILE__));
+echo date('H:i:s') , " File written to " , str_replace('.php', '.html', pathinfo(__FILE__, PATHINFO_BASENAME)) , EOL;
 
 
 // Echo memory peak usage
@@ -80,4 +86,4 @@ echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 102
 
 // Echo done
 echo date('H:i:s') , " Done writing file" , EOL;
-echo 'File has been created in ' , getcwd() , EOL;
+echo 'Files have been created in ' , getcwd() , EOL;

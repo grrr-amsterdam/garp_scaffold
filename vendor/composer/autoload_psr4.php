@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
+    'PHPExcel\\' => array($vendorDir . '/phpoffice/phpexcel/src/PhpSpreadsheet'),
 );

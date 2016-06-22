@@ -1,29 +1,38 @@
 {
-	"name": "grrr/garp3-project",
-	"description": "This is the PHP dependency package setup for a Garp 3 project.",
-	"license": "proprietary",
-	"config": {
-		"preferred-install": "dist"
-	},
+  "name": "grrr/garp3-project",
+  "description": "This is the PHP dependency package setup for a Garp 3 project.",
+  "license": "proprietary",
+  "config": {
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "dev",
 
-    "require-dev": {
-		"phpunit/phpunit": "3.7.*"
-	},
+  "repositories": [{
+    "type": "vcs",
+    "url": "https://github.com/Ixolit/Ano_ZFTwig"
+  }],
 
-    "require": {
-		"grrr-amsterdam/garp3": "^3.8.0"
-	},
+  "require-dev": {
+    "phpunit/phpunit": "3.7.*",
+    "squizlabs/php_codesniffer": "^2.6"
+  },
 
-	"autoload": {
-        "psr-0": {
-            "App_": "library/",
-            "Golem_": "library/",
-            "Model_": "application/modules/default/"
-        }
-    },
+  "require": {
+    "grrr-amsterdam/garp3": "^3.9.0",
+    "twig/twig": "^1.24",
+    "ano/zf-twig": "master"
+  },
 
-    "scripts": {
-    	"test": "vendor/bin/phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/"
+  "autoload": {
+    "psr-0": {
+      "App_": "library/",
+      "Golem_": "library/",
+      "Model_": "application/modules/default/"
     }
+  },
+
+  "scripts": {
+    "test": "vendor/bin/phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/"
+  }
 
 }

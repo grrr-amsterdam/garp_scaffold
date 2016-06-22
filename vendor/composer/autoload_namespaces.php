@@ -7,9 +7,10 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Zend_' => array($vendorDir . '/zendframework/zendframework1/library'),
-    'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
+    'Twig_' => array($vendorDir . '/twig/twig/lib'),
     'Model_' => array($baseDir . '/application/modules/default'),
     'Golem_' => array($baseDir . '/library'),
     'Garp_' => array($vendorDir . '/grrr-amsterdam/garp3/library'),
     'App_' => array($baseDir . '/library'),
+    '' => array($vendorDir . '/ano/zf-twig/library'),
 );

@@ -6,11 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/phpunit/phpunit-mock-objects',
     $vendorDir . '/phpunit/php-token-stream',
+    $vendorDir . '/zendframework/zendframework1/library',
+    $vendorDir . '/grrr-amsterdam/garp3/library',
+    $vendorDir . '/phpunit/phpunit-mock-objects',
     $vendorDir . '/phpunit/php-code-coverage',
     $vendorDir . '/phpunit/phpunit',
     $vendorDir . '/symfony/yaml',
-    $vendorDir . '/zendframework/zendframework1/library',
-    $vendorDir . '/grrr-amsterdam/garp3/library',
 );
