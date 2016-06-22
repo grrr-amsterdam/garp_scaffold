@@ -1,0 +1,204 @@
+<!doctype html>
+<html class="no-js" lang="nl">
+<head>
+    <meta charset="utf-8">
+    <title>{{ zf.fullTitle(title, currentPage) }}</title>
+    <!--
+     _________   ________   ________   _______-+-
+    /\* ______\ /\* ____ \ /\* ____ \ /\* ____ \
+    \ \ \_____/ \ \ \__/\ \\ \ \__/\ \\ \ \__/\ \
+     \ \ \   ____\ \ \_\_\ \\ \ \_\_\ \\ \ \_\_\ \
+      \ \ \ /\__ \\ \  __  _\\ \  __  _\\ \  __  _\
+       \ \ \_/_/\ \\ \ \/\ \/_\ \ \/\ \/_\ \ \/\ \/_
+        \ \________\\ \_\ \___\\ \_\ \___\\ \_\ \___\
+         \/________/ \/_/\/___/ \/_/\/___/ \/_/\/___/.nl -->
+
+    <meta http-equiv="cleartype" content="on">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ description ?: app.config.app.description }}">
+
+    {# TODO: zf.social().facebookOgData(ogData ?: []) | raw #}
+
+    {% if app.environment != 'production' %}
+    {# Robots must never crawl staging or development sites! #}
+    <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+
+    <link rel="canonical" href="{{ canonical_url ?: zf.fullUrl(zf.url()) }}">
+    <link rel="shortcut icon" href="{{ zf.baseUrl('/favicon.ico') }}">
+
+    {% if app.config.cdn.type != 'local' %}
+    <link rel="dns-prefetch" href="{{ zf.assetUrl('') }} ">
+    {% endif %}
+
+    {#
+      Preload web fonts
+      Note: the crossorigin attribute is mandatory for fonts, even when loaded from the same domain.
+      <link rel="preload" href="{{ zf.assetUrl('/css/fonts/[NAME].woff2') }}" as="font" type="font/woff2" crossorigin>
+    #}
+
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="stylesheet" href="{{ zf.assetUrl(app.config.assets.css.build ~ '/base.css') }}">
+
+    <script>
+        BASE = "{{ zf.baseUrl('/') }}";
+        CDN_URL = "{{ zf.assetUrl('') }}";
+        CDN_IMAGE_ROOT = CDN_URL + "{{ app.config.cdn.path.upload.image }}";
+        JS_ROOT = "{{ app.config.assets.js.build }}";
+        CSS_ROOT = "{{ app.config.assets.css.build }}";
+
+        {# Inline Modernizr since it's such a wee script #}
+        {% set modernizrSource = zf.script().includeSource(app.applicationPath ~ '/../public' ~
+                                                           app.config.assets.js.build ~
+                                                           '/modernizr.js') %}
+        {{ modernizrSource }}
+
+        {# Load scripts async thru loadJS() #}
+        {{ zf.script().includeSource(app.applicationPath ~ '/../public' ~ app.config.assets.js.root ~ '/loadJS.js') }}
+
+        var cutsMustard = 'querySelector' in document && 'addEventListener' in window && 'requestAnimationFrame' in window;
+        if (cutsMustard) {
+            loadJS("{{ zf.assetUrl(app.config.assets.js.build ~ '/bundle.js') }}");
+        } else {
+            // If the browser does support JS, but does not cut the mustard, put back to .no-js class
+            // This is a horrible solution, but Modernizr does not respect the `enableJSClass: false` option...
+            var reJS = new RegExp('(^|\\s)js(\\s|$)');
+            document.documentElement.className = document.documentElement.className.replace(reJS, '$1no-js$2');
+        }
+
+        // Polyfill <picture> when needed
+        if (!Modernizr.picture) {
+            document.createElement("picture");
+            loadJS("{{ zf.assetUrl(app.config.assets.js.build ~ '/../../polyfills/picturefill.js') }}");
+        }
+
+        // Polyfill svg `use` with external source
+        function svgSupportsExternalSource() {
+            var newerIEUA = /\bTrident\/[567]\b|\bMSIE (?:9|10)\.0\b/, webkitUA = /\bAppleWebKit\/(\d+)\b/, olderEdgeUA = /\bEdge\/12\.(\d+)\b/;
+            return newerIEUA.test(navigator.userAgent) || (navigator.userAgent.match(olderEdgeUA) || [])[1] < 10547 || (navigator.userAgent.match(webkitUA) || [])[1] < 537 ? false : true;
+        }
+
+        if (!svgSupportsExternalSource()) {
+            loadJS("{{ zf.assetUrl(app.config.assets.js.build ~ '/../../polyfills/svg4everybody.js') }}", function() {
+                svg4everybody();
+            });
+        }
+    </script>
+</head>
+<body>
+    {% if not modernizrSource %}
+    {# Warn developer if Modernizr does not exist #}
+    {% include('partials/modernizr-warning.phtml') %}
+    {% endif %}
+
+    // Google Tag Manager
+    echo $this->partial('partials/google-tag-manager.phtml', 'g');
+    ?>
+
+    <div class="wrapper">
+        <?php echo $this->partial('partials/navbar.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
+        <?php echo $this->partial('partials/header.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
+        {{ layoutBlock('content') }}
+    </div>
+
+    <?php
+        echo $this->partial('partials/cookie-announcement.phtml', 'default');
+
+        echo $this->script()->render();
+
+        if ($browseboxConfig = $this->browsebox()->config()):
+            echo $browseboxConfig;
+        endif;
+
+        if ($this->social()->needsFacebookInit()):
+            echo $this->social()->facebookInit();
+        endif;
+    ?>
+</body>
+</html>
+
+<!doctype html>
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="nl"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="nl"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    {% if app.config.cdn.type != 'local' %}
+    <link rel="dns-prefetch" href="//{{ app.config.cdn.domain }} ">
+    {% endif %}
+
+    <title>{{ zf.fullTitle(title, currentPage) }}</title>
+
+    <!--
+     _________   ________   ________   _______-+-
+    /\* ______\ /\* ____ \ /\* ____ \ /\* ____ \
+    \ \ \_____/ \ \ \__/\ \\ \ \__/\ \\ \ \__/\ \
+     \ \ \   ____\ \ \_\_\ \\ \ \_\_\ \\ \ \_\_\ \
+      \ \ \ /\__ \\ \  __  _\\ \  __  _\\ \  __  _\
+       \ \ \_/_/\ \\ \ \/\ \/_\ \ \/\ \/_\ \ \/\ \/_
+        \ \________\\ \_\ \___\\ \_\ \___\\ \_\ \___\
+         \/________/ \/_/\/___/ \/_/\/___/ \/_/\/___/.nl -->
+
+    <meta http-equiv="cleartype" content="on">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="{{ canonical_url ? canonical_url : zf.fullUrl(zf.url()) }}">
+
+    {% if app.environment != 'production' %}
+    {# Robots must never crawl staging or development sites! #}
+    <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+
+    <meta name="description" content="{{ description ?: app.config.app.description }}">
+
+    <?php // echo $this->social()->facebookOgData($this->ogData ?: array()); ?>
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/ie-old.css') ?>">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="<?php echo $this->assetUrl($this->config()->assets->css->root . '/base.css') ?>">
+    <!--<![endif]-->
+    <script>
+        BASE = "<?php echo $this->baseUrl('/') ?>";
+        CDN_URL = "http://<?php echo $this->config()->cdn->domain ?>";
+        CDN_IMAGE_ROOT = CDN_URL + "<?php echo $this->config()->cdn->path->upload->image ?>";
+        JS_ROOT = "<?php echo $this->config()->assets->js->root ?>";
+
+        <?php
+        // Inline Modernizr since it's such a wee script
+        require_once(APPLICATION_PATH . '/../public' .  $this->config()->assets->js->root . '/modernizr.js');
+
+        // Load scripts async thru loadJS()
+        $this->partial('partials/load-js.phtml');
+        ?>
+
+        var cutsMustard = 'querySelector' in document && 'addEventListener' in window;
+        if (cutsMustard) {
+            loadJS("<?php echo $this->assetUrl($this->config()->assets->js->root . '/main.js') ?>");
+        }
+        ?>
+    </script>
+    <link rel="shortcut icon" href="<?php echo $this->baseUrl('/favicon.ico') ?>">
+</head>
+<body>
+    <?php echo $this->partial('partials/google-tag-manager.phtml', 'g'); ?>
+    <div class="wrapper">
+        <?php echo $this->partial('partials/header.phtml', 'default', array('currentPage' => $this->currentPage)); ?>
+        <div class="content">
+            {{ layoutBlock('content') }}
+        </div>
+    </div>
+    <?php echo $this->partial('partials/cookie-announcement.phtml', 'default');?>
+    <?php
+        echo $this->script()->render();
+        if ($browseboxConfig = $this->browsebox()->config()):
+            echo $browseboxConfig;
+        endif;
+        if ($this->social()->needsFacebookInit()) {
+            echo $this->social()->facebookInit();
+        }
+    ?>
+</body>
+</html>
+
