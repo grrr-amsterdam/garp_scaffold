@@ -1,5 +1,5 @@
 {# Note: keep cms.css on baseUrl, because that stylesheet is referenced from Javascript, this would result in a security error otherwise. #}
-<link id="icons" rel="stylesheet" href="{{ zf.baseUrl(app.config.assets.css.build ~ '/cms.css') ~ '?' app.version }}">
+<link id="icons" rel="stylesheet" href="{{ zf.baseUrl(app.config.assets.css.build ~ '/cms.css') ~ '?' ~ app.version }}">
 
 <script>
 window.WYSIWYG_CSS_URL = "{{ zf.baseUrl(app.config.assets.css.build ~ '/cms-wysiwyg.css') ~ '?' ~ app.version }}";
