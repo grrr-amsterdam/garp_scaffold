@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the Ano_ZFTwig package
- * 
+ *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
@@ -39,8 +39,8 @@ class Ano_ZFTwig_View_Engine_TwigEngine extends Ano_View_Engine_Abstract
         if (array_key_exists('options', $config) && is_array($config['options'])) {
             $options = $config['options'];
         }
-        
-        $loader = new Ano_ZFTwig_Loader_FileLoader($this->getView()->getScriptPaths());
+
+        $loader = $this->_getFileLoader();
         $twigEnvironment = new Ano_ZFTwig_Environment($this->getView(), $loader, $options);
 
         if (array_key_exists('auto_escape', $options)) {
@@ -75,7 +75,7 @@ class Ano_ZFTwig_View_Engine_TwigEngine extends Ano_View_Engine_Abstract
                     throw new Ano_ZFTwig_View_Engine_TwigEngine_Exception('You must provide a name for globals (e.g. "app")');
                 }
                 $globalsName = $config['globals']['name'];
-                
+
                 if (!class_exists($globalsClass)) {
                     throw new Ano_ZFTwig_View_Engine_TwigEngine_Exception('Class for globals doesn\'t exist: ' . $globalsClass);
                 }
@@ -126,4 +126,42 @@ class Ano_ZFTwig_View_Engine_TwigEngine extends Ano_View_Engine_Abstract
         $template = $this->getEnvironment()->loadTemplate($templateFile);
         $template->display($vars);
     }
+
+    /**
+     * Grab a file loader, populated with paths per module
+     *
+     * @return Ano_ZFTwig_Loader_FileLoader
+     */
+    protected function _getFileLoader()
+    {
+        $viewDirs = $this->_getViewDirectories();
+        $loader = new Ano_ZFTwig_Loader_FileLoader();
+        foreach ($viewDirs as $module => $path) {
+            $loader->addPath($path, $module);
+        }
+        return $loader;
+    }
+
+    /**
+     * Get array of paths per module
+     *
+     * @return array
+     */
+    protected function _getViewDirectories()
+    {
+        $frontController = Zend_Controller_Front::getInstance();
+        $moduleDirs = $frontController->getControllerDirectory();
+        $viewDirs = array_map(function($dir) {
+            return dirname($dir) . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR .
+                'scripts';
+        }, $moduleDirs);
+
+        // Make default module the __main__ one otherwise every include would have to be namespaced
+        if (array_key_exists($frontController->getDefaultModule(), $viewDirs)) {
+            $viewDirs['__main__'] = $viewDirs[$frontController->getDefaultModule()];
+            unset($viewDirs[$frontController->getDefaultModule()]);
+        }
+        return $viewDirs;
+    }
 }
+

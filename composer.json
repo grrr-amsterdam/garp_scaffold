@@ -9,7 +9,7 @@
 
   "repositories": [{
     "type": "vcs",
-    "url": "https://github.com/Ixolit/Ano_ZFTwig"
+    "url": "https://github.com/harmenjanssen/Ano_ZFTwig"
   }],
 
   "require-dev": {

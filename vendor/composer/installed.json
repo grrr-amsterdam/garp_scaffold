@@ -669,47 +669,6 @@
         ]
     },
     {
-        "name": "ano/zf-twig",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Ixolit/Ano_ZFTwig.git",
-            "reference": "29aa58f67011b90ffd5ce76d05d4f93c8df4ab48"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Ixolit/Ano_ZFTwig/zipball/29aa58f67011b90ffd5ce76d05d4f93c8df4ab48",
-            "reference": "29aa58f67011b90ffd5ce76d05d4f93c8df4ab48",
-            "shasum": ""
-        },
-        "require": {
-            "twig/twig": "1.*",
-            "zendframework/zendframework1": "1.*"
-        },
-        "time": "2015-12-15 15:28:56",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "": "library/"
-            }
-        },
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Benjamin Dulau",
-                "email": "benjamin.dulau@gmail.com"
-            }
-        ],
-        "description": "Ano_ZFTwig allows the use of twig with Zend Framework 1.1x.",
-        "support": {
-            "source": "https://github.com/Ixolit/Ano_ZFTwig/tree/master"
-        }
-    },
-    {
         "name": "squizlabs/php_codesniffer",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -829,5 +788,46 @@
             "BSD-3-Clause"
         ],
         "description": "Framework and CMS built on top of Zend Framework."
+    },
+    {
+        "name": "ano/zf-twig",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/harmenjanssen/Ano_ZFTwig.git",
+            "reference": "d2198e3644f7b08d54518db6b501cb6832ae514b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/harmenjanssen/Ano_ZFTwig/zipball/d2198e3644f7b08d54518db6b501cb6832ae514b",
+            "reference": "d2198e3644f7b08d54518db6b501cb6832ae514b",
+            "shasum": ""
+        },
+        "require": {
+            "twig/twig": "1.*",
+            "zendframework/zendframework1": "1.*"
+        },
+        "time": "2016-06-23 18:09:55",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "": "library/"
+            }
+        },
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Benjamin Dulau",
+                "email": "benjamin.dulau@gmail.com"
+            }
+        ],
+        "description": "Ano_ZFTwig allows the use of twig with Zend Framework 1.1x.",
+        "support": {
+            "source": "https://github.com/harmenjanssen/Ano_ZFTwig/tree/master"
+        }
     }
 ]

@@ -91,9 +91,7 @@
         {% include('partials/modernizr-warning.twig') %}
     {% endif %}
 
-    {#{% include('partials/google-tag-manager.phtml') %}#}
-    {#{{ zf.partial('partials/google-tag-manager.phtml', 'g') }}#}
-    {#echo $this->partial('partials/google-tag-manager.phtml', 'g');#}
+    {% include('@g/partials/google-tag-manager.phtml') %}
 
     <div class="wrapper">
         {{ include('partials/navbar.twig') }}

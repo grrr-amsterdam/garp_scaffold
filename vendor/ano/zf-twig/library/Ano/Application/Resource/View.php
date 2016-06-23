@@ -77,6 +77,7 @@ class Ano_Application_Resource_View extends Zend_Application_Resource_ResourceAb
      */
     public function getView()
     {
+        $this->getBootstrap()->bootstrap('FrontController');
         if (null === $this->_view) {            
             $this->_options = $this->getOptions();
             $this->_view = new Ano_View($this->_options);
