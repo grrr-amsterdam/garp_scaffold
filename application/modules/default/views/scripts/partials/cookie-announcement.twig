@@ -1,15 +1,14 @@
-<?php
-/**
- * Let's store the cookie acceptance info in localStorage.
- * Since it's... you know... illegal to store it in a cookie...
- * Also it's a f*cking waste of HTTP load to store it in a cookie.
- */
-$cookie_script = <<<EOT
+{#
+  Let's store the cookie acceptance info in localStorage.
+  Since it's... you know... illegal to store it in a cookie...
+  Also it's a f*cking waste of HTTP load to store it in a cookie.
+#}
+
+<script>
 (function() {
 	var localStorage = typeof window.localStorage !== 'undefined' ? window.localStorage : null;
 	var cookie_bar_html = '<section id="cookie-announcement" class="cookie-announcement"> \
-	    Deze site maakt gebruik van cookies. \
-	    <a href="{$this->url(array(), 'cookie_info')}">Meer informatie?</a>';
+	    Deze site maakt gebruik van cookies.';
 	if (localStorage) {
 	    cookie_bar_html += '<button>&times;</button>';
 	}
@@ -27,5 +26,4 @@ $cookie_script = <<<EOT
 		}
 	}
 })();
-EOT;
-$this->script()->block($cookie_script);
+</script>

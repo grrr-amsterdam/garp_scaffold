@@ -1,6 +1,0 @@
-<?php /** Note: keep cms.css on baseUrl, because that stylesheet is referenced from Javascript, this would result in a security error otherwise. **/ ?>
-<link id="icons" rel="stylesheet" href="<?php echo $this->baseUrl($this->config()->assets->css->build . '/cms.css') . '?' . new Garp_Semver ?>">
-
-<script>
-	window.WYSIWYG_CSS_URL = "<?php echo $this->baseUrl($this->config()->assets->css->build . '/cms-wysiwyg.css') . '?' . new Garp_Semver ?>";
-</script>

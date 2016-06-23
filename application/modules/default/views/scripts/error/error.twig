@@ -1,34 +1,22 @@
-Dit is gerenderd door Twig
-
-<pre>
-{{ exception }}
-</pre>
-
-<!--
+{% if displayErrors %}
 <h3>Exception information:</h3>
-<pre><b>Where:</b> <?php echo $this->exception->getFile() . ':' . $this->exception->getLine() ?><br>
-<b>Message:</b> <?php echo $this->exception->getMessage() ?></pre>
+<pre><b>Where:</b> {{ exception.getFile() ~ ':' ~ exception.getLine() }}<br>
+<b>Message:</b> {{ exception.getMessage() }}</pre>
 
-<?php
-	if ($this->lastQuery):
-?>
+    {% if lastQuery %}
 <h3>Last executed query:</h3>
-<pre><?php echo $this->lastQuery; ?></pre>
-<?php
-	endif;
-?>
+<pre>{{ lastQuery }}</pre>
+    {% endif %}
 
 <h3>Stack trace:</h3>
-<pre><?php echo $this->exception->getTraceAsString() ?></pre>
+<pre>{{ exception.getTraceAsString() }}</pre>
 
 <h3>Request Parameters:</h3>
-<pre><?php print_r($this->request->getParams()) ?></pre>
+<pre>{{ dump(request.getParams()) }}</pre>
 
-<?php else: ?>
+{% else %}
 
 <h1>Error 404</h1>
 <p>Oeps! De opgevraagde pagina kan niet gevonden worden.</p>
 
-<?php endif ?>
-
--->
+{% endif %}

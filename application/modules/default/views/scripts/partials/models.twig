@@ -1,0 +1,56 @@
+<script>
+Ext.ns('Garp');
+Ext.ns('Garp.dataTypes');
+</script>
+<script src="{{ zf.assetUrl('/js/models/base/BaseModels.min.js') }}"></script>
+
+{% if app.config.cms.minifiedAssets %}
+
+{{ zf.script().src(app.config.assets.js.build ~ '/extended-models.js', true, {
+'crossorigin': 'anonymous'
+}) }}
+
+{% else %}
+
+<!-- BEGIN SPAWNED CALLS -->
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/AuthLocal.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/AuthLocal.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/AuthPasswordless.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/AuthPasswordless.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/ClusterClearCacheJob.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/ClusterClearCacheJob.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/ClusterRecurringJob.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/ClusterRecurringJob.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/ClusterServer.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/ClusterServer.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/Event.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/Image.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/Image.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/Musician.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/News.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/Piece.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/ScheduledJob.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/ScheduledJob.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/Snippet.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/Snippet.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/User.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/User.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/garp/models/Video.js') }}"></script>
+<script crossorigin="anonymous" src="{{ zf.assetUrl('/js/models/Video.js') }}"></script>
+
+<!-- END SPAWNED CALLS -->
+{% endif %}
+
+<script>
+Ext.onReady(function() {
+	Garp.modelMenu = new Garp.ModelMenu({
+		menuItems: [
+			'Snippet',
+			'Image',
+			'-',
+			'AuthPasswordless',
+			'User'
+		]
+	});
+});
+</script>
