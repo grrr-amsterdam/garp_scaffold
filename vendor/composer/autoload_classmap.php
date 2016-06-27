@@ -491,6 +491,7 @@ return array(
     'PSR2_Sniffs_Files_ClosingTagSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Files/ClosingTagSniff.php',
     'PSR2_Sniffs_Files_EndFileNewlineSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Files/EndFileNewlineSniff.php',
     'PSR2_Sniffs_Methods_FunctionCallSignatureSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Methods/FunctionCallSignatureSniff.php',
+    'PSR2_Sniffs_Methods_FunctionClosingBraceSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Methods/FunctionClosingBraceSniff.php',
     'PSR2_Sniffs_Methods_MethodDeclarationSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Methods/MethodDeclarationSniff.php',
     'PSR2_Sniffs_Namespaces_NamespaceDeclarationSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Namespaces/NamespaceDeclarationSniff.php',
     'PSR2_Sniffs_Namespaces_UseDeclarationSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php',
