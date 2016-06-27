@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the Ano_ZFTwig package
- * 
+ *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
@@ -43,7 +43,7 @@ abstract class Ano_View_Engine_Abstract implements Ano_View_Engine_Interface
      */
     public function __construct(Zend_View_Interface $view, array $config = array())
     {
-        $this->view = $view;
+        $this->setView($view);
         if (array_key_exists('viewSuffix', $config)) {
             $this->setViewSuffix($config['viewSuffix']);
             unset($config['viewSuffix']);
@@ -69,6 +69,16 @@ abstract class Ano_View_Engine_Abstract implements Ano_View_Engine_Interface
     protected function getView()
     {
         return $this->view;
+    }
+
+    /**
+     * Set the view
+     *
+     * @param Zend_View_Interface $view The view
+     */
+    public function setView(Zend_View_Interface $view)
+    {
+        $this->view = $view;
     }
 
     /**

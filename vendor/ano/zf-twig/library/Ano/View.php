@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the Ano_ZFTwig package
- * 
+ *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
@@ -37,6 +37,21 @@ class Ano_View extends Zend_View_Abstract
      */
     protected $_templateEngine = null;
 
+
+    /**
+     * Make sure template engines are cloned along with the view object.
+     * This fixes a bug where Zend's partial() method clones the view and assigns new vars, but the
+     * rendering engine still references the original view, missing those vars.
+     */
+    public function __clone()
+    {
+        foreach (array_keys($this->_templateEngines) as $key) {
+            $clonedEngine = clone $this->_templateEngines[$key];
+            $clonedEngine->setView($this);
+            $this->removeTemplateEngine($key)
+                ->addTemplateEngine($key, $clonedEngine);
+        }
+    }
 
     /**
      * @param string $key Set the key in $templateEngines of the
@@ -114,6 +129,18 @@ class Ano_View extends Zend_View_Abstract
     public function addTemplateEngine($key, Ano_View_Engine_Interface $templateEngine)
     {
         $this->_templateEngines[$key] = $templateEngine;
+        return $this;
+    }
+
+    /**
+     * Remove a rendering engine
+     *
+     * @param string $key The engine's identifier
+     * @return Ano_View
+     */
+    public function removeTemplateEngine($key)
+    {
+        unset($this->_templateEngines[$key]);
         return $this;
     }
 
