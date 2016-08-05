@@ -21,11 +21,6 @@ npm-debug.log
 .gulp
 cache.properties
 vendor/.git
-composer.lock
-build/api
-build/build
-build/logs
-build/phpdox
 node_modules
 public/js/build/dev/*
 public/css/build/dev/*
