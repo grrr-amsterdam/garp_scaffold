@@ -6,17 +6,12 @@ This is a scaffold set to initiate [Garp 3](https://github.com/grrr-amsterdam/ga
 
 ## Getting started
 
-Make sure you have the gulp cli installed globally. You can install it by running:
-```bash
-npm install --global gulp-cli
-```
-
 Next install all dependencies by running:
 ```bash
 npm install
 ```
 
-Now start your build and watch by running:
+You can start a frontend build and watch by running:
 ```bash
 gulp watch
 ```
