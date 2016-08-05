@@ -1,7 +1,7 @@
 {
-  "name": "grrr/garp3-project",
+  "name": "grrr-amsterdam/garp3-scaffold",
   "description": "This is the PHP dependency package setup for a Garp 3 project.",
-  "license": "proprietary",
+  "license": "BSD-3-Clause",
   "config": {
     "preferred-install": "dist"
   },
@@ -26,7 +26,6 @@
   "autoload": {
     "psr-0": {
       "App_": "library/",
-      "Golem_": "library/",
       "Model_": "application/modules/default/"
     }
   },
