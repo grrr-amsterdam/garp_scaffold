@@ -6,25 +6,39 @@ This is a scaffold set to initiate [Garp 3](https://github.com/grrr-amsterdam/ga
 
 ## Getting started
 
-Next install all dependencies by running:
+Use [Composer](https://getcomposer.org/) to create a Garp3 scaffolded project:
+
 ```bash
+composer create-project grrr-amsterdam/garp3-scaffold <your-target-directory>
+```
+
+Next update/install all dependencies by running:
+```bash
+composer update
 npm install
 ```
 
+Create an Apache vhost pointing to the `public` folder. This should always be the
+preferred webroot of any Garp project.
+
+## Building assets 
+
 You can start a frontend build and watch by running:
+
 ```bash
 gulp watch
 ```
 
 or alternatively via:
+
 ```bash
 npm start
 ```
 
-Now you should be able to visit [localhost:3000](http://localhost:3000) and get to your site.
+You should now be able to visit [localhost:3000](http://localhost:3000) and get to your site.    
 
 
-## Building for different environments
+### Building assets for different environments
 
 You can generate builds for different environments by running either:
 ```bash
