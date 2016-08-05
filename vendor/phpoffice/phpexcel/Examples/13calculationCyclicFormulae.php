@@ -36,12 +36,12 @@ define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 date_default_timezone_set('Europe/London');
 
 /** Include PHPExcel */
-require_once dirname(__FILE__) . '/../src/Bootstrap.php';
+require_once dirname(__FILE__) . '/../Classes/PHPExcel.php';
 
 
 // Create new PHPExcel object
 echo date('H:i:s') , " Create new PHPExcel object" , EOL;
-$objPHPExcel = new \PHPExcel\Spreadsheet();
+$objPHPExcel = new PHPExcel();
 
 // Add some data, we will use some formulas here
 echo date('H:i:s') , " Add some data and formulas" , EOL;
@@ -50,7 +50,7 @@ $objPHPExcel->getActiveSheet()->setCellValue('A1', '=B1')
                               ->setCellValue('B1', '=A1+1')
                               ->setCellValue('B2', '=A2');
 
-\PHPExcel\Calculation::getInstance($objPHPExcel)->cyclicFormulaCount = 100;
+PHPExcel_Calculation::getInstance($objPHPExcel)->cyclicFormulaCount = 100;
 
 // Calculated data
 echo date('H:i:s') , " Calculated data" , EOL;
@@ -69,7 +69,7 @@ for($row = 1; $row <= 2; ++$row) {
 echo date('H:i:s') , " Write to Excel2007 format" , EOL;
 $callStartTime = microtime(true);
 
-$objWriter = \PHPExcel\IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
 //
 //  If we set Pre Calculated Formulas to true then PHPExcel will calculate all formulae in the

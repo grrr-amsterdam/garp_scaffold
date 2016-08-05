@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "410c0ffa3bfd95833926f6e1197a5a54",
-    "content-hash": "a9c7243ca36ac0b680998f5251ed7672",
+    "hash": "6fd47207fed6328f16afe1f7fc04f35a",
+    "content-hash": "888cc5d20137c5499792aa900a63ecb9",
     "packages": [
         {
             "name": "ano/zf-twig",
@@ -91,21 +91,21 @@
         },
         {
             "name": "grrr-amsterdam/garp3",
-            "version": "v3.9.20",
+            "version": "v3.9.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grrr-amsterdam/garp3.git",
-                "reference": "11323e253174d15e6791c8bad05eee2e950e1fd0"
+                "reference": "a4993db6ce10bb12b78cab69ca4d2fd985f13524"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/11323e253174d15e6791c8bad05eee2e950e1fd0",
-                "reference": "11323e253174d15e6791c8bad05eee2e950e1fd0",
+                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/a4993db6ce10bb12b78cab69ca4d2fd985f13524",
+                "reference": "a4993db6ce10bb12b78cab69ca4d2fd985f13524",
                 "shasum": ""
             },
             "require": {
                 "google/apiclient": "^1.1",
-                "phpoffice/phpexcel": "^1.8",
+                "phpoffice/phpexcel": "1.8.*",
                 "zendframework/zendframework1": "^1"
             },
             "require-dev": {
@@ -126,46 +126,35 @@
                 "BSD-3-Clause"
             ],
             "description": "Framework and CMS built on top of Zend Framework.",
-            "time": "2016-06-28 12:33:49"
+            "time": "2016-08-05 12:24:10"
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.9.x-dev",
+            "version": "1.8.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPExcel.git",
-                "reference": "1702d953330b40d4ab6a49aa837ea5dee4c4d151"
+                "reference": "900325d0c809bc9cc4263fe67881d7627bb0b7f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/1702d953330b40d4ab6a49aa837ea5dee4c4d151",
-                "reference": "1702d953330b40d4ab6a49aa837ea5dee4c4d151",
+                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/900325d0c809bc9cc4263fe67881d7627bb0b7f3",
+                "reference": "900325d0c809bc9cc4263fe67881d7627bb0b7f3",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "php": "^5.4|^7.0"
+                "php": "^5.2|^7.0"
             },
             "require-dev": {
-                "mikey179/vfsstream": "1.5.*",
-                "phpunit/phpunit": "4.6.*",
                 "squizlabs/php_codesniffer": "2.*"
-            },
-            "suggest": {
-                "dompdf/dompdf": "Option for rendering PDF with PDF Writer",
-                "ext-gd": "*",
-                "ext-zip": "*",
-                "jpgraph/jpgraph": "Option for rendering charts, or including charts with PDF or HTML Writers",
-                "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
-                "pclzip/pclzip": "2.8.2",
-                "tecnick.com/tcpdf": "Option for rendering PDF with PDF Writer"
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "PHPExcel\\": "src/PhpSpreadsheet"
+                "psr-0": {
+                    "PHPExcel": "Classes/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -178,18 +167,19 @@
                     "homepage": "http://blog.maartenballiauw.be"
                 },
                 {
-                    "name": "Mark Baker"
-                },
-                {
                     "name": "Erik Tilt"
                 },
                 {
                     "name": "Franck Lefevre",
                     "homepage": "http://rootslabs.net"
+                },
+                {
+                    "name": "Mark Baker",
+                    "homepage": "http://markbakeruk.net"
                 }
             ],
             "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
-            "homepage": "http://phpexcel.codeplex.com",
+            "homepage": "https://github.com/PHPOffice/PHPExcel",
             "keywords": [
                 "OpenXML",
                 "excel",
@@ -198,7 +188,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2016-06-05 16:03:42"
+            "time": "2016-08-04 22:55:21"
         },
         {
             "name": "twig/twig",
@@ -206,12 +196,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "cdccdbbdf35f38a70eb6931667a76fc68012a999"
+                "reference": "b7cd3a88dcab5189a7f6d7f8756b17cd25faf759"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/cdccdbbdf35f38a70eb6931667a76fc68012a999",
-                "reference": "cdccdbbdf35f38a70eb6931667a76fc68012a999",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b7cd3a88dcab5189a7f6d7f8756b17cd25faf759",
+                "reference": "b7cd3a88dcab5189a7f6d7f8756b17cd25faf759",
                 "shasum": ""
             },
             "require": {
@@ -259,7 +249,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-06-24 05:05:43"
+            "time": "2016-07-28 20:58:48"
         },
         {
             "name": "zendframework/zendframework1",
@@ -267,12 +257,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zf1.git",
-                "reference": "7e639c9adccd1b8ccfc4c4d66c36924bbd8225ff"
+                "reference": "e368bc5a308754852a17d446ec43e0b9202ba7bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf1/zipball/7e639c9adccd1b8ccfc4c4d66c36924bbd8225ff",
-                "reference": "7e639c9adccd1b8ccfc4c4d66c36924bbd8225ff",
+                "url": "https://api.github.com/repos/zendframework/zf1/zipball/e368bc5a308754852a17d446ec43e0b9202ba7bf",
+                "reference": "e368bc5a308754852a17d446ec43e0b9202ba7bf",
                 "shasum": ""
             },
             "require": {
@@ -306,7 +296,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2016-04-13 15:46:27"
+            "time": "2016-07-13 15:15:12"
         }
     ],
     "packages-dev": [
@@ -689,12 +679,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "c028e7d96b62480f583c3b6776b3d622d127beb4"
+                "reference": "ac47d2536975484abe3dff630e4b965702d5102d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c028e7d96b62480f583c3b6776b3d622d127beb4",
-                "reference": "c028e7d96b62480f583c3b6776b3d622d127beb4",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/ac47d2536975484abe3dff630e4b965702d5102d",
+                "reference": "ac47d2536975484abe3dff630e4b965702d5102d",
                 "shasum": ""
             },
             "require": {
@@ -759,7 +749,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-06-27 22:18:28"
+            "time": "2016-08-05 04:06:21"
         },
         {
             "name": "symfony/yaml",
@@ -767,12 +757,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "95a2e68dfb974e511431a94ab8b4c9416814e5d1"
+                "reference": "0ceab136f43ed9d3e97b3eea32a7855dc50c121d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/95a2e68dfb974e511431a94ab8b4c9416814e5d1",
-                "reference": "95a2e68dfb974e511431a94ab8b4c9416814e5d1",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/0ceab136f43ed9d3e97b3eea32a7855dc50c121d",
+                "reference": "0ceab136f43ed9d3e97b3eea32a7855dc50c121d",
                 "shasum": ""
             },
             "require": {
@@ -808,7 +798,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-16 08:10:24"
+            "time": "2016-07-17 09:06:15"
         }
     ],
     "aliases": [],
