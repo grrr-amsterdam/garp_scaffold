@@ -31,7 +31,15 @@
   },
 
   "scripts": {
-    "test": "vendor/bin/phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/"
+    "test": "vendor/bin/phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/",
+    "post-install-cmd": [
+      "vendor/bin/g permissions set",
+      "vendor/bin/g git setup"
+    ],
+    "post-create-project-cmd": [
+      "vendor/bin/g permissions set",
+      "vendor/bin/g git setup"
+    ]
   }
 
 }
