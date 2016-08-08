@@ -2,7 +2,7 @@
     "name": "phpoffice/phpexcel",
     "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
     "keywords": ["PHP","Excel","OpenXML","xlsx","xls","spreadsheet"],
-    "homepage": "http://phpexcel.codeplex.com",
+    "homepage": "https://github.com/PHPOffice/PHPExcel",
     "type": "library",
     "license": "LGPL-2.1",
     "authors": [
@@ -11,7 +11,8 @@
             "homepage": "http://blog.maartenballiauw.be"
         },
         {
-            "name": "Mark Baker"
+            "name": "Mark Baker",
+            "homepage": "http://markbakeruk.net"
         },
         {
             "name": "Franck Lefevre",
@@ -22,28 +23,21 @@
         }
     ],
     "require": {
-        "php": "^5.4|^7.0",
+        "php": "^5.2|^7.0",
         "ext-mbstring": "*",
         "ext-xml": "*",
         "ext-xmlwriter": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "2.*",
-        "phpunit/phpunit": "4.6.*",
-        "mikey179/vfsStream": "1.5.*"
+        "squizlabs/php_codesniffer": "2.*"
     },
-    "suggest": {
+    "recommend": {
         "ext-zip": "*",
-        "ext-gd": "*",
-        "pclzip/pclzip": "2.8.2",
-        "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
-        "dompdf/dompdf": "Option for rendering PDF with PDF Writer",
-        "tecnick.com/tcpdf": "Option for rendering PDF with PDF Writer",
-        "jpgraph/jpgraph": "Option for rendering charts, or including charts with PDF or HTML Writers"
+        "ext-gd": "*"
     },
     "autoload": {
-        "psr-4": {
-            "PHPExcel\\": "src/PhpSpreadsheet"
+        "psr-0": {
+            "PHPExcel": "Classes/"
         }
     }
 }

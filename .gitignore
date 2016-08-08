@@ -1,10 +1,6 @@
 application/data/cache/pluginLoaderCache.php
-application/data/cache/CSS/**
-!application/data/cache/CSS/.gitdir
-application/data/cache/HTML/**
-!application/data/cache/HTML/.gitdir
-application/data/cache/URI/**
-!application/data/cache/URI/.gitdir
+application/data/cache/htmlpurifier/**
+!application/data/cache/htmlpurifier/.gitdir
 application/data/cache/tags/**
 !application/data/cache/tags/.gitdir
 application/data/logs/*.log

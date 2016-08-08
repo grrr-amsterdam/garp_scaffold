@@ -10,22 +10,51 @@ define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 
 date_default_timezone_set('Europe/London');
 
-/** Include PHPExcel */
-require_once dirname(__FILE__) . '/../src/Bootstrap.php';
+/**
+ * PHPExcel
+ *
+ * Copyright (c) 2006 - 2015 PHPExcel
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @category   PHPExcel
+ * @package    PHPExcel
+ * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version    ##VERSION##, ##DATE##
+ */
+
+/** Include path **/
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) . '/../Classes/');
+
+/** PHPExcel_IOFactory */
+include 'PHPExcel/IOFactory.php';
 
 
 //	Change these values to select the Rendering library that you wish to use
 //		for PDF files, and its directory location on your server
-//$rendererName = PHPExcel\Settings::PDF_RENDERER_TCPDF;
-$rendererName = PHPExcel\Settings::PDF_RENDERER_MPDF;
-//$rendererName = PHPExcel\Settings::PDF_RENDERER_DOMPDF;
+//$rendererName = PHPExcel_Settings::PDF_RENDERER_TCPDF;
+$rendererName = PHPExcel_Settings::PDF_RENDERER_MPDF;
+//$rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
 //$rendererLibrary = 'tcPDF5.9';
 $rendererLibrary = 'mPDF5.4';
 //$rendererLibrary = 'domPDF0.6.0beta3';
 $rendererLibraryPath = '/php/libraries/PDF/' . $rendererLibrary;
 
 
-if (!PHPExcel\Settings::setPdfRenderer(
+if (!PHPExcel_Settings::setPdfRenderer(
 		$rendererName,
 		$rendererLibraryPath
 	)) {
@@ -39,12 +68,12 @@ if (!PHPExcel\Settings::setPdfRenderer(
 
 //	Change these values to select the Rendering library that you wish to use
 //		for Chart images, and its directory location on your server
-$rendererName = PHPExcel\Settings::CHART_RENDERER_JPGRAPH;
+$rendererName = PHPExcel_Settings::CHART_RENDERER_JPGRAPH;
 $rendererLibrary = 'jpgraph3.5.0b1/src/';
 $rendererLibraryPath = '/php/libraries/Charts/' . $rendererLibrary;
 
 
-if (!PHPExcel\Settings::setChartRenderer(
+if (!PHPExcel_Settings::setChartRenderer(
 		$rendererName,
 		$rendererLibraryPath
 	)) {
@@ -77,7 +106,7 @@ foreach($inputFileNames as $inputFileName) {
 
 	echo date('H:i:s') , " Load Test from $inputFileType file " , $inputFileNameShort , EOL;
 
-	$objReader = \PHPExcel\IOFactory::createReader($inputFileType);
+	$objReader = PHPExcel_IOFactory::createReader($inputFileType);
 	$objReader->setIncludeCharts(TRUE);
 	$objPHPExcel = $objReader->load($inputFileName);
 
@@ -128,7 +157,7 @@ foreach($inputFileNames as $inputFileName) {
 	$outputFileName = str_replace('.xlsx', '.pdf', basename($inputFileName));
 
 	echo date('H:i:s') , " Write Tests to HTML file " , EOL;
-	$objWriter = \PHPExcel\IOFactory::createWriter($objPHPExcel, 'PDF');
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
 	$objWriter->setIncludeCharts(TRUE);
 	$objWriter->save($outputFileName);
 	echo date('H:i:s') , " File written to " , $outputFileName , EOL;

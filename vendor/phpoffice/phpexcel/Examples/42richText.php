@@ -2,7 +2,7 @@
 /**
  * PHPExcel
  *
- * Copyright (c) 2006 - 2015 PHPExcel
+ * Copyright (C) 2006 - 2014 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,7 @@
  *
  * @category   PHPExcel
  * @package    PHPExcel
- * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version    ##VERSION##, ##DATE##
  */
@@ -34,22 +34,22 @@ date_default_timezone_set('Europe/London');
 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 
 /** Include PHPExcel */
-require_once dirname(__FILE__) . '/../src/Bootstrap.php';
+require_once dirname(__FILE__) . '/../Classes/PHPExcel.php';
 
 
 // Create new PHPExcel object
 echo date('H:i:s') , " Create new PHPExcel object" , EOL;
-$objPHPExcel = new \PHPExcel\Spreadsheet();
+$objPHPExcel = new PHPExcel();
 
 // Set document properties
 echo date('H:i:s') , " Set document properties" , EOL;
 $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
-	->setLastModifiedBy("Maarten Balliauw")
-	->setTitle("PHPExcel Test Document")
-	->setSubject("PHPExcel Test Document")
-	->setDescription("Test document for PHPExcel, generated using PHP classes.")
-	->setKeywords("office PHPExcel php")
-	->setCategory("Test result file");
+							 ->setLastModifiedBy("Maarten Balliauw")
+							 ->setTitle("PHPExcel Test Document")
+							 ->setSubject("PHPExcel Test Document")
+							 ->setDescription("Test document for PHPExcel, generated using PHP classes.")
+							 ->setKeywords("office PHPExcel php")
+							 ->setCategory("Test result file");
 
 
 // Add some data
@@ -84,18 +84,15 @@ $html4 = 'H<sub>2</sub>SO<sub>4</sub> is the chemical formula for Sulphuric acid
 
 $html5 = '<strong>bold</strong>, <em>italic</em>, <strong><em>bold+italic</em></strong>';
 
-$wizard = new \PHPExcel\Helper\HTML;
+
+$wizard = new PHPExcel_Helper_HTML;
 $richText = $wizard->toRichTextObject($html1);
 
-$objPHPExcel->getActiveSheet()
+$objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue('A1', $richText);
 
-$objPHPExcel->getActiveSheet()
-    ->getColumnDimension('A')
-    ->setWidth(48);
-$objPHPExcel->getActiveSheet()
-    ->getRowDimension(1)
-    ->setRowHeight(-1);
+$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(48);
+$objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
 $objPHPExcel->getActiveSheet()->getStyle('A1')
     ->getAlignment()
     ->setWrapText(true);
@@ -105,28 +102,24 @@ $richText = $wizard->toRichTextObject($html2);
 $objPHPExcel->getActiveSheet()
     ->setCellValue('A2', $richText);
 
-$objPHPExcel->getActiveSheet()
-    ->getRowDimension(1)
-    ->setRowHeight(-1);
-$objPHPExcel->getActiveSheet()
-    ->getStyle('A2')
+$objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
+$objPHPExcel->getActiveSheet()->getStyle('A2')
     ->getAlignment()
     ->setWrapText(true);
 
-$objPHPExcel->setActiveSheetIndex(0)
+$objPHPExcel->getActiveSheet()
     ->setCellValue('A3', $wizard->toRichTextObject($html3));
 
-$objPHPExcel->setActiveSheetIndex(0)
+$objPHPExcel->getActiveSheet()
     ->setCellValue('A4', $wizard->toRichTextObject($html4));
 
-$objPHPExcel->setActiveSheetIndex(0)
+$objPHPExcel->getActiveSheet()
     ->setCellValue('A5', $wizard->toRichTextObject($html5));
 
 
 // Rename worksheet
 echo date('H:i:s') , " Rename worksheet" , EOL;
-$objPHPExcel->getActiveSheet()
-    ->setTitle('Rich Text Examples');
+$objPHPExcel->getActiveSheet()->setTitle('Simple');
 
 
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -137,7 +130,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 echo date('H:i:s') , " Write to Excel2007 format" , EOL;
 $callStartTime = microtime(true);
 
-$objWriter = \PHPExcel\IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
@@ -152,7 +145,7 @@ echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 
 echo date('H:i:s') , " Write to Excel5 format" , EOL;
 $callStartTime = microtime(true);
 
-$objWriter = \PHPExcel\IOFactory::createWriter($objPHPExcel, 'Excel5');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 $objWriter->save(str_replace('.php', '.xls', __FILE__));
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;

@@ -21,9 +21,9 @@ before_script:
 
 script:
   ## PHP_CodeSniffer
-  - ./vendor/bin/phpcs --report-width=200 --report-summary  --report-full src/ unitTests/ --standard=PSR2 -n
+  - ./vendor/bin/phpcs --report-width=200 --report-summary  --report-full Classes/ unitTests/ --standard=PSR2 -n
   ## PHPUnit
-  - ./vendor/bin/phpunit -c ./unitTests/
+  - phpunit -c ./unitTests/
 
 notifications:
   email: false
