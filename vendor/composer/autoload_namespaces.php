@@ -10,6 +10,7 @@ return array(
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'Model_' => array($baseDir . '/application/modules/default'),
+    'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Garp_' => array($vendorDir . '/grrr-amsterdam/garp3/library'),
     'App_' => array($baseDir . '/library'),
     '' => array($vendorDir . '/ano/zf-twig/library'),

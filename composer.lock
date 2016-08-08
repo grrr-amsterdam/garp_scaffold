@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6fd47207fed6328f16afe1f7fc04f35a",
+    "hash": "95b62a2d17a8d3e86847d86279d0b93c",
     "content-hash": "888cc5d20137c5499792aa900a63ecb9",
     "packages": [
         {
@@ -45,6 +45,50 @@
                 "source": "https://github.com/harmenjanssen/Ano_ZFTwig/tree/master"
             },
             "time": "2016-06-27 19:35:26"
+        },
+        {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
+                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "time": "2016-07-16 12:58:58"
         },
         {
             "name": "google/apiclient",
@@ -91,19 +135,20 @@
         },
         {
             "name": "grrr-amsterdam/garp3",
-            "version": "v3.9.37",
+            "version": "v3.9.40",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grrr-amsterdam/garp3.git",
-                "reference": "a4993db6ce10bb12b78cab69ca4d2fd985f13524"
+                "reference": "034e3bf3df6c108789f63e46fddc1f3fc0aef128"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/a4993db6ce10bb12b78cab69ca4d2fd985f13524",
-                "reference": "a4993db6ce10bb12b78cab69ca4d2fd985f13524",
+                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/034e3bf3df6c108789f63e46fddc1f3fc0aef128",
+                "reference": "034e3bf3df6c108789f63e46fddc1f3fc0aef128",
                 "shasum": ""
             },
             "require": {
+                "ezyang/htmlpurifier": "^4.8",
                 "google/apiclient": "^1.1",
                 "phpoffice/phpexcel": "1.8.*",
                 "zendframework/zendframework1": "^1"
@@ -126,7 +171,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Framework and CMS built on top of Zend Framework.",
-            "time": "2016-08-05 12:24:10"
+            "time": "2016-08-08 10:54:18"
         },
         {
             "name": "phpoffice/phpexcel",
