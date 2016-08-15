@@ -51,10 +51,10 @@
         {% set modernizrSource = zf.script().includeSource(app.applicationPath ~ '/../public' ~
                                                            app.config.assets.js.build ~
                                                            '/modernizr.js') %}
-        {{ modernizrSource }}
+        {{ modernizrSource|raw }}
 
         {# Load scripts async thru loadJS() #}
-        {{ zf.script().includeSource(app.applicationPath ~ '/../public' ~ app.config.assets.js.root ~ '/loadJS.js') }}
+        {{ zf.script().includeSource(app.applicationPath ~ '/../public' ~ app.config.assets.js.root ~ '/loadJS.js')|raw }}
 
         var cutsMustard = 'querySelector' in document && 'addEventListener' in window && 'requestAnimationFrame' in window;
         if (cutsMustard) {
