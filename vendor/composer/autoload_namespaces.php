@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Zend_' => array($vendorDir . '/zendframework/zendframework1/library'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
+    'Raven_' => array($vendorDir . '/sentry/sentry/lib'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'Model_' => array($baseDir . '/application/modules/default'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),

@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
-    $vendorDir . '/google/apiclient/src/Google/autoload.php',
+    '2cffec82183ee1cea088009cef9a6fc3' => $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+    'cf150f72bd303a2ff07711c9a70f2d53' => $vendorDir . '/google/apiclient/src/Google/autoload.php',
 );

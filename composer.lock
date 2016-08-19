@@ -135,22 +135,24 @@
         },
         {
             "name": "grrr-amsterdam/garp3",
-            "version": "v3.9.42",
+            "version": "v3.9.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grrr-amsterdam/garp3.git",
-                "reference": "496355c47bf23ee9dc443a333d8c811ea2bf6400"
+                "reference": "937927b31783bd52613ab02486f27bd3c21608f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/496355c47bf23ee9dc443a333d8c811ea2bf6400",
-                "reference": "496355c47bf23ee9dc443a333d8c811ea2bf6400",
+                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/937927b31783bd52613ab02486f27bd3c21608f0",
+                "reference": "937927b31783bd52613ab02486f27bd3c21608f0",
                 "shasum": ""
             },
             "require": {
                 "ezyang/htmlpurifier": "^4.8",
                 "google/apiclient": "^1.1",
+                "monolog/monolog": "^1.0",
                 "phpoffice/phpexcel": "1.8.*",
+                "sentry/sentry": "^1.1",
                 "zendframework/zendframework1": "^1"
             },
             "require-dev": {
@@ -174,7 +176,85 @@
                 "BSD-3-Clause"
             ],
             "description": "Framework and CMS built on top of Zend Framework.",
-            "time": "2016-08-15 19:32:32"
+            "time": "2016-08-19 13:21:46"
+        },
+        {
+            "name": "monolog/monolog",
+            "version": "1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "f42fbdfd53e306bda545845e4dbfd3e72edb4952"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f42fbdfd53e306bda545845e4dbfd3e72edb4952",
+                "reference": "f42fbdfd53e306bda545845e4dbfd3e72edb4952",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "psr/log": "~1.0"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^2.4.9",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
+                "jakub-onderka/php-parallel-lint": "0.9",
+                "php-amqplib/php-amqplib": "~2.4",
+                "php-console/php-console": "^3.1.3",
+                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit-mock-objects": "2.3.0",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "sentry/sentry": "^0.13",
+                "swiftmailer/swiftmailer": "~5.3"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB server",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+                "php-console/php-console": "Allow sending log messages to Google Chrome",
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "sentry/sentry": "Allow sending log messages to a Sentry server"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "homepage": "http://github.com/Seldaek/monolog",
+            "keywords": [
+                "log",
+                "logging",
+                "psr-3"
+            ],
+            "time": "2016-07-29 03:23:52"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -239,17 +319,122 @@
             "time": "2016-08-13 11:16:51"
         },
         {
+            "name": "psr/log",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d8e60a5619fff77f9669da8997697443ef1a1d7e",
+                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2016-01-06 21:40:42"
+        },
+        {
+            "name": "sentry/sentry",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getsentry/sentry-php.git",
+                "reference": "e0bb401bc32822cecd08c12de2c67dce5ba2bdf3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/e0bb401bc32822cecd08c12de2c67dce5ba2bdf3",
+                "reference": "e0bb401bc32822cecd08c12de2c67dce5ba2bdf3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "monolog/monolog": "*",
+                "php": ">=5.2.4"
+            },
+            "conflict": {
+                "raven/raven": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.8.0",
+                "phpunit/phpunit": "^4.6.6"
+            },
+            "bin": [
+                "bin/sentry"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Raven_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "David Cramer",
+                    "email": "dcramer@gmail.com"
+                }
+            ],
+            "description": "A PHP client for Sentry (http://getsentry.com)",
+            "homepage": "http://getsentry.com",
+            "keywords": [
+                "log",
+                "logging"
+            ],
+            "time": "2016-08-16 17:46:11"
+        },
+        {
             "name": "twig/twig",
             "version": "1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "21039777d8519dacf81e070489c953e92164842d"
+                "reference": "ffa2b812b07cceb163b30091aa54048b856d087b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/21039777d8519dacf81e070489c953e92164842d",
-                "reference": "21039777d8519dacf81e070489c953e92164842d",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ffa2b812b07cceb163b30091aa54048b856d087b",
+                "reference": "ffa2b812b07cceb163b30091aa54048b856d087b",
                 "shasum": ""
             },
             "require": {
@@ -297,7 +482,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-08-15 17:25:09"
+            "time": "2016-08-18 00:09:08"
         },
         {
             "name": "zendframework/zendframework1",
@@ -727,12 +912,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "71945d90d2735aa7cc466aa099674d011ee6ad17"
+                "reference": "a5d3f147190dbb2fd103f1163eca69835edafb44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/71945d90d2735aa7cc466aa099674d011ee6ad17",
-                "reference": "71945d90d2735aa7cc466aa099674d011ee6ad17",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/a5d3f147190dbb2fd103f1163eca69835edafb44",
+                "reference": "a5d3f147190dbb2fd103f1163eca69835edafb44",
                 "shasum": ""
             },
             "require": {
@@ -797,7 +982,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-08-11 01:08:45"
+            "time": "2016-08-17 03:15:09"
         },
         {
             "name": "symfony/yaml",
