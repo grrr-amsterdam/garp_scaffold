@@ -135,16 +135,16 @@
         },
         {
             "name": "grrr-amsterdam/garp3",
-            "version": "v3.9.52",
+            "version": "v3.9.53",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grrr-amsterdam/garp3.git",
-                "reference": "937927b31783bd52613ab02486f27bd3c21608f0"
+                "reference": "48e8e7e119d3ad65a9a7d2843844d77cad679857"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/937927b31783bd52613ab02486f27bd3c21608f0",
-                "reference": "937927b31783bd52613ab02486f27bd3c21608f0",
+                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/48e8e7e119d3ad65a9a7d2843844d77cad679857",
+                "reference": "48e8e7e119d3ad65a9a7d2843844d77cad679857",
                 "shasum": ""
             },
             "require": {
@@ -176,7 +176,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Framework and CMS built on top of Zend Framework.",
-            "time": "2016-08-19 13:21:46"
+            "time": "2016-08-19 15:14:11"
         },
         {
             "name": "monolog/monolog",
