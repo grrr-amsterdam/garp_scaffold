@@ -22,3 +22,4 @@ public/js/build/dev/*
 public/css/build/dev/*
 bower_components
 application/data/cache/twig
+application/modules/default/Model/Base/*.php
