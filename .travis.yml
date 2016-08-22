@@ -1,31 +1,22 @@
 language: php
 php:
     - '5.3'
+
 script:
     - composer test
+
 before_install:
-    #- gem install semver
-    #- rm -rf node_modules
-    #- npm install -g gulp
-    #- npm install node-sass
-    #- npm install gulp-sass
-    #- npm install
-    #- git clone https://github.com/grrr-amsterdam/golem ../golem
     - mysql -e "create database IF NOT EXISTS garpscaffold_t;" -uroot
     - mysql -e "create user garp_development@localhost identified by 'welovegarp';" -uroot
     - mysql -e "grant all privileges on *.* to garp_development@localhost;" -uroot
+    - composer install
     - php vendor/grrr-amsterdam/garp3/scripts/garp.php spawn -b --e=testing
     - php vendor/grrr-amsterdam/garp3/scripts/garp.php snippet create --e=testing
-    #- composer install
+
 before_script:
     - chmod +x vendor/bin/phpunit
-    #- gulp --dev
+    - chmod +x vendor/bin/g
 
-    # Set MySQL timezone for Melkweg db unit tests
-    #- mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
-    #- echo 'Europe/Amsterdam' | sudo tee /etc/timezone
-    #- sudo dpkg-reconfigure --frontend noninteractive tzdata
-    #- sudo service mysql restart
 notifications:
     email: false
     slack:
