@@ -16,7 +16,8 @@ function determineEnvironment($host) {
 $memcachedPorts = array(
     'production'  => 11212,
     'staging'     => 11213,
-    'development' => null
+    'development' => null,
+    'testing'     => null
 );
 
 defined('APPLICATION_ENV') || define(
