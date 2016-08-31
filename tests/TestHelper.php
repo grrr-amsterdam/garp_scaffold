@@ -1,6 +1,9 @@
 <?php
 date_default_timezone_set('Europe/Amsterdam');
 define('APPLICATION_ENV', 'testing');
+define('MEMCACHE_HOST', null);
+define('MEMCACHE_PORT', null);
+
 define('BASE_PATH', realpath(dirname(__FILE__) . '/..'));
 
 error_reporting(-1);
