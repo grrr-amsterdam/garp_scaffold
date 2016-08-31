@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "db8f3539e74a491f8b9993d5417898ae",
+    "hash": "46fcc4c27ea1bff6d89c700504087549",
     "content-hash": "888cc5d20137c5499792aa900a63ecb9",
     "packages": [
         {
@@ -135,16 +135,16 @@
         },
         {
             "name": "grrr-amsterdam/garp3",
-            "version": "v3.9.58",
+            "version": "v3.9.64",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grrr-amsterdam/garp3.git",
-                "reference": "28816c890e23fd69908138e3b65d5aa615d72c2f"
+                "reference": "1bc9aeead6c9168314a855c7d6584e9765fba424"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/28816c890e23fd69908138e3b65d5aa615d72c2f",
-                "reference": "28816c890e23fd69908138e3b65d5aa615d72c2f",
+                "url": "https://api.github.com/repos/grrr-amsterdam/garp3/zipball/1bc9aeead6c9168314a855c7d6584e9765fba424",
+                "reference": "1bc9aeead6c9168314a855c7d6584e9765fba424",
                 "shasum": ""
             },
             "require": {
@@ -176,7 +176,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Framework and CMS built on top of Zend Framework.",
-            "time": "2016-08-23 19:59:09"
+            "time": "2016-08-31 14:39:59"
         },
         {
             "name": "monolog/monolog",
@@ -371,12 +371,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-php.git",
-                "reference": "e0bb401bc32822cecd08c12de2c67dce5ba2bdf3"
+                "reference": "25651da63b8b8f04dc13d82066e2bd9f67ff43b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/e0bb401bc32822cecd08c12de2c67dce5ba2bdf3",
-                "reference": "e0bb401bc32822cecd08c12de2c67dce5ba2bdf3",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/25651da63b8b8f04dc13d82066e2bd9f67ff43b4",
+                "reference": "25651da63b8b8f04dc13d82066e2bd9f67ff43b4",
                 "shasum": ""
             },
             "require": {
@@ -421,7 +421,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2016-08-16 17:46:11"
+            "time": "2016-08-26 23:38:40"
         },
         {
             "name": "twig/twig",
@@ -912,12 +912,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "a5d3f147190dbb2fd103f1163eca69835edafb44"
+                "reference": "447ee9868cbce0830a5aa333b0caa2a059f495a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/a5d3f147190dbb2fd103f1163eca69835edafb44",
-                "reference": "a5d3f147190dbb2fd103f1163eca69835edafb44",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/447ee9868cbce0830a5aa333b0caa2a059f495a8",
+                "reference": "447ee9868cbce0830a5aa333b0caa2a059f495a8",
                 "shasum": ""
             },
             "require": {
@@ -982,7 +982,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-08-17 03:15:09"
+            "time": "2016-08-25 22:32:31"
         },
         {
             "name": "symfony/yaml",
