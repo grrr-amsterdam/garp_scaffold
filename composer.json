@@ -34,7 +34,8 @@
     "test": "vendor/bin/phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/",
     "phpcs": "vendor/bin/phpcs --standard=vendor/grrr-amsterdam/garp3/phpcs.xml --extensions=php --colors .",
     "post-install-cmd": [
-      "if [ \"$APPLICATION_ENV\" = \"development\" ]; then php ./vendor/grrr-amsterdam/garp3/scripts/garp.php permissions set; fi"
+      "if [ \"$APPLICATION_ENV\" = \"development\" ]; then php ./vendor/bin/g permissions set; fi",
+      "if [ \"$APPLICATION_ENV\" = \"development\" ]; then php ./vendor/bin/g security generateSalt; fi"
     ]
   }
 
