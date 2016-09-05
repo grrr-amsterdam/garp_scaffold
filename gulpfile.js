@@ -9,6 +9,7 @@
 var gulp          = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
 	$               = gulpLoadPlugins(),
+  copy            = require('gulp-copy'),
 	pxtorem         = require('postcss-pxtorem'),
 	autoprefixer    = require('autoprefixer'),
 	browserSync     = require('browser-sync'),
@@ -54,7 +55,7 @@ gulp.task('clean', function() {
   return del([
     paths.cssBuild + '/**/*',
     paths.jsBuild + '/**/*'
-  ]);
+  ], { dot: true });
 });
 
 /**
@@ -116,6 +117,10 @@ gulp.task('sass', function() {
     .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
     .pipe($.if(ENV !== 'development' && paths.cssCdn !== '', $.rework(
       reworkUrl(function(url) {
+        // Leave data urls alone
+        if (url.indexOf('data:') === 0) {
+          return url;
+        }
         // Prepend url with cdn path
         return paths.cssCdn + '/' + url;
       })
@@ -192,7 +197,7 @@ function bundle() {
 
   return b.bundle()
     .on('error', handleError)
-    .pipe(source('bundle.js'))
+    .pipe(source('main.js'))
     .pipe(buffer())
     .pipe($.if(ENV === 'development' && PROFILE !== 'production', $.sourcemaps.init({loadMaps: true})))
     .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.uglify())).on('error', handleError)
@@ -259,6 +264,14 @@ gulp.task('images', function() {
 });
 
 /**
+ * Copy fonts
+ */
+gulp.task('fonts', function() {
+  return gulp.src(paths.fontSrc + '/*.{ttf,eot,woff,woff2}')
+    .pipe(copy(paths.fontBuild, { prefix: 3 }));
+});
+
+/**
  * Creates an svg sprite out of all files in the public/css/img/icons folder
  *
  * This sprite is lazy loaded with JS, see load-icons.js for more info
@@ -320,8 +333,12 @@ gulp.task('watch', ['default', 'browser-sync'], function(cb) {
 	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass:cms']);
 	gulp.watch(paths.cssSrc + '/img/icons/*.svg', ['icons']);
 	gulp.watch(paths.jsSrc + '/**/*.js', ['bundle']);
-	gulp.watch(paths.js + '/models/*.js', ['javascript:models']);
+	gulp.watch([
+    paths.js + '/models/*.js',
+    paths.jsSrc + '/../garp/models/*.js'
+  ], ['javascript:models']);
 	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
+	gulp.watch(paths.fontSrc + '/**/*.{ttf,eot,woff,woff2}', ['fonts']);
 	gulp.watch(paths.js +'/garp/*.js', ['javascript:cms']);
 	gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
 });
@@ -329,7 +346,7 @@ gulp.task('watch', ['default', 'browser-sync'], function(cb) {
 /**
  * Add revision hash behind filename so we can cache assets forever
  */
-gulp.task('revision', function() {
+gulp.task('revision:hash', function() {
   var cssFilter = $.filter('**/*.css', {restore: true});
   var jsFilter = $.filter('**/*.js', {restore: true});
   var imgFilter = $.filter('**/*.{png,gif,jpg,svg}', {restore: true});
@@ -363,7 +380,7 @@ gulp.task('revision', function() {
  * Replace image and font urls in css files
  */
 
-gulp.task('revision:replace', function(){
+gulp.task('revision:replace:css', function(){
   var manifestFile = './rev-manifest-' + ENV + '.json';
   var manifest = gulp.src(manifestFile);
 
@@ -372,24 +389,53 @@ gulp.task('revision:replace', function(){
     .pipe(gulp.dest(paths.cssBuild));
 });
 
-gulp.task('default', [
-  'init',
-  'clean',
-	'sass',
-  'sass:cms',
-	'sass:lint',
-	'javascript',
-	'javascript:cms',
-	'javascript:models',
-	'images',
-	'images:icons',
-	'modernizr:build'
-], function(callback) {
+/**
+ * Replace image and font urls in js files
+ */
+gulp.task('revision:replace:js', function() {
+  var manifestFile = './rev-manifest-' + ENV + '.json';
+  var manifest = gulp.src(manifestFile);
+
+  return gulp.src(paths.jsBuild + "/*.js")
+    .pipe($.revReplace({ manifest: manifest }))
+    .pipe(gulp.dest(paths.jsBuild));
+});
+
+/**
+ * Revision tasks wrapper
+ */
+gulp.task('revision', function(cb) {
   if (ENV === 'development') {
     $.util.log('Skipping revisioning for development');
-    return callback();
+    return cb();
   }
-  runSequence('revision', 'revision:replace', callback);
+  runSequence(
+    'revision:hash',
+    'revision:replace:css',
+    'revision:replace:js',
+    cb
+  );
+});
+
+gulp.task('default', function(cb) {
+  runSequence(
+    'init',
+    'clean',
+    [
+	    'sass',
+      'sass:cms',
+	    'sass:lint',
+	    'javascript',
+	    'javascript:cms',
+	    'javascript:models',
+	    'images',
+	    'images:icons',
+      'fonts',
+	    'modernizr:build'
+  ],
+  'revision',
+  cb
+  );
 });
 
 
@@ -426,7 +472,7 @@ function getConfigValue(value) {
 		handleError('Can\'t get undefined config value');
 		return;
 	}
-	var command = 'php ' + GARP_DIR + '/scripts/garp.php config get ' + value + ' --e=' + ENV;
+	var command = 'php ' + GARP_DIR + '/scripts/garp.php config get ' + value + ' ' + ENV;
 	return getShellOutput(command);
 }
 
@@ -443,6 +489,8 @@ function constructPaths() {
 
 	paths.imgSrc      = paths.css      + '/img';
 	paths.imgBuild    = paths.cssBuild + '/img';
+  paths.fontSrc     = paths.css + '/fonts';
+  paths.fontBuild   = paths.cssBuild + '/fonts';
   paths.cssCdn      = getConfigValue('cdn.domain');
   if (paths.cssCdn) {
 	  var protocol    = getConfigValue('cdn.ssl') ? 'https://' : 'http://';
