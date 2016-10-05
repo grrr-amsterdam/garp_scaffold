@@ -9,7 +9,7 @@ import FlashMessage from './modules/flashmessage.js';
 
 // Import handlers
 import { handler as classToggler } from './modules/class-toggler.js';
-import { hanlder as googleAnalyticsEventHandler } from './modules/google-analytics.js';
+import { handler as googleAnalyticsEventHandler } from './modules/google-analytics.js';
 
 // Import enhancers
 import { enhancer as googleAnalyticsEventEnhancer } from './modules/google-analytics.js';
