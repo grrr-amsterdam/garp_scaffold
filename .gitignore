@@ -22,4 +22,5 @@ public/css/build/dev/*
 bower_components
 application/data/cache/twig
 application/modules/default/Model/Base/*.php
-vendor
+public/js/models/base/*.js
+/vendor
