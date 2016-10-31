@@ -340,7 +340,7 @@ gulp.task('watch', ['default', 'browser-sync'], function(cb) {
   gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
   gulp.watch(paths.fontSrc + '/**/*.{ttf,eot,woff,woff2}', ['fonts']);
   gulp.watch(paths.js +'/garp/*.js', ['javascript:cms']);
-  gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
+  gulp.watch('application/modules/default/**/*.{phtml,php,twig}', browserSync.reload);
 });
 
 /**
