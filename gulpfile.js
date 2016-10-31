@@ -1,4 +1,4 @@
-/*
+/**
  * Gulpfile
  * Author: Mattijs Bliek
  *
@@ -7,24 +7,24 @@
  */
 
 var gulp          = require('gulp'),
-	gulpLoadPlugins = require('gulp-load-plugins'),
-	$               = gulpLoadPlugins(),
+  gulpLoadPlugins = require('gulp-load-plugins'),
+  $               = gulpLoadPlugins(),
   copy            = require('gulp-copy'),
-	pxtorem         = require('postcss-pxtorem'),
-	autoprefixer    = require('autoprefixer'),
-	browserSync     = require('browser-sync'),
+  pxtorem         = require('postcss-pxtorem'),
+  autoprefixer    = require('autoprefixer'),
+  browserSync     = require('browser-sync'),
   browserify      = require('browserify'),
   babelify        = require('babelify'),
   del             = require('del'),
   watchify        = require('watchify'),
-	assign          = require('lodash.assign'),
+  assign          = require('lodash.assign'),
   runSequence     = require('run-sequence'),
   source          = require('vinyl-source-stream'),
   buffer          = require('vinyl-buffer'),
-	path            = require('path'),
-	reworkUrl       = require('rework-plugin-url'),
+  path            = require('path'),
+  reworkUrl       = require('rework-plugin-url'),
   execSync        = require('child_process').execSync,
-	argv            = require('yargs').argv;
+  argv            = require('yargs').argv;
 
 var paths = {};
 var isWatching = false;
@@ -36,16 +36,16 @@ var GARP_DIR = __dirname + '/vendor/grrr-amsterdam/garp3';
  * Constructs paths and gets the domain for Browserify
  */
 gulp.task('init', function() {
-	domain = getConfigValue('app.domain');
-	paths = constructPaths();
+  domain = getConfigValue('app.domain');
+  paths = constructPaths();
 
-	$.util.log($.util.colors.green('----------------------------------'));
-	$.util.log($.util.colors.green('Environment: ' + ENV));
-	$.util.log($.util.colors.green(''));
+  $.util.log($.util.colors.green('----------------------------------'));
+  $.util.log($.util.colors.green('Environment: ' + ENV));
+  $.util.log($.util.colors.green(''));
   $.util.log($.util.colors.green('CDN url used in css: ' + (paths.cssCdn ? paths.cssCdn : '[local]')));
   $.util.log($.util.colors.green('Building css to:     ' + paths.cssBuild));
   $.util.log($.util.colors.green('Building js to:      ' + paths.jsBuild));
-	$.util.log($.util.colors.green('----------------------------------'));
+  $.util.log($.util.colors.green('----------------------------------'));
 });
 
 /**
@@ -65,14 +65,14 @@ gulp.task('clean', function() {
  * third party devices over the network.
  */
 gulp.task('browser-sync', function() {
-	if (!domain) {
-		handleError('Could not get "' + ENV + '" domain from application/configs/app.ini');
-	}
-	browserSync({
-		proxy: domain,
-		open: false,
-		notify: {
-			styles: [
+  if (!domain) {
+    handleError('Could not get "' + ENV + '" domain from application/configs/app.ini');
+  }
+  browserSync({
+    proxy: domain,
+    open: false,
+    notify: {
+      styles: [
         "display: none",
         "padding: 15px",
         "font-family: sans-serif",
@@ -86,16 +86,16 @@ gulp.task('browser-sync', function() {
         "margin: 0",
         "color: white",
         "text-align: center"
-			]
-		}
-	});
+      ]
+    }
+  });
 });
 
 /**
  * Builds css files
  */
 gulp.task('sass', function() {
-	var processors = [
+  var processors = [
       autoprefixer({
           browsers: ['>5%', 'last 2 versions', 'ie 9', 'ie 10']
       }),
@@ -277,20 +277,20 @@ gulp.task('fonts', function() {
  * This sprite is lazy loaded with JS, see load-icons.js for more info
  */
 gulp.task('images:icons', function () {
-    return gulp.src(paths.css + '/img/icons/*.svg')
-		.pipe($.svgmin(function (file) {
-        var prefix = path.basename(file.relative, path.extname(file.relative));
-        return {
-            plugins: [{
-                cleanupIDs: {
-                    prefix: prefix + '-',
-                    minify: true
-                }
-            }]
+  return gulp.src(paths.css + '/img/icons/*.svg')
+  .pipe($.svgmin(function (file) {
+    var prefix = path.basename(file.relative, path.extname(file.relative));
+    return {
+      plugins: [{
+        cleanupIDs: {
+          prefix: prefix + '-',
+          minify: true
         }
-    }).on('error', handleError))
-    .pipe($.svgstore({ inlineSvg: true }).on('error', handleError))
-    .pipe(gulp.dest(paths.cssBuild + '/img'));
+      }]
+    }
+  }).on('error', handleError))
+  .pipe($.svgstore({ inlineSvg: true }).on('error', handleError))
+  .pipe(gulp.dest(paths.cssBuild + '/img'));
 });
 
 /**
@@ -325,22 +325,22 @@ gulp.task('modernizr', ['init', 'modernizr:build']);
 gulp.task('watch', ['default', 'browser-sync'], function(cb) {
   isWatching = true;
 
-	gulp.watch([
-		paths.cssSrc + '/**/*.scss',
-		'!**/cms-wysiwyg.scss',
-		'!**/cms.scss'
-	], ['sass', 'sass:lint']);
-	gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass:cms']);
-	gulp.watch(paths.cssSrc + '/img/icons/*.svg', ['icons']);
-	gulp.watch(paths.jsSrc + '/**/*.js', ['bundle']);
-	gulp.watch([
+  gulp.watch([
+    paths.cssSrc + '/**/*.scss',
+    '!**/cms-wysiwyg.scss',
+    '!**/cms.scss'
+  ], ['sass', 'sass:lint']);
+  gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass:cms']);
+  gulp.watch(paths.cssSrc + '/img/icons/*.svg', ['icons']);
+  gulp.watch(paths.jsSrc + '/**/*.js', ['bundle']);
+  gulp.watch([
     paths.js + '/models/*.js',
     paths.jsSrc + '/../garp/models/*.js'
   ], ['javascript:models']);
-	gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
-	gulp.watch(paths.fontSrc + '/**/*.{ttf,eot,woff,woff2}', ['fonts']);
-	gulp.watch(paths.js +'/garp/*.js', ['javascript:cms']);
-	gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
+  gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
+  gulp.watch(paths.fontSrc + '/**/*.{ttf,eot,woff,woff2}', ['fonts']);
+  gulp.watch(paths.js +'/garp/*.js', ['javascript:cms']);
+  gulp.watch('application/modules/default/**/*.{phtml, php}', browserSync.reload);
 });
 
 /**
@@ -422,16 +422,16 @@ gulp.task('default', function(cb) {
     'init',
     'clean',
     [
-	    'sass',
+      'sass',
       'sass:cms',
-	    'sass:lint',
-	    'javascript',
-	    'javascript:cms',
-	    'javascript:models',
-	    'images',
-	    'images:icons',
+      'sass:lint',
+      'javascript',
+      'javascript:cms',
+      'javascript:models',
+      'images',
+      'images:icons',
       'fonts',
-	    'modernizr:build'
+      'modernizr:build'
   ],
   'revision',
   cb
@@ -447,56 +447,55 @@ gulp.task('default', function(cb) {
  * ----------------------------------------------------
  */
 function handleError(error, emitEnd) {
-	if (typeof(emitEnd) === 'undefined') {
-		emitEnd = true;
-	}
-	$.util.beep();
-	$.util.log($.util.colors.white.bgRed('Error!'), $.util.colors.red(error.toString()));
-	if (emitEnd) {
-		this.emit('end');
-	}
+  if (typeof(emitEnd) === 'undefined') {
+    emitEnd = true;
+  }
+  $.util.beep();
+  $.util.log($.util.colors.white.bgRed('Error!'), $.util.colors.red(error.toString()));
+  if (emitEnd) {
+    this.emit('end');
+  }
 }
 
 function getShellOutput(command) {
   var result = execSync(command).toString('utf-8');
-	if (!result) {
-		handleError('Error getting shell output');
-		$.util.beep();
-	}
-	// Do a replace because of newline in shell output
-	return result.replace(/\s?$/, '');
+  if (!result) {
+    handleError('Error getting shell output');
+    $.util.beep();
+  }
+  // Do a replace because of newline in shell output
+  return result.replace(/\s?$/, '');
 }
 
 function getConfigValue(value) {
-	if (!value) {
-		handleError('Can\'t get undefined config value');
-		return;
-	}
-	var command = 'php ' + GARP_DIR + '/scripts/garp.php config get ' + value + ' ' + ENV;
-	return getShellOutput(command);
+  if (!value) {
+    handleError('Can\'t get undefined config value');
+    return;
+  }
+  var command = 'php ' + GARP_DIR + '/scripts/garp.php config get ' + value + ' ' + ENV;
+  return getShellOutput(command);
 }
 
 function constructPaths() {
-	paths.public      = 'public';
+  paths.public      = 'public';
 
-	paths.js          = paths.public + '/js';
-	paths.jsSrc       = paths.public + getConfigValue('assets.js.root');
-	paths.jsBuild     = paths.public + getConfigValue('assets.js.build');
+  paths.js          = paths.public + '/js';
+  paths.jsSrc       = paths.public + getConfigValue('assets.js.root');
+  paths.jsBuild     = paths.public + getConfigValue('assets.js.build');
 
-	paths.css         = paths.public + '/css';
-	paths.cssSrc      = paths.public + getConfigValue('assets.css.root');
-	paths.cssBuild    = paths.public + getConfigValue('assets.css.build');
+  paths.css         = paths.public + '/css';
+  paths.cssSrc      = paths.public + getConfigValue('assets.css.root');
+  paths.cssBuild    = paths.public + getConfigValue('assets.css.build');
 
-	paths.imgSrc      = paths.css      + '/img';
-	paths.imgBuild    = paths.cssBuild + '/img';
+  paths.imgSrc      = paths.css      + '/img';
+  paths.imgBuild    = paths.cssBuild + '/img';
   paths.fontSrc     = paths.css + '/fonts';
   paths.fontBuild   = paths.cssBuild + '/fonts';
   paths.cssCdn      = getConfigValue('cdn.domain');
   if (paths.cssCdn) {
-	  var protocol    = getConfigValue('cdn.ssl') ? 'https://' : 'http://';
-	  paths.cssCdn    = protocol + paths.cssCdn + getConfigValue('assets.css.build');
+    var protocol    = getConfigValue('cdn.ssl') ? 'https://' : 'http://';
+    paths.cssCdn    = protocol + paths.cssCdn + getConfigValue('assets.css.build');
   }
 
-	return paths;
+  return paths;
 }
-
