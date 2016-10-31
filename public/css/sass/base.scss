@@ -55,7 +55,7 @@ body {
 button, input, select, textarea {
 	color: $black;
 	font-family: $bodyFont; font-weight: normal;
-	font-size: map-get($fontSizesSmall, body); 
+	font-size: map-get($fontSizesSmall, body);
 }
 
 
@@ -103,16 +103,14 @@ img, object, iframe, video {
 /* ==========================================================================
 	LAYOUT
 	========================================================================== */
-.wrapper {}
 
+.wrapper {}
 
 /* ==========================================================================
 	MODULES
 	========================================================================== */
 
-@import 'modules/cookie-info';
-@import 'modules/flash-message';
-@import 'modules/nav-primary';
+@import 'modules/*';
 
 /* ==========================================================================
    HELPERS

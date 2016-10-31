@@ -23,6 +23,7 @@ var gulp          = require('gulp'),
   buffer          = require('vinyl-buffer'),
   path            = require('path'),
   reworkUrl       = require('rework-plugin-url'),
+  sassGlob        = require('gulp-sass-glob'),
   execSync        = require('child_process').execSync,
   argv            = require('yargs').argv;
 
@@ -112,6 +113,7 @@ gulp.task('sass', function() {
     ];
 
   return gulp.src(paths.cssSrc + '/base.scss')
+    .pipe(sassGlob())
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.postcss(processors))
     .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
@@ -132,6 +134,7 @@ gulp.task('sass', function() {
 
 gulp.task('sass:cms', function() {
   return gulp.src([paths.cssSrc + '/cms.scss', paths.cssSrc + '/cms-wysiwyg.scss'])
+    .pipe(sassGlob())
     .pipe($.sass({
       onError: function(err) {
         handleError(err.message + ' => ' + err.file + ':' + err.line, false);

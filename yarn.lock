@@ -2896,6 +2896,14 @@ gulp-rework@^1.2.0:
     rework "^1.0.0"
     through2 "^2.0.0"
 
+gulp-sass-glob:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/gulp-sass-glob/-/gulp-sass-glob-1.0.6.tgz#88b8b27e65422b6b02c51a18f1960fdccda73ee3"
+  dependencies:
+    glob "^7.0.0"
+    slash "^1.0.0"
+    through2 "^2.0.1"
+
 gulp-sass@^2.3.1:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/gulp-sass/-/gulp-sass-2.3.2.tgz#82b7ab90fe902cdc34c04f180d92f2c34902dd52"
