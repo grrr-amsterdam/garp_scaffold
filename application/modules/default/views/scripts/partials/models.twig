@@ -2,7 +2,7 @@
 Ext.ns('Garp');
 Ext.ns('Garp.dataTypes');
 </script>
-<script src="{{ zf.assetUrl('/js/models/base/BaseModels.min.js') ~ '?' ~ app.version }}"></script>
+<script src="{{ zf.assetUrl('/js/models/base/BaseModels.min.js') }}"></script>
 
 {% if app.config.cms.minifiedAssets %}
 
@@ -39,14 +39,14 @@ Ext.ns('Garp.dataTypes');
 
 <script>
 Ext.onReady(function() {
-	Garp.modelMenu = new Garp.ModelMenu({
-		menuItems: [
-			'Snippet',
-			'Image',
-			'-',
-			'AuthPasswordless',
-			'User'
-		]
-	});
+    Garp.modelMenu = new Garp.ModelMenu({
+        menuItems: [
+            'Snippet',
+            'Image',
+            '-',
+            'AuthPasswordless',
+            'User'
+        ]
+    });
 });
 </script>

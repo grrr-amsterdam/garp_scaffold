@@ -15,11 +15,11 @@ Garp.Cookie.get = function(name) {
     for (var i = 0, cal = ca.length; i < cal; ++i) {
         var c = ca[i];
         while (c.charAt(0) === ' ') {
-			c = c.substring(1, c.length);
-		}
+      c = c.substring(1, c.length);
+    }
         if (c.indexOf(nameEQ) === 0) {
-			return c.substring(nameEQ.length, c.length);
-		}
+      return c.substring(nameEQ.length, c.length);
+    }
     }
     return null;
 };
@@ -32,16 +32,16 @@ Garp.Cookie.get = function(name) {
  * @param {String} domain
  */
 Garp.Cookie.set = function(name, value, date, domain) {
-	value = escape(value) + "; path=/";
-	if (domain) {
-		value += '; domain=' + escape(domain);
-	}
-	value += (!date ? "" : "; expires=" + date.toGMTString());
-	document.cookie = name + "=" + value;
+  value = escape(value) + "; path=/";
+  if (domain) {
+    value += '; domain=' + escape(domain);
+  }
+  value += (!date ? "" : "; expires=" + date.toGMTString());
+  document.cookie = name + "=" + value;
 };
 
 Garp.Cookie.remove = function(name) {
-	Garp.setCookie(name, '', new Date('1900'));
+  Garp.setCookie(name, '', new Date('1900'));
 };
 
 module.exports = Garp.Cookie;

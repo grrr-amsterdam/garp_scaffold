@@ -5,19 +5,19 @@
 import { register } from './scroll-listener.js';
 
 export default () => {
-	const body = document.body;
-	let timer;
-	if (!body) {
-		return;
-	}
-	register('hover-styles', () => {
-		clearTimeout(timer);
-		if (!body.classList.contains('disable-hover')) {
-			body.classList.add('disable-hover');
-		}
+  const body = document.body;
+  let timer;
+  if (!body) {
+    return;
+  }
+  register('hover-styles', () => {
+    clearTimeout(timer);
+    if (!body.classList.contains('disable-hover')) {
+      body.classList.add('disable-hover');
+    }
 
-		timer = setTimeout(() => {
-			body.classList.remove('disable-hover');
-		}, 300);
-	});
+    timer = setTimeout(() => {
+      body.classList.remove('disable-hover');
+    }, 300);
+  });
 };

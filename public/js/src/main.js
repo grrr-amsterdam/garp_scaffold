@@ -9,7 +9,7 @@ import FlashMessage from './modules/flashmessage.js';
 
 // Import handlers
 import { handler as classToggler } from './modules/class-toggler.js';
-import { handler as googleAnalyticsEventHandler } from './modules/google-analytics.js';
+import { hanlder as googleAnalyticsEventHandler } from './modules/google-analytics.js';
 
 // Import enhancers
 import { enhancer as googleAnalyticsEventEnhancer } from './modules/google-analytics.js';
@@ -17,51 +17,52 @@ import { enhancer as googleAnalyticsEventEnhancer } from './modules/google-analy
 let mainReady = false;
 
 const executeOnReady = () => {
-	// Flash Messages
-	const cookieMsg = FlashMessage.parseCookie();
-	if (cookieMsg) {
-		const fm = new FlashMessage(cookieMsg);
-		fm.show();
-	}
+  // Flash Messages
+  const cookieMsg = FlashMessage.parseCookie();
+  if (cookieMsg) {
+    const fm = new FlashMessage(cookieMsg);
+    fm.show();
+  }
 
-	disableHoverStylesOnScroll(); // Disable hover styles on scroll
+  disableHoverStylesOnScroll(); // Disable hover styles on scroll
   scrollListener(); // Initialise central scroll listener
   responsive(); // Set document width on resize and orientation change
 };
 
 function main() {
-	if (mainReady) {
-		return;
-	}
+  if (mainReady) {
+    return;
+  }
 
-	mainReady = true;
+  mainReady = true;
 
   // Setup the basics
-	executeOnReady();
+  executeOnReady();
 
-	/**
- 	 * We use handlers and enhancers.
- 	 * For more info:
- 	 * @see https://hiddedevries.nl/en/blog/2015-04-03-progressive-enhancement-with-handlers-and-enhancers
- 	 *
- 	 * Add handlers and enhancers to the respective lists below, and add the data-handler or
- 	 * data-enhancer attributes to your HTML.
- 	 *
- 	 */
-	handle({
-		classToggler,
-		googleAnalyticsEventHandler,
-	});
+  /**
+   * We use handlers and enhancers.
+   * For more info:
+   * @see https://hiddedevries.nl/en/blog/2015-04-03-progressive-enhancement-with-handlers-and-enhancers
+   *
+   * Add handlers and enhancers to the respective lists below, and add the data-handler or
+   * data-enhancer attributes to your HTML.
+   *
+   */
 
-	enhance({
-		googleAnalyticsEventEnhancer,
-	});
+  handle({
+    classToggler,
+    googleAnalyticsEventHandler,
+  });
+
+  enhance({
+    googleAnalyticsEventEnhancer,
+  });
 }
 
-if (document.readyState !== "loading") {
-	main();
+if (document.readyState !== 'loading') {
+  main();
 } else {
-	document.addEventListener("DOMContentLoaded", main, false);
-	document.addEventListener("readystatechange", main, false);
-	window.addEventListener("load", main, false);
+  document.addEventListener('DOMContentLoaded', main, false);
+  document.addEventListener('readystatechange', main, false);
+  window.addEventListener('load', main, false);
 }

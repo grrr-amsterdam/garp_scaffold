@@ -6,24 +6,24 @@
 
 <script>
 (function() {
-	var localStorage = typeof window.localStorage !== 'undefined' ? window.localStorage : null;
-	var cookie_bar_html = '<section id="cookie-announcement" class="cookie-announcement"> \
-	    Deze site maakt gebruik van cookies.';
-	if (localStorage) {
-	    cookie_bar_html += '<button>&times;</button>';
-	}
-	cookie_bar_html += '</section>';
-	if (!localStorage || !localStorage.getItem('accept_cookies')) {
-	    document.write(cookie_bar_html);
+    var localStorage = typeof window.localStorage !== 'undefined' ? window.localStorage : null;
+    var cookie_bar_html = '<section id="cookie-announcement" class="cookie-announcement"> \
+        Deze site maakt gebruik van cookies.';
+    if (localStorage) {
+        cookie_bar_html += '<button>&times;</button>';
+    }
+    cookie_bar_html += '</section>';
+    if (!localStorage || !localStorage.getItem('accept_cookies')) {
+        document.write(cookie_bar_html);
 
-		if (localStorage) {
-			var ca = document.getElementById('cookie-announcement');
-			var btn = ca.getElementsByTagName('button')[0];
-			btn.onclick = function() {
-				ca.parentNode.removeChild(ca);
-				localStorage.setItem('accept_cookies', 1);
-			};
-		}
-	}
+        if (localStorage) {
+            var ca = document.getElementById('cookie-announcement');
+            var btn = ca.getElementsByTagName('button')[0];
+            btn.onclick = function() {
+                ca.parentNode.removeChild(ca);
+                localStorage.setItem('accept_cookies', 1);
+            };
+        }
+    }
 })();
 </script>
