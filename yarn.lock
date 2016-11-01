@@ -2763,6 +2763,13 @@ gulp-concat@^2.6.0:
     gulp-util "^3.0.1"
     through2 "^0.6.3"
 
+gulp-copy:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/gulp-copy/-/gulp-copy-0.0.2.tgz#3dcc8c4267a9c1e0ca0b83faba70ce8abf25a886"
+  dependencies:
+    gulp-util "~2.2.9"
+    through "2.3.4"
+
 gulp-csso@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/gulp-csso/-/gulp-csso-2.0.0.tgz#3237bc949736cd6704c929ca3952ce071021ed84"
@@ -3005,7 +3012,7 @@ gulp-util@*, gulp-util@^3.0, gulp-util@^3.0.0, gulp-util@^3.0.1, gulp-util@^3.0.
     through2 "^2.0.0"
     vinyl "^0.5.0"
 
-gulp-util@~2.2.10:
+gulp-util@~2.2.10, gulp-util@~2.2.9:
   version "2.2.20"
   resolved "https://registry.yarnpkg.com/gulp-util/-/gulp-util-2.2.20.tgz#d7146e5728910bd8f047a6b0b1e549bc22dbd64c"
   dependencies:
@@ -5826,6 +5833,10 @@ tfunk@^3.0.1:
 through@^2.3.6, "through@>=2.2.7 <3", through@~2.3, through@~2.3.1, through@2:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
+
+through@2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/through/-/through-2.3.4.tgz#495e40e8d8a8eaebc7c275ea88c2b8fc14c56455"
 
 through2-concurrent@^1.1.0:
   version "1.1.1"
