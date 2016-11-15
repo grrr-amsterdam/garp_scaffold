@@ -16,7 +16,7 @@ export default handlers => {
     throw new Error('Nothing to handle');
   }
 
-  document.documentElement.addEventListener('click', (e) => {
+  document.body.addEventListener('click', (e) => {
     if (e.target.tagName === 'HTML') {
       return;
     }
