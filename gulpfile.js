@@ -267,19 +267,11 @@ gulp.task('images', function() {
 });
 
 /**
- * Copy fonts
- */
-gulp.task('fonts', function() {
-  return gulp.src(paths.fontSrc + '/*.{ttf,eot,woff,woff2}')
-    .pipe(copy(paths.fontBuild, { prefix: 3 }));
-});
-
-/**
  * Creates an svg sprite out of all files in the public/css/img/icons folder
- *
  * This sprite is lazy loaded with JS, see load-icons.js for more info
  */
 gulp.task('images:icons', function () {
+  $.util.log($.util.colors.green('Spriting icons to ' + paths.imgBuild));
   return gulp.src(paths.css + '/img/icons/*.svg')
   .pipe($.svgmin(function (file) {
     var prefix = path.basename(file.relative, path.extname(file.relative));
@@ -294,6 +286,14 @@ gulp.task('images:icons', function () {
   }).on('error', handleError))
   .pipe($.svgstore({ inlineSvg: true }).on('error', handleError))
   .pipe(gulp.dest(paths.cssBuild + '/img'));
+});
+
+/**
+ * Copy fonts
+ */
+gulp.task('fonts', function() {
+  return gulp.src(paths.fontSrc + '/*.{ttf,eot,woff,woff2}')
+    .pipe(copy(paths.fontBuild, { prefix: 3 }));
 });
 
 /**
@@ -334,16 +334,22 @@ gulp.task('watch', ['default', 'browser-sync'], function(cb) {
     '!**/cms.scss'
   ], ['sass', 'sass:lint']);
   gulp.watch(paths.cssSrc + '/**/cms.scss', ['sass:cms']);
-  gulp.watch(paths.cssSrc + '/img/icons/*.svg', ['icons']);
+  gulp.watch(paths.imgSrc + '/icons/*.svg', ['images:icons']);
+  gulp.watch([
+    paths.imgSrc + '/**/*.{gif,jpg,svg,png}',
+    '!**/icons/**/*.svg',
+  ], ['images']);
+  gulp.watch(paths.fontSrc + '/**/*.{ttf,eot,woff,woff2}', ['fonts']);
   gulp.watch(paths.jsSrc + '/**/*.js', ['bundle']);
   gulp.watch([
     paths.js + '/models/*.js',
     paths.jsSrc + '/../garp/models/*.js'
   ], ['javascript:models']);
-  gulp.watch(paths.imgSrc + '/**/*.{gif,jpg,svg,png}', ['images']);
-  gulp.watch(paths.fontSrc + '/**/*.{ttf,eot,woff,woff2}', ['fonts']);
   gulp.watch(paths.js +'/garp/*.js', ['javascript:cms']);
-  gulp.watch('application/modules/default/**/*.{phtml,php,twig}', browserSync.reload);
+  gulp.watch([
+    'application/modules/default/**/*.{phtml,php,twig}',
+    'library/App/Form/**/*.php'
+  ], browserSync.reload);
 });
 
 /**
