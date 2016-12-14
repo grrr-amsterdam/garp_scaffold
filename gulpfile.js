@@ -11,6 +11,7 @@ var gulp          = require('gulp'),
   $               = gulpLoadPlugins(),
   copy            = require('gulp-copy'),
   pxtorem         = require('postcss-pxtorem'),
+  cssUrl          = require('postcss-url'),
   autoprefixer    = require('autoprefixer'),
   browserSync     = require('browser-sync'),
   browserify      = require('browserify'),
@@ -22,7 +23,6 @@ var gulp          = require('gulp'),
   source          = require('vinyl-source-stream'),
   buffer          = require('vinyl-buffer'),
   path            = require('path'),
-  reworkUrl       = require('rework-plugin-url'),
   sassGlob        = require('gulp-sass-glob'),
   execSync        = require('child_process').execSync,
   argv            = require('yargs').argv;
@@ -109,24 +109,22 @@ gulp.task('sass', function() {
         ],
         replace: false,
         media_query: false
-      })
+      }),
+      cssUrl({
+        url: function(url) {
+          if (ENV === 'development' || url.indexOf('data:') === 0) {
+            return url;
+          }
+          return paths.cssCdn + '/' + url;
+        }
+      }),
     ];
 
   return gulp.src(paths.cssSrc + '/base.scss')
     .pipe(sassGlob())
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.postcss(processors))
-    .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
-    .pipe($.if(ENV !== 'development' && paths.cssCdn !== '', $.rework(
-      reworkUrl(function(url) {
-        // Leave data urls alone
-        if (url.indexOf('data:') === 0) {
-          return url;
-        }
-        // Prepend url with cdn path
-        return paths.cssCdn + '/' + url;
-      })
-    )))
+    .pipe($.csso()))
     .pipe(gulp.dest(paths.cssBuild))
     .pipe(browserSync.reload({stream:true}))
   ;
