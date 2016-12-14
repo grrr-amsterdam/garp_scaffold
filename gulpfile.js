@@ -124,7 +124,7 @@ gulp.task('sass', function() {
     .pipe(sassGlob())
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.postcss(processors))
-    .pipe($.csso()))
+    .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.csso()))
     .pipe(gulp.dest(paths.cssBuild))
     .pipe(browserSync.reload({stream:true}))
   ;
