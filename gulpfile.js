@@ -171,7 +171,6 @@ gulp.task('sass:lint', function() {
  * Javascript bundle with Browserify
  */
 var b;
-
 function initBrowserify() {
   var customOpts = {
     entries: paths.jsSrc + '/main.js'
@@ -184,13 +183,12 @@ function initBrowserify() {
     b = watchify(b);
   }
   b.transform(babelify, {
-    presets: ["es2015"]
+    presets: ["latest"]
   }).on('error', handleError);
 
   b.on('update', bundle);
-  bundle();
+  return bundle();
 };
-
 gulp.task('javascript', initBrowserify);
 
 function bundle() {
@@ -206,7 +204,6 @@ function bundle() {
     .pipe(gulp.dest(paths.jsBuild))
     .pipe(browserSync.stream({once: true}));
 };
-
 gulp.task('bundle', bundle);
 
 /**
