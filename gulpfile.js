@@ -72,23 +72,6 @@ gulp.task('browser-sync', function() {
   browserSync({
     proxy: domain,
     open: false,
-    notify: {
-      styles: [
-        "display: none",
-        "padding: 15px",
-        "font-family: sans-serif",
-        "position: fixed",
-        "font-size: 0.9em",
-        "z-index: 9999",
-        "right: 0px",
-        "bottom: 0px",
-        "border-top-left-radius: 5px",
-        "background-color: rgb(27, 32, 50)",
-        "margin: 0",
-        "color: white",
-        "text-align: center"
-      ]
-    }
   });
 });
 
@@ -98,7 +81,7 @@ gulp.task('browser-sync', function() {
 gulp.task('sass', function() {
   var processors = [
       autoprefixer({
-          browsers: ['>5%', 'last 2 versions', 'ie 9', 'ie 10']
+          browsers: ['>5%', 'last 3 versions', 'ie 9', 'ie 10', 'ie 11']
       }),
       pxtorem({
         root_value: 10,
@@ -147,25 +130,14 @@ gulp.task('sass:cms', function() {
  * Lints Sass
  */
 gulp.task('sass:lint', function() {
-  var scssLintOutput = function(file, stream) {
-  if (!file.scsslint.success) {
-    $.util.log($.util.colors.gray('-----------------'));
-    $.util.log($.util.colors.green(file.scsslint.issues.length) + ' scss-lint issue(s) found:');
-    file.scsslint.issues.forEach(function(issue) {
-      $.util.colors.underline(file.path);
-      $.util.log($.util.colors.green(issue.reason) + ' => ' + $.util.colors.underline(file.path) + ':' + issue.line);
-    });
-    $.util.log($.util.colors.gray('-----------------'));
-  }
-  };
   return gulp.src(paths.cssSrc + '/**/*.scss')
-    .pipe($.scssLint({
-      'config': __dirname + '/.scss-lint.yml',
-      'customReport': scssLintOutput
-    })).on('error', handleError)
+    .pipe($.sassLint({
+      configFile: '.sass-lint.yml',
+    }))
+    .pipe($.sassLint.format())
+    .on('error', handleError)
   ;
 });
-
 
 /**
  * Javascript bundle with Browserify
@@ -211,8 +183,8 @@ gulp.task('bundle', bundle);
  */
 function eslint() {
   return gulp.src(paths.jsSrc + '/**/*.js')
-      .pipe($.eslint('.eslintrc').on('error', handleError))
-      .pipe($.eslint.format());
+    .pipe($.eslint('.eslintrc').on('error', handleError))
+    .pipe($.eslint.format());
 }
 
 gulp.task('eslint', eslint);
@@ -428,7 +400,6 @@ gulp.task('default', function(cb) {
     [
       'sass',
       'sass:cms',
-      'sass:lint',
       'javascript',
       'javascript:cms',
       'javascript:models',
@@ -437,6 +408,7 @@ gulp.task('default', function(cb) {
       'fonts',
       'modernizr:build'
   ],
+  'sass:lint',
   'revision',
   cb
   );
