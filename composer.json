@@ -31,7 +31,7 @@
   },
 
   "scripts": {
-    "test": "vendor/bin/phpunit --verbose --colors --bootstrap tests/TestHelper.php tests/",
+    "test": "phpunit",
     "phpcs": "vendor/bin/phpcs --standard=vendor/grrr-amsterdam/garp3/phpcs.xml --extensions=php --colors .",
     "post-install-cmd": [
       "if [ \"$APPLICATION_ENV\" = \"development\" ]; then php ./vendor/bin/g permissions set; fi"
