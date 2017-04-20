@@ -103,6 +103,12 @@ php_value post_max_size 30M
 	# RewriteCond %{HTTP_HOST} ^www\.example\.com$ [NC]
 	# RewriteRule ^(.*)$ http://example.com/$1 [R=301,L]
 
+    #RewriteCond %{HTTPS} off
+    #RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    #RewriteCond %{HTTP:CLOUDFRONT-FORWARDED-PROTO} !https [NC]
+    #RewriteCond %{HTTP_HOST} ^example\.com$
+    #RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
+
 	# Disregard slash at the end of request
 	RewriteRule ^(.*)/$ /$1 [L]
 
