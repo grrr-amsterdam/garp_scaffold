@@ -23,3 +23,4 @@ application/data/cache/twig
 application/modules/default/Model/Base/*.php
 public/js/models/base/*.js
 /vendor
+!.env.template
