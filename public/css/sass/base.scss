@@ -23,7 +23,6 @@
  * Print styles........Styles for printing
  */
 
-
 // Import Normalize.css from npm so it’s easy to update
 @import '../../../node_modules/normalize.css/normalize';
 
@@ -38,21 +37,30 @@
 
 html {
 	box-sizing: border-box; font-size: 62.5%; line-height: 1.4;
-	-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    @include font-smoothing;
 }
 
-*, *::before, *::after { box-sizing: inherit; }
+// sass-lint:disable no-universal-selectors
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+// sass-lint:enable no-universal-selectors
 
 body {
 	background: #fff; margin: 0;
 	font-family: $bodyFont; font-weight: normal;
-	font-size: map-get($fontSizesSmall, body); color: $black;
+	font-size: 16px; color: $black;
 }
 
 /*
  * Forms
  */
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
 	color: $black;
 	font-family: $bodyFont; font-weight: normal;
 	font-size: map-get($fontSizesSmall, body);
@@ -62,9 +70,9 @@ button, input, select, textarea {
 /*
  * Links
  */
-a:hover, a:focus {
-	outline: 0; vertical-align: baseline;
-	-webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove the blue tap-highlight on mobile */
+a:hover,
+a:focus {
+	outline: 0;
 }
 
 
@@ -72,7 +80,7 @@ a:hover, a:focus {
  * Typography
  */
 p {
-	margin-top: 0; margin-bottom: $defaultLineHeight + em;
+	margin-top: 0; margin-bottom: $line-height + em;
 }
 
 h1 {
@@ -87,15 +95,24 @@ h3 {
 	font-size: map-get($fontSizesSmall, h3);
 }
 
-h4 { }
-h5 { }
-h6 { }
+h4 {
+
+}
+h5 {
+
+}
+h6 {
+
+}
 
 
 /*
  * Media
  */
-img, object, iframe, video {
+img,
+object,
+iframe,
+video {
 	max-width: 100%; width: auto; height: auto;
 }
 
@@ -116,28 +133,20 @@ img, object, iframe, video {
    HELPERS
    ========================================================================== */
 
-@include bp-max($small) {
-	.hide-on-palm { display: none !important; }
+.is-hidden {
+    display: none !important; visibility: hidden !important;
 }
-
-@include bp-min($small) {
-	.hide-on-lap { display: none !important; }
+.is-offscreen {
+    position: absolute !important; left: -999em !important;
 }
-
-.show-only-on-palm { display: none; }
-@include bp-max($small) {
-	.show-only-on-palm { display: block !important; }
+.is-invisible {
+    visibility: hidden !important;
 }
-
-.is-hidden { display: none !important; visibility: hidden !important; }
-.is-offscreen { position: absolute !important; left: -999em !important; }
-.is-invisible { visibility: hidden !important; }
 
 /* Hide form field that should be left empty */
 form .hp {
 	display: none;
 }
-
 
 /* ==========================================================================
 	HOVER - disable on scroll (see function disableHoverStylesOnScroll() in main.js)

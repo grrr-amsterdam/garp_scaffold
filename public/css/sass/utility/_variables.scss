@@ -1,73 +1,59 @@
-/* ==========================================================================
-   variables
-   ========================================================================== */
-
-// COLORS (base)
-// The following is inspired by this article: http://sachagreif.com/sass-color-variables/
+/**
+ * Colors
+ * @see http://sachagreif.com/sass-color-variables/
+ */
 $black: #222;
 $white: #ffffff;
 
 $red: #f00;
 $blue: #00f;
 
-$textColor: $black;
-
-$primaryColor: $red;
-$secondaryColor: $blue;
+$primary-color: $red;
+$secondary-color: $blue;
 
 $themes: (
-	$primaryColor,
-	$secondaryColor,
+	$primary-color,
+	$secondary-color,
 );
 
-$themesMap: (
-	primary: $primaryColor,
-	secondary: $secondaryColor,
+$themes-map: (
+	primary: $primary-color,
+	secondary: $secondary-color,
 );
 
-// FONTS
-$fontSizesSmall: (
-	h1: 38px,
-	h2: 32px,
-	h3: 20px,
-	body: 19px
-);
+/**
+ * Fonts
+ */
+$body-font: sans-serif;
+$heading-font: sans-serif;
+$ui-font: sans-serif;
 
-$fontSizesMedium: (
-	h1: 57px,
-	h2: 42px,
-	h3: 32px,
-	body: 19px
-);
+/**
+ * General defaults
+ */
+$line-height: 1.5;
+$border-radius: 2px;
+$box-shadow: 0 0 10px 0 rgba($black, .3);
 
-$fontSizesLarge: (
-);
-
-$defaultLineHeight: 1.5;
-
-$bodyFont: sans-serif;
-$headingFont: sans-serif;
-
-
-// WIDTHS & SIZES
-$siteWidth: 1020;
+/**
+ * Widths & Sizes
+ */
+$site-width: 1020;
 
 /*
- * z-index
- * for stacking stuff
- *
- * define the stacking order for modules here
- * within a module you should define it via
- * the $module-z-index variable
+ * Z-index
+ * Define the stacking order for modules here within a module you
+ * should define it via the $module-z-index variable
  */
 $z-index: (
 );
 
-// BREAKPOINTS
-// The following is inspired by this article: http://css-tricks.com/media-queries-sass-3-2-and-codekit/
-$small: 540;
-$medium: 680;
-$mediumLarge: 900;
+/**
+ * Breakpoints
+ * @see http://css-tricks.com/media-queries-sass-3-2-and-codekit/
+ */
+$tiny: 480;
+$small: 640;
+$medium: 960;
 $large: 1200;
-$extraLarge: 1400;
-$huge: 1700;
+$huge: 1680;

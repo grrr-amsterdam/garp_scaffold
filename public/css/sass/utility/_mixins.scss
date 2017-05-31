@@ -36,6 +36,21 @@
 }
 
 /**
+ * Font smoothing
+ */
+@mixin font-smoothing($enabled: true) {
+    @if $enabled {
+        font-smoothing: antialiased;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    } @else {
+        font-smoothing: initial;
+        -webkit-font-smoothing: initial;
+        -moz-osx-font-smoothing: initial;
+    }
+}
+
+/**
  * Media query breakpoints mixins
  *
  * Usage:
