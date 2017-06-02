@@ -138,6 +138,16 @@ form .hp {
 	display: none;
 }
 
+// sass-lint:disable no-ids
+#__bs_notify__ {
+    background: $primaryColor !important;
+    top: auto !important; bottom: 0 !important;
+    border-radius: 0 !important;
+    padding: 10px 15px !important;
+    font-size: 14px !important;
+}
+// sass-lint:enable no-ids
+
 
 /* ==========================================================================
 	HOVER - disable on scroll (see function disableHoverStylesOnScroll() in main.js)
