@@ -72,23 +72,6 @@ gulp.task('browser-sync', function() {
   browserSync({
     proxy: domain,
     open: false,
-    notify: {
-      styles: [
-        "display: none",
-        "padding: 15px",
-        "font-family: sans-serif",
-        "position: fixed",
-        "font-size: 0.9em",
-        "z-index: 9999",
-        "right: 0px",
-        "bottom: 0px",
-        "border-top-left-radius: 5px",
-        "background-color: rgb(27, 32, 50)",
-        "margin: 0",
-        "color: white",
-        "text-align: center"
-      ]
-    }
   });
 });
 
@@ -166,7 +149,6 @@ gulp.task('sass:lint', function() {
   ;
 });
 
-
 /**
  * Javascript bundle with Browserify
  */
@@ -192,17 +174,21 @@ function initBrowserify() {
 gulp.task('javascript', initBrowserify);
 
 function bundle() {
-  eslint();
+  if (!isWatching) {
+    eslint();
+  }
 
   return b.bundle()
     .on('error', handleError)
     .pipe(source('main.js'))
     .pipe(buffer())
-    .pipe($.if(ENV === 'development' && PROFILE !== 'production', $.sourcemaps.init({loadMaps: true})))
-    .pipe($.if(ENV !== 'development' || PROFILE === 'production', $.uglify())).on('error', handleError)
-    .pipe($.if(ENV === 'development' && PROFILE !== 'production', $.sourcemaps.write({loadMaps: true})))
+    .pipe($.sourcemaps.init({
+      loadMaps: true
+    }))
+    .pipe($.if(ENV !== 'development' || PROFILE === 'production',
+      $.uglify())).on('error', handleError)
+    .pipe($.sourcemaps.write('./'))
     .pipe(gulp.dest(paths.jsBuild))
-    .pipe(browserSync.stream({once: true}));
 };
 gulp.task('bundle', bundle);
 
@@ -214,7 +200,6 @@ function eslint() {
       .pipe($.eslint('.eslintrc').on('error', handleError))
       .pipe($.eslint.format());
 }
-
 gulp.task('eslint', eslint);
 
 
@@ -298,7 +283,11 @@ gulp.task('fonts', function() {
  * Note: this task isn't run on watch, you can run it manually via `gulp modernizr`
  */
 gulp.task('modernizr:build', function() {
-  return gulp.src([paths.cssSrc + '/**/*.scss', paths.jsSrc + '/modules/*.js', paths.jsSrc + '/main.js'])
+  return gulp.src([
+    paths.cssSrc + '/**/*.scss',
+    paths.jsSrc + '/modules/*.js',
+    paths.jsSrc + '/main.js'
+  ])
   .pipe($.modernizr({
     "enableJSClass": false,
     "options" : [
@@ -318,11 +307,18 @@ gulp.task('modernizr:build', function() {
 gulp.task('modernizr', ['init', 'modernizr:build']);
 
 /**
+ * Watch wrapper for JavaScript bundle, since we want to reload
+ * the browser only once, and only after finishing the bundling.
+ */
+gulp.task('js-watch', ['bundle'], function(done) {
+    browserSync.reload();
+    done();
+});
+
+/**
  * Watches for file changes and runs Gulp tasks accordingly
  */
-gulp.task('watch', ['default', 'browser-sync'], function(cb) {
-  isWatching = true;
-
+gulp.task('watch-tasks', function() {
   gulp.watch([
     paths.cssSrc + '/**/*.scss',
     '!**/cms-wysiwyg.scss',
@@ -335,7 +331,7 @@ gulp.task('watch', ['default', 'browser-sync'], function(cb) {
     '!**/icons/**/*.svg',
   ], ['images']);
   gulp.watch(paths.fontSrc + '/**/*.{ttf,eot,woff,woff2}', ['fonts']);
-  gulp.watch(paths.jsSrc + '/**/*.js', ['bundle']);
+  gulp.watch(paths.jsSrc + '/**/*.js', ['js-watch']);
   gulp.watch([
     paths.js + '/models/*.js',
     paths.jsSrc + '/../garp/models/*.js'
@@ -344,8 +340,24 @@ gulp.task('watch', ['default', 'browser-sync'], function(cb) {
   gulp.watch([
     'application/modules/default/**/*.{phtml,php,twig}',
     'library/App/Form/**/*.php'
-  ], browserSync.reload);
+  ]).on('change', browserSync.reload);
 });
+
+/**
+ * Watch
+ */
+gulp.task('watch', function(cb) {
+  isWatching = true;
+  runSequence(
+    'default',
+    [
+      'browser-sync',
+      'watch-tasks',
+    ],
+    cb
+  );
+});
+
 
 /**
  * Add revision hash behind filename so we can cache assets forever
@@ -380,10 +392,9 @@ gulp.task('revision:hash', function() {
 
 });
 
-/*
+/**
  * Replace image and font urls in css files
  */
-
 gulp.task('revision:replace:css', function(){
   var manifestFile = './rev-manifest-' + ENV + '.json';
   var manifest = gulp.src(manifestFile);
@@ -436,9 +447,9 @@ gulp.task('default', function(cb) {
       'images:icons',
       'fonts',
       'modernizr:build'
-  ],
-  'revision',
-  cb
+    ],
+    'revision',
+    cb
   );
 });
 
