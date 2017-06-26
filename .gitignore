@@ -24,3 +24,4 @@ application/modules/default/Model/Base/*.php
 public/js/models/base/*.js
 /vendor
 !.env.template
+/.env
