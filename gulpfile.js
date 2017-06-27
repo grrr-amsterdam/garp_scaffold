@@ -506,10 +506,9 @@ function constructPaths() {
   paths.imgBuild    = paths.cssBuild + '/img';
   paths.fontSrc     = paths.css + '/fonts';
   paths.fontBuild   = paths.cssBuild + '/fonts';
-  paths.cssCdn      = getConfigValue('cdn.domain');
+  paths.cssCdn      = getConfigValue('cdn.baseUrl');
   if (paths.cssCdn) {
-    var protocol    = getConfigValue('cdn.ssl') ? 'https://' : 'http://';
-    paths.cssCdn    = protocol + paths.cssCdn + getConfigValue('assets.css.build');
+    paths.cssCdn    = paths.cssCdn + getConfigValue('assets.css.build');
   }
 
   return paths;
