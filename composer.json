@@ -6,30 +6,26 @@
     "preferred-install": "dist"
   },
   "minimum-stability": "dev",
-
+  "prefer-stable": true,
   "repositories": [{
     "type": "vcs",
     "url": "https://github.com/harmenjanssen/Ano_ZFTwig"
   }],
-
+  "require": {
+    "grrr-amsterdam/garp3": "^3.11.0",
+    "twig/twig": "^1.24",
+    "ano/zf-twig": "dev-master"
+  },
   "require-dev": {
     "phpunit/phpunit": "3.7.*",
     "squizlabs/php_codesniffer": "^2.6"
   },
-
-  "require": {
-    "grrr-amsterdam/garp3": "^3.9.0",
-    "twig/twig": "^1.24",
-    "ano/zf-twig": "master"
-  },
-
   "autoload": {
     "psr-0": {
       "App_": "library/",
       "Model_": "application/modules/default/"
     }
   },
-
   "scripts": {
     "test": "phpunit",
     "phpcs": "vendor/bin/phpcs --standard=vendor/grrr-amsterdam/garp3/phpcs.xml --extensions=php --colors .",
@@ -41,5 +37,4 @@
       "if [ \"$APPLICATION_ENV\" = \"development\" ]; then php ./vendor/bin/g security generateSalt; fi"
     ]
   }
-
 }

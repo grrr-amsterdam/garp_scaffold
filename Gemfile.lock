@@ -20,7 +20,8 @@ GEM
     scss_lint (0.54.0)
       rake (>= 0.9, < 13)
       sass (~> 3.4.20)
-    sshkit (1.13.1)
+    semver (1.0.1)
+    sshkit (1.14.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
 
@@ -28,9 +29,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  capistrano (~> 3.7)
+  capistrano (~> 3.8)
   capistrano-bundler (~> 1.2)
   scss_lint
+  semver (~> 1.0)
 
 BUNDLED WITH
-   1.15.0
+   1.15.1
