@@ -2,6 +2,8 @@
 
 # Readme for Garp Scaffold
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/grrr-amsterdam/garp_scaffold.svg)](https://greenkeeper.io/)
+
 This is a scaffold set to initiate [Garp 3](https://github.com/grrr-amsterdam/garp3) projects.
 
 ## Getting started
